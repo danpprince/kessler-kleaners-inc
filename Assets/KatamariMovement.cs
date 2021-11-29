@@ -15,12 +15,9 @@ public class KatamariMovement : MonoBehaviour
 
     private float horizontalInput, verticalInput, hitInput;
 
-    AudioSource popAudioSource;
-
     // Start is called before the first frame update
     void Start()
     {
-        popAudioSource = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
 
         Vector3 initialRotation = transform.rotation.eulerAngles;
@@ -57,7 +54,10 @@ public class KatamariMovement : MonoBehaviour
         GameObject colliderObject = collision.gameObject;
         if (colliderObject.name == "Small Cube(Clone)") {
             StickToKatamari(colliderObject);
-            popAudioSource.Play();
+
+            AudioSource audioSource = colliderObject.GetComponent<AudioSource>();
+            audioSource.pitch = Random.Range(0.7f, 1.3f);
+            audioSource.Play();
         }
     }
 
