@@ -7,10 +7,12 @@ public class KatamariMovement : MonoBehaviour
     public float movementSpeed = 1;
     public float rotationSpeed = 1;
     public Quaternion heading;
+    public float hitStrength = 10;
+    public float hitXAngle = 45;
 
     private Rigidbody rb;
 
-    private float horizontalInput, verticalInput;
+    private float horizontalInput, verticalInput, hitInput;
 
     AudioSource popAudioSource;
 
@@ -29,15 +31,18 @@ public class KatamariMovement : MonoBehaviour
     {
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
+        hitInput = Input.GetAxis("Jump");
     }
 
     private void FixedUpdate() {
-        rb.velocity += heading * new Vector3(0, 0, 1) * verticalInput * movementSpeed;
-
         float yRotation = horizontalInput * rotationSpeed;
         Vector3 rotation = new Vector3(0, yRotation, 0);
         transform.Rotate(rotation, Space.World);
         heading *= Quaternion.Euler(0, yRotation, 0);
+
+        Quaternion hitAngle = heading * Quaternion.Euler(-1 * hitXAngle, 0, 0);
+        Vector3 hitVector = hitInput * hitStrength * (hitAngle * Vector3.forward);
+        rb.AddForce(hitVector, ForceMode.Impulse);
     }
 
     private void OnCollisionEnter(Collision collision) {
