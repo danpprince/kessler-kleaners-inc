@@ -5,12 +5,14 @@ using UnityEngine;
 public class CreateCubes : MonoBehaviour
 {
     public GameObject cube;
+    public float size = 20;
+    public int numCubes = 300;
 
     // Start is called before the first frame update
     void Start()
     {
         CreateCubeLine();
-        CreateCubePile();
+        CreateCubeCluster();
     }
 
     // Update is called once per frame
@@ -28,11 +30,14 @@ public class CreateCubes : MonoBehaviour
         }
     }
 
-    void CreateCubePile () {
-        int numCubes = 300;
-        float startX = 10, endX = 15;
-        float startY = 10, endY = 20;
-        float startZ = 10, endZ = 15;
+    void CreateCubeCluster () {
+        float startX = transform.position.x - size;
+        float endX = transform.position.x + size;
+        float startY = transform.position.y - size; 
+        float endY = transform.position.y + size;
+        float startZ = transform.position.z - size;
+        float endZ = transform.position.z + size;
+
         for (int i = 0; i < numCubes; i ++)
         {
             Vector3 position = new Vector3(
