@@ -22,6 +22,9 @@ public class FollowKatamari : MonoBehaviour
     {
         Quaternion katamariHeading = movement.heading;
 
+        float verticalInput = Input.GetAxis("Vertical");
+        cameraHeight -= verticalInput * Time.deltaTime;
+
         transform.position =
             katamari.transform.position
             - katamariHeading * new Vector3(0, 0, followDistance)
