@@ -9,6 +9,7 @@ public class KatamariMovement : MonoBehaviour
     public Quaternion heading;
     public float hitStrength = 10;
     public float hitXAngle = 45;
+    public float hitXAngleSpeed = 10;
 
     private Rigidbody rb;
 
@@ -32,6 +33,8 @@ public class KatamariMovement : MonoBehaviour
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
         hitInput = Input.GetAxis("Jump");
+
+        hitXAngle += hitXAngleSpeed * verticalInput * Time.deltaTime;
     }
 
     private void FixedUpdate() {
@@ -43,6 +46,9 @@ public class KatamariMovement : MonoBehaviour
         Quaternion hitAngle = heading * Quaternion.Euler(-1 * hitXAngle, 0, 0);
         Vector3 hitVector = hitInput * hitStrength * (hitAngle * Vector3.forward);
         rb.AddForce(hitVector, ForceMode.Impulse);
+
+        // Roll the katamari in the direction it is being hit
+        rb.AddTorque(100 * hitInput * (heading * Vector3.right), ForceMode.Impulse);
     }
 
     private void OnCollisionEnter(Collision collision) {
