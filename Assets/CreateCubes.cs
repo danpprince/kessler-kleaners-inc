@@ -5,7 +5,7 @@ using UnityEngine;
 public class CreateCubes : MonoBehaviour
 {
     public GameObject cube;
-    public float size = 20;
+    public float sizeX = 20, sizeY = 20, sizeZ = 20;
     public int numCubes = 300;
 
     // Start is called before the first frame update
@@ -31,12 +31,12 @@ public class CreateCubes : MonoBehaviour
     }
 
     void CreateCubeCluster () {
-        float startX = transform.position.x - size;
-        float endX = transform.position.x + size;
-        float startY = transform.position.y - size; 
-        float endY = transform.position.y + size;
-        float startZ = transform.position.z - size;
-        float endZ = transform.position.z + size;
+        float startX = transform.position.x - sizeX;
+        float endX = transform.position.x + sizeX;
+        float startY = transform.position.y - sizeY; 
+        float endY = transform.position.y + sizeY;
+        float startZ = transform.position.z - sizeZ;
+        float endZ = transform.position.z + sizeZ;
 
         for (int i = 0; i < numCubes; i ++)
         {
