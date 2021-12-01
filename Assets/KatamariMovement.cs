@@ -11,9 +11,13 @@ public class KatamariMovement : MonoBehaviour
     public float hitXAngle = 45;
     public float hitXAngleSpeed = 10;
 
+    public int stuckObjectCountLimit = 200;
+
     private Rigidbody rb;
 
     private float horizontalInput, verticalInput, hitInput;
+
+    private Queue<GameObject> stuckObjects;
 
     // Start is called before the first frame update
     void Start()
@@ -22,6 +26,8 @@ public class KatamariMovement : MonoBehaviour
 
         Vector3 initialRotation = transform.rotation.eulerAngles;
         heading = Quaternion.Euler(0, transform.rotation.y, 0);
+
+        stuckObjects = new Queue<GameObject>();
     }
 
     // Update is called once per frame
@@ -62,8 +68,8 @@ public class KatamariMovement : MonoBehaviour
     }
 
     void StickToKatamari(GameObject colliderObject) {
-        float towardsKatamariAmount = 0.2f;
-        float jitterAmount = 0.1f;
+        float towardsKatamariAmount = 0.0f;
+        float jitterAmount = 0.0f;
 
         Vector3 colliderPosition = colliderObject.transform.position;
 
@@ -86,6 +92,14 @@ public class KatamariMovement : MonoBehaviour
         Destroy(colliderObject.GetComponent<Rigidbody>());
 
         colliderObject.transform.position = colliderPosition;
+
+        stuckObjects.Enqueue(colliderObject);
+        if (stuckObjects.Count > stuckObjectCountLimit)
+        {
+            print("Deleting collider from old object");
+            GameObject oldestObject = stuckObjects.Dequeue();
+            Destroy(oldestObject.GetComponent<Collider>());
+        }
     }
 }
 
