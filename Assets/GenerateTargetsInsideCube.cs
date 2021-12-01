@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GenerateTargretsInsideCube : MonoBehaviour
+public class GenerateTargetsInsideCube : MonoBehaviour
 {
     public GameObject gameObjectToInstance;
     public int numObjects;
@@ -12,9 +12,7 @@ public class GenerateTargretsInsideCube : MonoBehaviour
         for (int i = 0; i < numObjects; i++)
         {
             Vector3 point = GetRandomPointInsideCube();
-            print("Placing object at " + point);
             GameObject newObject = Instantiate(gameObjectToInstance, point, new Quaternion());
-            newObject.name = "Yoo " + i;
         }
     }
 
