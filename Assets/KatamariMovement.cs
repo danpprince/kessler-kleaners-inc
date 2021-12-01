@@ -19,6 +19,9 @@ public class KatamariMovement : MonoBehaviour
 
     private Queue<GameObject> stuckObjects;
 
+    private Color colliderObjectColor = new Color(1.0f, 0.25f, 0.95f, 1.0f);
+    private Color nonColliderObjectColor = new Color(0.2f, 0.2f, 0.2f, 1.0f);
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,7 +51,7 @@ public class KatamariMovement : MonoBehaviour
 
         Quaternion hitAngle = heading * Quaternion.Euler(-1 * hitXAngle, 0, 0);
         Vector3 hitVector = hitInput * hitStrength * (hitAngle * Vector3.forward);
-        rb.AddForce(hitVector, ForceMode.Impulse);
+        rb.AddForce(hitVector);
 
         // Roll the katamari in the direction it is being hit
         rb.AddTorque(100 * hitInput * (heading * Vector3.right), ForceMode.Impulse);
@@ -73,7 +76,7 @@ public class KatamariMovement : MonoBehaviour
 
         Vector3 colliderPosition = colliderObject.transform.position;
 
-        print("Sticking to katamari");
+        // print("Sticking to katamari");
         colliderObject.transform.SetParent(transform, worldPositionStays: true);
 
         Vector3 towardsKatamari = colliderPosition - transform.position;
@@ -90,15 +93,41 @@ public class KatamariMovement : MonoBehaviour
         colliderPosition += jitter;
 
         Destroy(colliderObject.GetComponent<Rigidbody>());
-
         colliderObject.transform.position = colliderPosition;
 
-        stuckObjects.Enqueue(colliderObject);
-        if (stuckObjects.Count > stuckObjectCountLimit)
+        OptimizeNewStuckObjects(colliderObject);
+        OptimizeOldestStuckObjects();
+    }
+
+    void OptimizeNewStuckObjects(GameObject colliderObject)
+    {
+        bool isDeletingColider = Random.value < 0.25;
+        if (isDeletingColider)
         {
-            print("Deleting collider from old object");
-            GameObject oldestObject = stuckObjects.Dequeue();
-            Destroy(oldestObject.GetComponent<Collider>());
+            Destroy(colliderObject.GetComponent<Collider>());            
+            colliderObject.GetComponent<Renderer>().material.color = nonColliderObjectColor;
+        } 
+        else 
+        {
+            // Mark new objects with colliders with a visible color
+            colliderObject.GetComponent<Renderer>().material.color = colliderObjectColor;
+        }
+        stuckObjects.Enqueue(colliderObject);
+    }
+
+    void OptimizeOldestStuckObjects()
+    {
+       if (stuckObjects.Count > stuckObjectCountLimit)
+       {
+            bool isDeletingColider = Random.value < 0.75;
+            if (isDeletingColider)
+            {
+                // print("Deleting collider from old object");
+                GameObject oldestObject = stuckObjects.Dequeue();
+                Destroy(oldestObject.GetComponent<Collider>());
+
+                oldestObject.GetComponent<Renderer>().material.color = nonColliderObjectColor;
+            }
         }
     }
 }

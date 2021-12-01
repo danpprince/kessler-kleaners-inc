@@ -939,9 +939,9 @@ MonoBehaviour:
   movementSpeed: 0.3
   rotationSpeed: 3
   heading: {x: 0, y: 0, z: 0, w: 0}
-  hitStrength: 100
+  hitStrength: 2000
   hitXAngle: 45
-  hitXAngleSpeed: 50
+  hitXAngleSpeed: 25
   stuckObjectCountLimit: 200
 --- !u!1 &1249586139
 GameObject:
