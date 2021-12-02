@@ -15,7 +15,7 @@ public class KatamariMovement : MonoBehaviour
 
     private Rigidbody rb;
 
-    private float horizontalInput, verticalInput, hitInput;
+    private float horizontalInput, verticalInput, hitInput, stopInput;
 
     private Queue<GameObject> stuckObjects;
 
@@ -39,6 +39,9 @@ public class KatamariMovement : MonoBehaviour
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
         hitInput = Input.GetAxis("Jump");
+        stopInput = Input.GetAxis("Stop");
+
+        print("Stop input: " + stopInput);
 
         hitXAngle += hitXAngleSpeed * verticalInput * Time.deltaTime;
     }
@@ -52,6 +55,17 @@ public class KatamariMovement : MonoBehaviour
         Quaternion hitAngle = heading * Quaternion.Euler(-1 * hitXAngle, 0, 0);
         Vector3 hitVector = hitInput * hitStrength * (hitAngle * Vector3.forward);
         rb.AddForce(hitVector);
+
+        // Slow down based on input
+        if (stopInput > 0.5)
+        {
+            rb.velocity = 0.95f * rb.velocity;
+            rb.angularVelocity = 0.95f * rb.angularVelocity;
+            rb.useGravity = false;
+        } else
+        {
+            rb.useGravity = true;
+        }
 
         // Roll the katamari in the direction it is being hit
         rb.AddTorque(100 * hitInput * (heading * Vector3.right), ForceMode.Impulse);
@@ -101,7 +115,7 @@ public class KatamariMovement : MonoBehaviour
 
     void OptimizeNewStuckObjects(GameObject colliderObject)
     {
-        bool isDeletingColider = Random.value < 0.25;
+        bool isDeletingColider = Random.value < 0.5;
         if (isDeletingColider)
         {
             Destroy(colliderObject.GetComponent<Collider>());            
