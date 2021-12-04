@@ -13,6 +13,8 @@ public class KatamariMovement : MonoBehaviour
 
     public int stuckObjectCountLimit = 200;
 
+    public bool isColorCodingColliders = false;
+
     private Rigidbody rb;
 
     private float horizontalInput, verticalInput, hitInput, stopInput;
@@ -40,8 +42,6 @@ public class KatamariMovement : MonoBehaviour
         verticalInput = Input.GetAxis("Vertical");
         hitInput = Input.GetAxis("Jump");
         stopInput = Input.GetAxis("Stop");
-
-        print("Stop input: " + stopInput);
 
         hitXAngle += hitXAngleSpeed * verticalInput * Time.deltaTime;
     }
@@ -75,7 +75,7 @@ public class KatamariMovement : MonoBehaviour
         print("Collided with " + collision.collider.name);
 
         GameObject colliderObject = collision.gameObject;
-        if (colliderObject.name == "Small Cube(Clone)") {
+        if (colliderObject.tag == "Stickable") {
             StickToKatamari(colliderObject);
 
             AudioSource audioSource = colliderObject.GetComponent<AudioSource>();
@@ -115,17 +115,25 @@ public class KatamariMovement : MonoBehaviour
 
     void OptimizeNewStuckObjects(GameObject colliderObject)
     {
+        Color colliderMarkerColor;
+
         bool isDeletingColider = Random.value < 0.5;
         if (isDeletingColider)
         {
-            Destroy(colliderObject.GetComponent<Collider>());            
-            colliderObject.GetComponent<Renderer>().material.color = nonColliderObjectColor;
+            Destroy(colliderObject.GetComponent<Collider>());
+            colliderMarkerColor = nonColliderObjectColor;
         } 
         else 
         {
-            // Mark new objects with colliders with a visible color
-            colliderObject.GetComponent<Renderer>().material.color = colliderObjectColor;
+            colliderMarkerColor = colliderObjectColor;
         }
+
+        if (isColorCodingColliders)
+        {
+            // Mark new objects with colliders with a visible color
+            colliderObject.GetComponent<Renderer>().material.color = colliderMarkerColor;
+        }
+
         stuckObjects.Enqueue(colliderObject);
     }
 
@@ -133,14 +141,18 @@ public class KatamariMovement : MonoBehaviour
     {
        if (stuckObjects.Count > stuckObjectCountLimit)
        {
+            GameObject oldestObject = stuckObjects.Dequeue();
+
             bool isDeletingColider = Random.value < 0.75;
             if (isDeletingColider)
             {
                 // print("Deleting collider from old object");
-                GameObject oldestObject = stuckObjects.Dequeue();
                 Destroy(oldestObject.GetComponent<Collider>());
 
-                oldestObject.GetComponent<Renderer>().material.color = nonColliderObjectColor;
+                if (isColorCodingColliders)
+                {
+                    oldestObject.GetComponent<Renderer>().material.color = nonColliderObjectColor;
+                }
             }
         }
     }
