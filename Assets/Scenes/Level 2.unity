@@ -198,7 +198,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc860862954d91c45992d0285d589077, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameObjectToInstance: {fileID: 440125175200158228, guid: cdff75696071540f0b2e9dc14a503cf4, type: 3}
+  gameObjectsToInstance:
+  - {fileID: 440125175200158228, guid: cdff75696071540f0b2e9dc14a503cf4, type: 3}
   numObjects: 500
 --- !u!23 &367856707
 MeshRenderer:
@@ -458,7 +459,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh18254
+  m_Name: pb_Mesh17328
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -647,7 +648,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc860862954d91c45992d0285d589077, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameObjectToInstance: {fileID: 440125175200158228, guid: cdff75696071540f0b2e9dc14a503cf4, type: 3}
+  gameObjectsToInstance:
+  - {fileID: 440125175200158228, guid: cdff75696071540f0b2e9dc14a503cf4, type: 3}
   numObjects: 500
 --- !u!23 &913735600
 MeshRenderer:
@@ -943,6 +945,7 @@ MonoBehaviour:
   hitXAngle: 45
   hitXAngleSpeed: 25
   stuckObjectCountLimit: 200
+  isColorCodingColliders: 0
 --- !u!1 &1249586139
 GameObject:
   m_ObjectHideFlags: 0
@@ -7587,7 +7590,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc860862954d91c45992d0285d589077, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameObjectToInstance: {fileID: 440125175200158228, guid: cdff75696071540f0b2e9dc14a503cf4, type: 3}
+  gameObjectsToInstance:
+  - {fileID: 440125175200158228, guid: cdff75696071540f0b2e9dc14a503cf4, type: 3}
   numObjects: 1000
 --- !u!23 &1443016086
 MeshRenderer:
@@ -7744,7 +7748,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc860862954d91c45992d0285d589077, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameObjectToInstance: {fileID: 440125175200158228, guid: cdff75696071540f0b2e9dc14a503cf4, type: 3}
+  gameObjectsToInstance:
+  - {fileID: 54632771443421116, guid: e01b03332b3ad924495249311955270e, type: 3}
+  - {fileID: 54632771443421116, guid: faa84dabe8ef65b4bb957ad839dbf6ec, type: 3}
+  - {fileID: 54632771443421116, guid: 61706b335c974d14d96ca38e52be6519, type: 3}
   numObjects: 1000
 --- !u!23 &1963364759
 MeshRenderer:
