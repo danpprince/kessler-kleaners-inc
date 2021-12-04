@@ -15,6 +15,8 @@ public class KatamariMovement : MonoBehaviour
 
     public bool isColorCodingColliders = false;
 
+    public ResourceManager resourceManager;
+
     private Rigidbody rb;
 
     private float horizontalInput, verticalInput, hitInput, stopInput;
@@ -52,12 +54,18 @@ public class KatamariMovement : MonoBehaviour
         transform.Rotate(rotation, Space.World);
         heading *= Quaternion.Euler(0, yRotation, 0);
 
+        float accelerateFuelUsed = resourceManager.UseFuel(hitInput);
+        float stopFuelUsed = resourceManager.UseFuel(stopInput);
+
         Quaternion hitAngle = heading * Quaternion.Euler(-1 * hitXAngle, 0, 0);
-        Vector3 hitVector = hitInput * hitStrength * (hitAngle * Vector3.forward);
+        Vector3 hitVector = accelerateFuelUsed * hitStrength * (hitAngle * Vector3.forward);
         rb.AddForce(hitVector);
 
+        // Roll the katamari in the direction it is being hit
+        rb.AddTorque(100 * accelerateFuelUsed * (heading * Vector3.right), ForceMode.Impulse);
+
         // Slow down based on input
-        if (stopInput > 0.5)
+        if (stopFuelUsed > 0.5)
         {
             rb.velocity = 0.95f * rb.velocity;
             rb.angularVelocity = 0.95f * rb.angularVelocity;
@@ -67,8 +75,6 @@ public class KatamariMovement : MonoBehaviour
             rb.useGravity = true;
         }
 
-        // Roll the katamari in the direction it is being hit
-        rb.AddTorque(100 * hitInput * (heading * Vector3.right), ForceMode.Impulse);
     }
 
     private void OnCollisionEnter(Collision collision) {
@@ -106,7 +112,10 @@ public class KatamariMovement : MonoBehaviour
         );
         colliderPosition += jitter;
 
-        Destroy(colliderObject.GetComponent<Rigidbody>());
+        Rigidbody rb = colliderObject.GetComponent<Rigidbody>();
+        resourceManager.AddMass(rb.mass);
+        Destroy(rb);
+
         colliderObject.transform.position = colliderPosition;
 
         OptimizeNewStuckObjects(colliderObject);
