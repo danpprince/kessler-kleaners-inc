@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class ResourceManager : MonoBehaviour
 {
     public float initialFuel;
-    private float fuelRemaining, massCollected;
+    private float fuelRemaining, massCollected, timeElapsedSec;
 
     public Text resourceText;
 
@@ -18,6 +18,7 @@ public class ResourceManager : MonoBehaviour
 
     void Update()
     {
+        timeElapsedSec += Time.deltaTime;
         UpdateUI();
     }
 
@@ -25,7 +26,8 @@ public class ResourceManager : MonoBehaviour
     {
         resourceText.text =
             "Fuel remaining: " + fuelRemaining + "\n"
-            + "Mass collected: " + massCollected;
+            + "Mass collected: " + massCollected + "\n"
+            + "Time elapsed: " + timeElapsedSec.ToString("0.0");
     }
 
     public float UseFuel(float amountRequested) 
