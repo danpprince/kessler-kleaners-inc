@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GenerateTargetsInsideCube : MonoBehaviour
 {
-    public GameObject gameObjectToInstance;
+    public List<GameObject> gameObjectsToInstance;
     public int numObjects;
 
     void Start()
@@ -12,7 +12,16 @@ public class GenerateTargetsInsideCube : MonoBehaviour
         for (int i = 0; i < numObjects; i++)
         {
             Vector3 point = GetRandomPointInsideCube();
-            GameObject newObject = Instantiate(gameObjectToInstance, point, new Quaternion());
+            Quaternion rotation = Quaternion.Euler(
+                Random.Range(-180, 180),
+                Random.Range(-180, 180),
+                Random.Range(-180, 180)
+            );
+
+            GameObject objToInstance = gameObjectsToInstance[
+                Random.Range(0, gameObjectsToInstance.Count)
+            ];
+            Instantiate(objToInstance, point, rotation);
         }
     }
 
