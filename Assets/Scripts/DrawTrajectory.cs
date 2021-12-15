@@ -34,7 +34,6 @@ public class DrawTrajectory : MonoBehaviour
         predictionScene = SceneManager.CreateScene("Prediction", parameters);
         predictionPhysicsScene = predictionScene.GetPhysicsScene();
 
-        // TODO:         lineRenderer = GetComponent<LineRenderer>();
 
         CopyAllObstacles();
         PredictKatamariPath();
