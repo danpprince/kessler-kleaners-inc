@@ -95,14 +95,6 @@ public class DrawTrajectory : MonoBehaviour
         predictionRigidbody.inertiaTensor = subjectRigidbody.inertiaTensor;
         predictionRigidbody.inertiaTensorRotation = subjectRigidbody.inertiaTensorRotation;
 
-
-        //var fields = subjectRigidbody.GetType().GetFields();
-        //foreach (var field in fields)
-        //{
-        //    if (field.IsStatic) continue;
-        //    field.SetValue(predictionRigidbody, field.GetValue(subjectRigidbody));
-        //}
-
         predictionRigidbody.useGravity = true;
         lineRenderer.positionCount = 0;
         lineRenderer.positionCount = maxIterations;
