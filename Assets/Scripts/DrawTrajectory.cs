@@ -11,6 +11,7 @@ public class DrawTrajectory : MonoBehaviour
 
     public int maxIterations = 100;
     public float physicsStepMultiplier = 1.0f;
+    public float collisionUpdateRateSeconds = 1.0f;
     public List<GameObject> obstacles;
     public GameObject subject;
     public KatamariMovement km;
@@ -19,6 +20,7 @@ public class DrawTrajectory : MonoBehaviour
     private PhysicsScene currentPhysicsScene;
     private PhysicsScene predictionPhysicsScene;
     private Scene predictionScene;
+    private float timeSinceLastUpdateSeconds = 0.0f;
 
     void Start()
     {
@@ -35,6 +37,7 @@ public class DrawTrajectory : MonoBehaviour
         // TODO:         lineRenderer = GetComponent<LineRenderer>();
 
         CopyAllObstacles();
+        PredictKatamariPath();
     }
 
     public void CopyAllObstacles()
@@ -51,7 +54,13 @@ public class DrawTrajectory : MonoBehaviour
 
     void Update()
     {
-        PredictKatamariPath();
+        timeSinceLastUpdateSeconds += Time.deltaTime;
+
+        if (timeSinceLastUpdateSeconds > collisionUpdateRateSeconds)
+        {
+            PredictKatamariPath();
+            timeSinceLastUpdateSeconds = 0.0f;
+        }
     }
 
     void FixedUpdate()
