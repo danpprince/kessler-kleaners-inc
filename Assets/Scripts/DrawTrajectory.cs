@@ -74,8 +74,6 @@ public class DrawTrajectory : MonoBehaviour
 
     void PredictKatamariPath()
     {
-        // TODO
-
         if (!currentPhysicsScene.IsValid() || !predictionPhysicsScene.IsValid())
         {
             Debug.LogError("Invalid physics scene in DrawTrajectory");
