@@ -57,12 +57,10 @@ public class KatamariMovement : MonoBehaviour
         float accelerateFuelUsed = resourceManager.UseFuel(hitInput);
         float stopFuelUsed = resourceManager.UseFuel(stopInput);
 
-        Quaternion hitAngle = heading * Quaternion.Euler(-1 * hitXAngle, 0, 0);
-        Vector3 hitVector = accelerateFuelUsed * hitStrength * (hitAngle * Vector3.forward);
-        rb.AddForce(hitVector);
+        rb.AddForce(CalculateHitVector(accelerateFuelUsed));
 
         // Roll the katamari in the direction it is being hit
-        rb.AddTorque(100 * accelerateFuelUsed * (heading * Vector3.right), ForceMode.Impulse);
+        rb.AddTorque(CalculateRollVector(accelerateFuelUsed));
 
         // Slow down based on input
         if (stopFuelUsed > 0.5)
@@ -74,7 +72,18 @@ public class KatamariMovement : MonoBehaviour
         {
             rb.useGravity = true;
         }
+    }
 
+    public Vector3 CalculateHitVector(float accelerateFuelUsed)
+    {
+        Quaternion hitAngle = heading * Quaternion.Euler(-1 * hitXAngle, 0, 0);
+        Vector3 hitVector = accelerateFuelUsed * hitStrength * (hitAngle * Vector3.forward);
+        return hitVector;
+    }
+
+    public Vector3 CalculateRollVector(float accelerateFuelUsed)
+    {
+        return 100 * accelerateFuelUsed * (heading * Vector3.right);
     }
 
     private void OnCollisionEnter(Collision collision) {
