@@ -8010,10 +8010,6 @@ PrefabInstance:
       propertyPath: obstacles.Array.data[0]
       value: 
       objectReference: {fileID: 1249586139}
-    - target: {fileID: 8342835830873079450, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
-      propertyPath: m_Positions.Array.size
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8453875387259748963, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
       propertyPath: m_RootOrder
       value: 2
