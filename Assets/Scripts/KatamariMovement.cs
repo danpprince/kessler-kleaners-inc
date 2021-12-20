@@ -86,10 +86,10 @@ public class KatamariMovement : MonoBehaviour
         return 100 * accelerateFuelUsed * (heading * Vector3.right);
     }
 
-    private void OnCollisionEnter(Collision collision) {
-        print("Collided with " + collision.collider.name);
+    private void OnTriggerEnter(Collider collider) {
+        print("Collided with " + collider.name);
 
-        GameObject colliderObject = collision.gameObject;
+        GameObject colliderObject = collider.gameObject;
         if (colliderObject.tag == "Stickable") {
             StickToKatamari(colliderObject);
 
@@ -121,9 +121,11 @@ public class KatamariMovement : MonoBehaviour
         );
         colliderPosition += jitter;
 
-        Rigidbody rb = colliderObject.GetComponent<Rigidbody>();
-        resourceManager.AddMass(rb.mass);
-        Destroy(rb);
+        // Make object "solid" by disabling the trigger
+        colliderObject.GetComponent<Collider>().isTrigger = false;
+
+        // TODO: Should objects have other mass?
+        resourceManager.AddMass(1);
 
         colliderObject.transform.position = colliderPosition;
 
