@@ -259,7 +259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79eee3de5b5360d4bbf00bae5bb119f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxIterations: 40
+  maxIterations: 20
   physicsStepMultiplier: 10
   collisionUpdateRateSeconds: 0.25
   obstacles:
