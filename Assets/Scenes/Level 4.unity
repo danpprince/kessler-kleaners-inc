@@ -6862,7 +6862,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameObjectsToInstance:
-  - {fileID: 6547886358264475907, guid: 1fa17cdea6efd5c43b49981137ffedd5, type: 3}
+  - {fileID: 521388060154036800, guid: d7c063c28918a504593fb6b78a41b595, type: 3}
   numObjects: 700
 --- !u!23 &1443016086
 MeshRenderer:
@@ -7589,6 +7589,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8183482591349809909, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
+      propertyPath: maxIterations
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 8183482591349809909, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
       propertyPath: obstacles.Array.data[0]
       value: 
