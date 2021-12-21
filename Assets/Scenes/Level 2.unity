@@ -8003,13 +8003,25 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 8183482591349809909, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
+      propertyPath: maxIterations
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8183482591349809909, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
       propertyPath: obstacles.Array.size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8183482591349809909, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
+      propertyPath: physicsStepMultiplier
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8183482591349809909, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
       propertyPath: obstacles.Array.data[0]
       value: 
       objectReference: {fileID: 1249586139}
+    - target: {fileID: 8453875387259748962, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
     - target: {fileID: 8453875387259748963, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
       propertyPath: m_RootOrder
       value: 2

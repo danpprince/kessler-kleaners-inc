@@ -26,6 +26,8 @@ public class KatamariMovement : MonoBehaviour
     private Color colliderObjectColor = new Color(1.0f, 0.25f, 0.95f, 1.0f);
     private Color nonColliderObjectColor = new Color(0.2f, 0.2f, 0.2f, 1.0f);
 
+    private bool isGolfHitMode = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -44,6 +46,7 @@ public class KatamariMovement : MonoBehaviour
         verticalInput = Input.GetAxis("Vertical");
         hitInput = Input.GetAxis("Jump");
         stopInput = Input.GetAxis("Stop");
+        isGolfHitMode = Input.GetAxis("Mode") > 0.5;
 
         hitXAngle += hitXAngleSpeed * verticalInput * Time.deltaTime;
     }
@@ -175,6 +178,12 @@ public class KatamariMovement : MonoBehaviour
                 }
             }
         }
+    }
+
+    // Returns True if in golf hit mode
+    public bool IsGolfHitMode()
+    {
+        return isGolfHitMode;
     }
 }
 

@@ -93,17 +93,26 @@ public class DrawTrajectory : MonoBehaviour
         predictionRigidbody.inertiaTensorRotation = subjectRigidbody.inertiaTensorRotation;
 
         predictionRigidbody.useGravity = true;
-        lineRenderer.positionCount = 0;
         lineRenderer.positionCount = maxIterations;
 
         for (int i = 0; i < maxIterations; i++)
         {
             float accelerateFuelUsed = 1.0f;
-            Vector3 hitVector = km.CalculateHitVector(accelerateFuelUsed);
-            predictionRigidbody.AddForce(hitVector);
+            if (km.IsGolfHitMode() /* && i > 0 */)
+            {
+                accelerateFuelUsed = 0.0f;
+                //predictionRigidbody.WakeUp();
+            } else
+            {
+                Vector3 hitVector = km.CalculateHitVector(accelerateFuelUsed);
+                predictionRigidbody.AddForce(hitVector);
 
-            Vector3 rollVector = km.CalculateRollVector(accelerateFuelUsed);
-            predictionRigidbody.AddTorque(rollVector);
+                Vector3 rollVector = km.CalculateRollVector(accelerateFuelUsed);
+                predictionRigidbody.AddTorque(rollVector);
+
+            }
+
+            // predictionRigidbody.AddForce(Physics.gravity, ForceMode.Acceleration);
 
             predictionPhysicsScene.Simulate(physicsStepMultiplier * Time.fixedDeltaTime);
             lineRenderer.SetPosition(i, predictionSubject.transform.position);
