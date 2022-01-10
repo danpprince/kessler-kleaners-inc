@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class KatamariMovement : MonoBehaviour
 {
@@ -22,15 +23,40 @@ public class KatamariMovement : MonoBehaviour
     private Color colliderObjectColor = new Color(1.0f, 0.25f, 0.95f, 1.0f);
     private Color nonColliderObjectColor = new Color(0.2f, 0.2f, 0.2f, 1.0f);
 
+    public bool golf_mode = false;
+    private Katamari_Input modeInput;
+    
+
+
+
     // Start is called before the first frame update
     void Start()
     {
+        modeInput = new Katamari_Input();
+        modeInput.Mode.Enable();
+        modeInput.Mode.Newaction.performed += Newaction_performed; 
+
         rb = GetComponent<Rigidbody>();
 
         Vector3 initialRotation = transform.rotation.eulerAngles;
         heading = Quaternion.Euler(0, transform.rotation.y, 0);
 
         stuckObjects = new Queue<GameObject>();
+    }
+
+    private void Newaction_performed(InputAction.CallbackContext obj)
+    {
+        
+        if (golf_mode == false)
+        {
+            golf_mode = true;
+        }
+
+        else
+        {
+            golf_mode = false;
+        }
+        
     }
 
     // Update is called once per frame
@@ -40,8 +66,14 @@ public class KatamariMovement : MonoBehaviour
         verticalInput = Input.GetAxis("Vertical");
         hitInput = Input.GetAxis("Jump");
         stopInput = Input.GetAxis("Stop");
+        
+        
+        
+      
+  
 
-        print("Stop input: " + stopInput);
+        //print("Stop input: " + stopInput);
+        print(golf_mode);
 
         hitXAngle += hitXAngleSpeed * verticalInput * Time.deltaTime;
     }
@@ -144,6 +176,9 @@ public class KatamariMovement : MonoBehaviour
             }
         }
     }
+
+    
+   
 }
 
 
