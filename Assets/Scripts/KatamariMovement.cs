@@ -7,7 +7,8 @@ public class KatamariMovement : MonoBehaviour
     public float movementSpeed = 1;
     public float rotationSpeed = 1;
     public Quaternion heading;
-    public float hitStrength = 10;
+    public float strikeStrength = 100;
+    public float flyStrength = 10;
     public float hitXAngle = 45;
     public float hitXAngleSpeed = 10;
 
@@ -27,7 +28,7 @@ public class KatamariMovement : MonoBehaviour
     private Color nonColliderObjectColor = new Color(0.2f, 0.2f, 0.2f, 1.0f);
 
     private bool isGolfHitMode = false;
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -57,6 +58,15 @@ public class KatamariMovement : MonoBehaviour
         transform.Rotate(rotation, Space.World);
         heading *= Quaternion.Euler(0, yRotation, 0);
 
+        if (isGolfHitMode && hitInput > 0)
+        {
+            bool isHitSuccessful = resourceManager.tryToHit();
+            if (!isHitSuccessful)
+            {
+                hitInput = 0;
+            }
+        }
+
         float accelerateFuelUsed = resourceManager.UseFuel(hitInput);
         float stopFuelUsed = resourceManager.UseFuel(stopInput);
 
@@ -79,8 +89,19 @@ public class KatamariMovement : MonoBehaviour
 
     public Vector3 CalculateHitVector(float accelerateFuelUsed)
     {
+        float strength;
+        
+        if (isGolfHitMode)
+        {
+            strength = strikeStrength;
+        }
+        else
+        {
+            strength = flyStrength;
+        }
+
         Quaternion hitAngle = heading * Quaternion.Euler(-1 * hitXAngle, 0, 0);
-        Vector3 hitVector = accelerateFuelUsed * hitStrength * (hitAngle * Vector3.forward);
+        Vector3 hitVector = accelerateFuelUsed * strength * (hitAngle * Vector3.forward);
         return hitVector;
     }
 
@@ -184,7 +205,7 @@ public class KatamariMovement : MonoBehaviour
     public bool IsGolfHitMode()
     {
         return isGolfHitMode;
-    }
+    }   
 }
 
 

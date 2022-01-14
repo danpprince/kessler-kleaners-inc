@@ -98,19 +98,12 @@ public class DrawTrajectory : MonoBehaviour
         for (int i = 0; i < maxIterations; i++)
         {
             float accelerateFuelUsed = 1.0f;
-            if (km.IsGolfHitMode() /* && i > 0 */)
-            {
-                accelerateFuelUsed = 0.0f;
-                //predictionRigidbody.WakeUp();
-            } else
-            {
-                Vector3 hitVector = km.CalculateHitVector(accelerateFuelUsed);
-                predictionRigidbody.AddForce(hitVector);
 
-                Vector3 rollVector = km.CalculateRollVector(accelerateFuelUsed);
-                predictionRigidbody.AddTorque(rollVector);
+            Vector3 hitVector = km.CalculateHitVector(accelerateFuelUsed);
+            predictionRigidbody.AddForce(hitVector);
 
-            }
+            Vector3 rollVector = km.CalculateRollVector(accelerateFuelUsed);
+            predictionRigidbody.AddTorque(rollVector);
 
             // predictionRigidbody.AddForce(Physics.gravity, ForceMode.Acceleration);
 
