@@ -74,12 +74,10 @@ public class KatamariMovement : MonoBehaviour
        
         
 
-<<<<<<< HEAD:Assets/KatamariMovement.cs
-        //print("Stop input: " + stopInput);
         
 
-=======
->>>>>>> master:Assets/Scripts/KatamariMovement.cs
+
+        
         hitXAngle += hitXAngleSpeed * verticalInput * Time.deltaTime;
 
 
