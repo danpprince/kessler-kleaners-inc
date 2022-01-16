@@ -67,15 +67,17 @@ public class KatamariMovement : MonoBehaviour
         hitInput = Input.GetAxis("Jump");
         stopInput = Input.GetAxis("Stop");
         
+       
         
-        
-      
-  
 
         //print("Stop input: " + stopInput);
-        print(golf_mode);
+        
 
         hitXAngle += hitXAngleSpeed * verticalInput * Time.deltaTime;
+
+
+
+        
     }
 
     private void FixedUpdate() {
@@ -93,6 +95,7 @@ public class KatamariMovement : MonoBehaviour
         {
             rb.velocity = 0.95f * rb.velocity;
             rb.angularVelocity = 0.95f * rb.angularVelocity;
+            
             rb.useGravity = false;
         } else
         {
