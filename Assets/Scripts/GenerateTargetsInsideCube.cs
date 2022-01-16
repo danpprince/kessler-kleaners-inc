@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GenerateTargetsInsideCube : MonoBehaviour
 {
-    public GameObject gameObjectToInstance;
+    public List<GameObject> gameObjectsToInstance;
     public int numObjects;
     public List<GameObject> cubs;
     public Vector3 cubby_position;
@@ -19,6 +19,7 @@ public class GenerateTargetsInsideCube : MonoBehaviour
         for (int i = 0; i < numObjects; i++)
         {
             Vector3 point = GetRandomPointInsideCube();
+<<<<<<< HEAD:Assets/GenerateTargetsInsideCube.cs
             GameObject newObject = Instantiate(gameObjectToInstance, point, new Quaternion());
             cubs.Add(newObject);
         }
@@ -40,6 +41,18 @@ public class GenerateTargetsInsideCube : MonoBehaviour
                 cubby.GetComponent<Rigidbody>().AddForce(direction_of_travel * Gravity_Strength);
             }
 
+=======
+            Quaternion rotation = Quaternion.Euler(
+                Random.Range(-180, 180),
+                Random.Range(-180, 180),
+                Random.Range(-180, 180)
+            );
+
+            GameObject objToInstance = gameObjectsToInstance[
+                Random.Range(0, gameObjectsToInstance.Count)
+            ];
+            Instantiate(objToInstance, point, rotation);
+>>>>>>> master:Assets/Scripts/GenerateTargetsInsideCube.cs
         }
     }
 
