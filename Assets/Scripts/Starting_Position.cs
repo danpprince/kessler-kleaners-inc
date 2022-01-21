@@ -39,8 +39,8 @@ public class Starting_Position : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
+    // Update is called once per frame *****Move only the counter to Fixed !!!!!********
+    void FixedUpdate()
     {
 
         hitInput = Input.GetAxis("Jump") * 10;

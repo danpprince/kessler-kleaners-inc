@@ -1364,7 +1364,7 @@ MonoBehaviour:
   player: {fileID: 1070024225}
   player_size: {x: 0, y: 0, z: 0}
   before_stroke: 0
-  stop_timer_value: 40
+  stop_timer_value: 3
 --- !u!114 &1070024235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1493,10 +1493,8 @@ MonoBehaviour:
   physicsStepMultiplier: 10
   collisionUpdateRateSeconds: 0.25
   obstacles:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 2041866126}
+  - {fileID: 1892365326}
   subject: {fileID: 1070024225}
   km: {fileID: 1070024231}
   lineRenderer: {fileID: 1070024236}
@@ -1761,6 +1759,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5122255303124867541, guid: 42758af1e9410f745a63d3d1fa2dcc2b, type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5122255303124867541, guid: 42758af1e9410f745a63d3d1fa2dcc2b, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5122255303124867541, guid: 42758af1e9410f745a63d3d1fa2dcc2b, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5122255303124867541, guid: 42758af1e9410f745a63d3d1fa2dcc2b, type: 3}
+      propertyPath: m_LocalScale.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5122255303124867541, guid: 42758af1e9410f745a63d3d1fa2dcc2b, type: 3}
@@ -2505,7 +2515,7 @@ GameObject:
   - component: {fileID: 1892365329}
   - component: {fileID: 1892365327}
   m_Layer: 0
-  m_Name: Sphere (3)
+  m_Name: Planet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2625,7 +2635,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-447864
+  m_Name: pb_Mesh35974
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2814,7 +2824,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b66affe39ae6ba46b2ca42caf668823, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  km: {fileID: 0}
+  km: {fileID: 1070024231}
   positionOffset: 2
 --- !u!23 &2015877201
 MeshRenderer:
@@ -3707,8 +3717,9 @@ GameObject:
   - component: {fileID: 2041866127}
   - component: {fileID: 2041866132}
   - component: {fileID: 2041866133}
+  - component: {fileID: 2041866131}
   m_Layer: 0
-  m_Name: Sphere
+  m_Name: Moon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3790,6 +3801,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: -9.236, y: 17.729, z: 29.639}
+--- !u!114 &2041866131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2041866126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cef4688c94abf7d44bc5978db111eb89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  planet: {fileID: 1892365326}
+  speed: 90
 --- !u!54 &2041866132
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3804,7 +3829,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 126
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!114 &2041866133
 MonoBehaviour:
