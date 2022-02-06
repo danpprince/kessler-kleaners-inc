@@ -132,8 +132,11 @@ public class KatamariMovement : MonoBehaviour
             StickToKatamari(colliderObject);
 
             AudioSource audioSource = colliderObject.GetComponent<AudioSource>();
-            audioSource.pitch = Random.Range(0.7f, 1.3f);
-            audioSource.Play();
+            if (!(audioSource is null))
+            {
+                audioSource.pitch = Random.Range(0.7f, 1.3f);
+                audioSource.Play();
+            }
         }
     }
 
