@@ -15,6 +15,7 @@ public class KatamariMovement : MonoBehaviour
     public int stuckObjectCountLimit = 200;
 
     public bool isColorCodingColliders = false;
+    private AudioSource collisionAudioSource;
 
     public ResourceManager resourceManager;
 
@@ -38,6 +39,8 @@ public class KatamariMovement : MonoBehaviour
         heading = Quaternion.Euler(0, transform.rotation.y, 0);
 
         stuckObjects = new Queue<GameObject>();
+
+        collisionAudioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -108,6 +111,17 @@ public class KatamariMovement : MonoBehaviour
     public Vector3 CalculateRollVector(float accelerateFuelUsed)
     {
         return 100 * accelerateFuelUsed * (heading * Vector3.right);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        // Audio source may be null for objects stuck to the katamari
+        if (!(collisionAudioSource is null))
+        {
+            collisionAudioSource.pitch = Random.Range(0.9f, 1.1f);
+            collisionAudioSource.volume = Random.Range(0.25f, 0.50f);
+            collisionAudioSource.Play();
+        }
     }
 
     private void OnTriggerEnter(Collider collider) {
