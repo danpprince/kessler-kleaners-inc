@@ -12,7 +12,7 @@ public class Attractor : MonoBehaviour
      void FixedUpdate()
     {
 
-     
+     //needs to be changed
         Attractor[] attractors = FindObjectsOfType<Attractor>();
         foreach (Attractor attractor in attractors)
         {
