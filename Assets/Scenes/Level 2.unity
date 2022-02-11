@@ -201,6 +201,12 @@ MonoBehaviour:
   gameObjectsToInstance:
   - {fileID: 440125175200158228, guid: cdff75696071540f0b2e9dc14a503cf4, type: 3}
   numObjects: 500
+  cubs: []
+  cubby_position: {x: 0, y: 0, z: 0}
+  direction_of_travel: {x: 0, y: 0, z: 0}
+  gravity: 0
+  Gravity_Strength: 0
+  gameObjectToInstance: {fileID: 0}
 --- !u!23 &367856707
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -681,6 +687,12 @@ MonoBehaviour:
   gameObjectsToInstance:
   - {fileID: 6547886358264475907, guid: 1fa17cdea6efd5c43b49981137ffedd5, type: 3}
   numObjects: 500
+  cubs: []
+  cubby_position: {x: 0, y: 0, z: 0}
+  direction_of_travel: {x: 0, y: 0, z: 0}
+  gravity: 0
+  Gravity_Strength: 0
+  gameObjectToInstance: {fileID: 440125175200158228, guid: cdff75696071540f0b2e9dc14a503cf4, type: 3}
 --- !u!23 &913735600
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7506,6 +7518,12 @@ MonoBehaviour:
   gameObjectsToInstance:
   - {fileID: 440125175200158228, guid: cdff75696071540f0b2e9dc14a503cf4, type: 3}
   numObjects: 1000
+  cubs: []
+  cubby_position: {x: 0, y: 0, z: 0}
+  direction_of_travel: {x: 0, y: 0, z: 0}
+  gravity: 0
+  Gravity_Strength: 0
+  gameObjectToInstance: {fileID: 6547886358264475907, guid: 1fa17cdea6efd5c43b49981137ffedd5, type: 3}
 --- !u!23 &1443016086
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7732,6 +7750,12 @@ MonoBehaviour:
   - {fileID: 54632771443421116, guid: faa84dabe8ef65b4bb957ad839dbf6ec, type: 3}
   - {fileID: 54632771443421116, guid: 61706b335c974d14d96ca38e52be6519, type: 3}
   numObjects: 1000
+  cubs: []
+  cubby_position: {x: 0, y: 0, z: 0}
+  direction_of_travel: {x: 0, y: 0, z: 0}
+  gravity: 0
+  Gravity_Strength: 0
+  gameObjectToInstance: {fileID: 0}
 --- !u!23 &1963364759
 MeshRenderer:
   m_ObjectHideFlags: 0
