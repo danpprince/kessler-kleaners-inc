@@ -15,7 +15,8 @@ public class ResourceManager : MonoBehaviour
     void Start()
     {
         fuelRemaining = initialFuel;
-        lastHitTimeSec = Time.time;
+        // Initialize so a hit can be performed at the start
+        lastHitTimeSec = Time.time - timeBetweenHits;
     }
 
     void Update()
