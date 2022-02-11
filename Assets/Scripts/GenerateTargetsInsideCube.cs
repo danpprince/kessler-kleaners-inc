@@ -6,44 +6,12 @@ public class GenerateTargetsInsideCube : MonoBehaviour
 {
     public List<GameObject> gameObjectsToInstance;
     public int numObjects;
-    public List<GameObject> cubs;
-    public Vector3 cubby_position;
-    public Vector3 direction_of_travel;
-    public bool gravity;
-    public float Gravity_Strength;
-    public GameObject gameObjectToInstance;
-    private Vector3 point;
 
     void Start()
     {
-       cubs =  new List<GameObject>();
-
         for (int i = 0; i < numObjects; i++)
         {
             Vector3 point = GetRandomPointInsideCube();
-
-            GameObject newObject = Instantiate(gameObjectToInstance, point, new Quaternion());
-            cubs.Add(newObject);
-        }
-
-        //Destroy(gameObject);
-    }
-
-    private void FixedUpdate()
-    {
-
-        if (gravity == true)
-        {
-
-            for (int i = 0; i < cubs.Count; i++)
-            {
-                GameObject cubby = cubs[i];
-                cubby_position = cubby.transform.position;
-                direction_of_travel = gameObject.transform.position - cubby_position;
-                cubby.GetComponent<Rigidbody>().AddForce(direction_of_travel * Gravity_Strength);
-            }
-
-
             Quaternion rotation = Quaternion.Euler(
                 Random.Range(-180, 180),
                 Random.Range(-180, 180),
@@ -54,7 +22,6 @@ public class GenerateTargetsInsideCube : MonoBehaviour
                 Random.Range(0, gameObjectsToInstance.Count)
             ];
             Instantiate(objToInstance, point, rotation);
-
         }
     }
 
