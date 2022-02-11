@@ -110,7 +110,17 @@ public class KatamariMovement : MonoBehaviour
 
     public Vector3 CalculateRollVector(float accelerateFuelUsed)
     {
-        return 100 * accelerateFuelUsed * (heading * Vector3.right);
+        float strength;
+
+        if (isGolfHitMode)
+        {
+            strength = 100000;
+        }
+        else
+        {
+            strength = 100;
+        }
+        return strength * accelerateFuelUsed * (heading * Vector3.right);
     }
 
     private void OnCollisionEnter(Collision collision)
