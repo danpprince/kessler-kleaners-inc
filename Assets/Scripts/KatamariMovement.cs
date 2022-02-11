@@ -7,13 +7,15 @@ public class KatamariMovement : MonoBehaviour
     public float movementSpeed = 1;
     public float rotationSpeed = 1;
     public Quaternion heading;
-    public float hitStrength = 10;
+    public float strikeStrength = 100;
+    public float flyStrength = 10;
     public float hitXAngle = 45;
     public float hitXAngleSpeed = 10;
 
     public int stuckObjectCountLimit = 200;
 
     public bool isColorCodingColliders = false;
+    private AudioSource collisionAudioSource;
 
     public ResourceManager resourceManager;
 
@@ -26,6 +28,8 @@ public class KatamariMovement : MonoBehaviour
     private Color colliderObjectColor = new Color(1.0f, 0.25f, 0.95f, 1.0f);
     private Color nonColliderObjectColor = new Color(0.2f, 0.2f, 0.2f, 1.0f);
 
+    private bool isGolfHitMode = false;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +39,8 @@ public class KatamariMovement : MonoBehaviour
         heading = Quaternion.Euler(0, transform.rotation.y, 0);
 
         stuckObjects = new Queue<GameObject>();
+
+        collisionAudioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -44,6 +50,7 @@ public class KatamariMovement : MonoBehaviour
         verticalInput = Input.GetAxis("Vertical");
         hitInput = Input.GetAxis("Jump");
         stopInput = Input.GetAxis("Stop");
+        isGolfHitMode = Input.GetAxis("Mode") > 0.5;
 
         hitXAngle += hitXAngleSpeed * verticalInput * Time.deltaTime;
     }
@@ -53,6 +60,15 @@ public class KatamariMovement : MonoBehaviour
         Vector3 rotation = new Vector3(0, yRotation, 0);
         transform.Rotate(rotation, Space.World);
         heading *= Quaternion.Euler(0, yRotation, 0);
+
+        if (isGolfHitMode && hitInput > 0)
+        {
+            bool isHitSuccessful = resourceManager.tryToHit();
+            if (!isHitSuccessful)
+            {
+                hitInput = 0;
+            }
+        }
 
         float accelerateFuelUsed = resourceManager.UseFuel(hitInput);
         float stopFuelUsed = resourceManager.UseFuel(stopInput);
@@ -76,14 +92,46 @@ public class KatamariMovement : MonoBehaviour
 
     public Vector3 CalculateHitVector(float accelerateFuelUsed)
     {
+        float strength;
+        
+        if (isGolfHitMode)
+        {
+            strength = strikeStrength;
+        }
+        else
+        {
+            strength = flyStrength;
+        }
+
         Quaternion hitAngle = heading * Quaternion.Euler(-1 * hitXAngle, 0, 0);
-        Vector3 hitVector = accelerateFuelUsed * hitStrength * (hitAngle * Vector3.forward);
+        Vector3 hitVector = accelerateFuelUsed * strength * (hitAngle * Vector3.forward);
         return hitVector;
     }
 
     public Vector3 CalculateRollVector(float accelerateFuelUsed)
     {
-        return 100 * accelerateFuelUsed * (heading * Vector3.right);
+        float strength;
+
+        if (isGolfHitMode)
+        {
+            strength = 100000;
+        }
+        else
+        {
+            strength = 100;
+        }
+        return strength * accelerateFuelUsed * (heading * Vector3.right);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        // Audio source may be null for objects stuck to the katamari
+        if (!(collisionAudioSource is null))
+        {
+            collisionAudioSource.pitch = Random.Range(0.9f, 1.1f);
+            collisionAudioSource.volume = Random.Range(0.25f, 0.50f);
+            collisionAudioSource.Play();
+        }
     }
 
     private void OnTriggerEnter(Collider collider) {
@@ -94,8 +142,11 @@ public class KatamariMovement : MonoBehaviour
             StickToKatamari(colliderObject);
 
             AudioSource audioSource = colliderObject.GetComponent<AudioSource>();
-            audioSource.pitch = Random.Range(0.7f, 1.3f);
-            audioSource.Play();
+            if (!(audioSource is null))
+            {
+                audioSource.pitch = Random.Range(0.7f, 1.3f);
+                audioSource.Play();
+            }
         }
     }
 
@@ -176,6 +227,12 @@ public class KatamariMovement : MonoBehaviour
             }
         }
     }
+
+    // Returns True if in golf hit mode
+    public bool IsGolfHitMode()
+    {
+        return isGolfHitMode;
+    }   
 }
 
 

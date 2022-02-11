@@ -7,13 +7,16 @@ using UnityEngine.UI;
 public class ResourceManager : MonoBehaviour
 {
     public float initialFuel;
-    private float fuelRemaining, massCollected, timeElapsedSec;
+    private float fuelRemaining, massCollected, timeElapsedSec, lastHitTimeSec;
+    private float timeBetweenHits = 5.0f;
 
     public Text resourceText;
 
     void Start()
     {
         fuelRemaining = initialFuel;
+        // Initialize so a hit can be performed at the start
+        lastHitTimeSec = Time.time - timeBetweenHits;
     }
 
     void Update()
@@ -27,7 +30,8 @@ public class ResourceManager : MonoBehaviour
         resourceText.text =
             "Fuel remaining: " + fuelRemaining + "\n"
             + "Mass collected: " + massCollected + "\n"
-            + "Time elapsed: " + timeElapsedSec.ToString("0.0");
+            + "Time elapsed: " + timeElapsedSec.ToString("0.0") + "\n"
+            + "Time since last hit: " + GetTimeSinceLastHit().ToString("0.0");
     }
 
     public float UseFuel(float amountRequested) 
@@ -51,5 +55,23 @@ public class ResourceManager : MonoBehaviour
     public void AddMass(float massToAdd)
     {
         massCollected += massToAdd;
+    }
+
+    public bool tryToHit()
+    {
+        bool isTimeForNextHit = GetTimeSinceLastHit() >= timeBetweenHits;
+
+        if (isTimeForNextHit)
+        {
+            lastHitTimeSec = Time.time;
+            return true;
+        }
+
+        return false;
+    }
+
+    public float GetTimeSinceLastHit()
+    {
+        return Time.time - lastHitTimeSec;
     }
 }

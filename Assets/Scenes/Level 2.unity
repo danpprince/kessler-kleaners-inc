@@ -7899,6 +7899,45 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5122255302856479317, guid: 42758af1e9410f745a63d3d1fa2dcc2b, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 317.6069
+      objectReference: {fileID: 0}
+    - target: {fileID: 5122255302856479317, guid: 42758af1e9410f745a63d3d1fa2dcc2b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 441.40002
+      objectReference: {fileID: 0}
+    - target: {fileID: 5122255302856479317, guid: 42758af1e9410f745a63d3d1fa2dcc2b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -187.35342
+      objectReference: {fileID: 0}
+    - target: {fileID: 5122255303104786176, guid: 42758af1e9410f745a63d3d1fa2dcc2b, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 756.7764
+      objectReference: {fileID: 0}
+    - target: {fileID: 5122255303104786176, guid: 42758af1e9410f745a63d3d1fa2dcc2b, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 344.8437
+      objectReference: {fileID: 0}
+    - target: {fileID: 5122255303104786176, guid: 42758af1e9410f745a63d3d1fa2dcc2b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 3.4632
+      objectReference: {fileID: 0}
+    - target: {fileID: 5122255303104786176, guid: 42758af1e9410f745a63d3d1fa2dcc2b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.0001
+      objectReference: {fileID: 0}
+    - target: {fileID: 5122255303104786177, guid: 42758af1e9410f745a63d3d1fa2dcc2b, type: 3}
+      propertyPath: m_Text
+      value: 'Fuel remaining: XXXX
+
+        Mass collected: XXXX
+
+        Elapsed
+        time: XXXX
+
+        Time since last hit: XXXX'
+      objectReference: {fileID: 0}
     - target: {fileID: 5122255303124867541, guid: 42758af1e9410f745a63d3d1fa2dcc2b, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -8027,13 +8066,33 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 8183482591349809909, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
+      propertyPath: maxIterations
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8183482591349809909, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
       propertyPath: obstacles.Array.size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8183482591349809909, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
+      propertyPath: physicsStepMultiplier
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8183482591349809909, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
       propertyPath: obstacles.Array.data[0]
       value: 
       objectReference: {fileID: 1249586139}
+    - target: {fileID: 8453875387259748961, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
+      propertyPath: flyStrength
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8453875387259748961, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
+      propertyPath: strikeStrength
+      value: 1000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8453875387259748962, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
     - target: {fileID: 8453875387259748963, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
       propertyPath: m_RootOrder
       value: 2
