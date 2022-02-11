@@ -8,17 +8,20 @@ public class Attractor : MonoBehaviour
     public Vector3 force;
     public float forceMagnitude;
     public float Big_G;
-
+    private GameObject player;
      void FixedUpdate()
     {
+
+     
         Attractor[] attractors = FindObjectsOfType<Attractor>();
-            foreach (Attractor attractor in attractors)
-            {
-            if (attractor != this)
+        foreach (Attractor attractor in attractors)
+        {
+
+            if (attractor.gameObject.tag == "player")
             {
                 Attract(attractor);
             }
-            }
+        }
     }
 
 

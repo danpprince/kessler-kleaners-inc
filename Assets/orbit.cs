@@ -9,7 +9,7 @@ public class orbit : MonoBehaviour
     public float speed;
     void Start()
     {
-        
+        speed = speed + Random.Range(-5, 5);
     }
 
     // Update is called once per frame
