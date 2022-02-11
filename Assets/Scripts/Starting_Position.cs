@@ -9,6 +9,7 @@ public class Starting_Position : MonoBehaviour
     public Vector3 size;
     public MeshRenderer renderer;
     private Renderer player_render;
+    
 
     public GameObject player;
     public Vector3 player_size;
@@ -36,7 +37,7 @@ public class Starting_Position : MonoBehaviour
         renderer = platform.GetComponent<MeshRenderer>();
         h = renderer.bounds.size.y;
         starting_position = renderer.bounds.center + new Vector3 (0f, ((h/2) + (width/2)), 0f);
-        gameObject.transform.position = starting_position;
+        player.transform.position = starting_position;
         before_stroke = true;
         default_movementSpeed = player.GetComponent<KatamariMovement>().movementSpeed;
 
@@ -61,33 +62,17 @@ public class Starting_Position : MonoBehaviour
 
         if (before_stroke)
         {
-            gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition;
+            player.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition;
             player.GetComponent<KatamariMovement>().movementSpeed = hit_power;
         }
 
         else
         {
-            gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+            player.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
             player.GetComponent<KatamariMovement>().movementSpeed = default_movementSpeed;
         }
 
-        // Start a timer that counts down while player is trying to stop the ball
-        if (stopInput > 0.5)
-        {
-            stop_timer -= 0.1f;
-        }
-        else
-        {
-            stop_timer = stop_timer_value;
-        }
-
-        // After the timer runs out, freeze the position and set the Before Stroke bool to true again
-
-        if (stopInput > 0.5 && stop_timer < 0.5)
-        {
-            gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition;
-            before_stroke = true;
-        }
+       
 
         //print(stop_timer);
         print(before_stroke);

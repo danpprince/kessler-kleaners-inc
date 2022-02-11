@@ -1672,7 +1672,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1070024225}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 895f89a32a6b7ad45821bbfadaa31b63, type: 3}
   m_Name: 
@@ -1819,6 +1819,50 @@ MonoBehaviour:
   subject: {fileID: 1070024225}
   km: {fileID: 1070024231}
   lineRenderer: {fileID: 1070024236}
+--- !u!1 &1172448876
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1172448878}
+  - component: {fileID: 1172448877}
+  m_Layer: 0
+  m_Name: GravitySetter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1172448877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1172448876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acc39df5d0e10ce48a0dcde31ba5ce44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gravity: {x: 0, y: 0, z: 0}
+--- !u!4 &1172448878
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1172448876}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 430.33823, y: 402.4511, z: -90.910866}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 31
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1216125214
 GameObject:
   m_ObjectHideFlags: 0
@@ -3196,7 +3240,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh35974
+  m_Name: pb_Mesh18996
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3464,6 +3508,7 @@ GameObject:
   - component: {fileID: 2035465669}
   - component: {fileID: 2035465668}
   - component: {fileID: 2035465673}
+  - component: {fileID: 2035465674}
   m_Layer: 0
   m_Name: Starting Platform
   m_TagString: Untagged
@@ -4264,6 +4309,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2035465674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2035465667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 895f89a32a6b7ad45821bbfadaa31b63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  platform: {fileID: 2035465667}
+  starting_position: {x: 0, y: 0, z: 0}
+  size: {x: 0, y: 0, z: 0}
+  renderer: {fileID: 2035465670}
+  player: {fileID: 1070024225}
+  player_size: {x: 0, y: 0, z: 0}
+  before_stroke: 1
+  stop_timer_value: 0
+  hit_power: 0
 --- !u!1 &2041866126
 GameObject:
   m_ObjectHideFlags: 0
