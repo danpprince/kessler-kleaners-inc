@@ -86,7 +86,7 @@ public class DrawTrajectory : MonoBehaviour
         Rigidbody subjectRigidbody = subject.GetComponent<Rigidbody>();
         Rigidbody predictionRigidbody = predictionSubject.GetComponent<Rigidbody>();
 
-        // Copy the Rigidody state from the subject to the prediction
+        // Copy the Rigidbody state from the subject to the prediction
         predictionRigidbody.velocity = subjectRigidbody.velocity;
         predictionRigidbody.angularVelocity = subjectRigidbody.angularVelocity;
         predictionRigidbody.inertiaTensor = subjectRigidbody.inertiaTensor;
@@ -95,20 +95,27 @@ public class DrawTrajectory : MonoBehaviour
         predictionRigidbody.useGravity = true;
         lineRenderer.positionCount = maxIterations;
 
+        bool isGolfHitMode = km.IsGolfHitMode();
+        ForceMode forceMode = isGolfHitMode ? ForceMode.Impulse : ForceMode.Force;
         for (int i = 0; i < maxIterations; i++)
         {
+            lineRenderer.SetPosition(i, predictionSubject.transform.position);
+
             float accelerateFuelUsed = 1.0f;
 
-            Vector3 hitVector = km.CalculateHitVector(accelerateFuelUsed);
-            predictionRigidbody.AddForce(hitVector);
+            bool isFirstHitIteration = isGolfHitMode && i == 0;
+            if (isFirstHitIteration || !isGolfHitMode)
+            {
+                Vector3 hitVector = km.CalculateHitVector(accelerateFuelUsed);
+                predictionRigidbody.AddForce(hitVector, forceMode);
 
-            Vector3 rollVector = km.CalculateRollVector(accelerateFuelUsed);
-            predictionRigidbody.AddTorque(rollVector);
+                Vector3 rollVector = km.CalculateRollVector(accelerateFuelUsed);
+                predictionRigidbody.AddTorque(rollVector, forceMode);
+            }
 
             // predictionRigidbody.AddForce(Physics.gravity, ForceMode.Acceleration);
 
             predictionPhysicsScene.Simulate(physicsStepMultiplier * Time.fixedDeltaTime);
-            lineRenderer.SetPosition(i, predictionSubject.transform.position);
         }
 
         Destroy(predictionSubject);

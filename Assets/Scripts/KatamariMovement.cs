@@ -61,11 +61,12 @@ public class KatamariMovement : MonoBehaviour
         transform.Rotate(rotation, Space.World);
         heading *= Quaternion.Euler(0, yRotation, 0);
 
+        ForceMode forceMode = isGolfHitMode ? ForceMode.Impulse : ForceMode.Force;
+
         if (isGolfHitMode && hitInput > 0)
         {
             bool isHitSuccessful = resourceManager.tryToHit();
-            if (!isHitSuccessful)
-            {
+            if (!isHitSuccessful) {
                 hitInput = 0;
             }
         }
@@ -73,10 +74,10 @@ public class KatamariMovement : MonoBehaviour
         float accelerateFuelUsed = resourceManager.UseFuel(hitInput);
         float stopFuelUsed = resourceManager.UseFuel(stopInput);
 
-        rb.AddForce(CalculateHitVector(accelerateFuelUsed));
+        rb.AddForce(CalculateHitVector(accelerateFuelUsed), forceMode);
 
         // Roll the katamari in the direction it is being hit
-        rb.AddTorque(CalculateRollVector(accelerateFuelUsed));
+        rb.AddTorque(CalculateRollVector(accelerateFuelUsed), forceMode);
 
         // Slow down based on input
         if (stopFuelUsed > 0.5)
@@ -128,8 +129,10 @@ public class KatamariMovement : MonoBehaviour
         // Audio source may be null for objects stuck to the katamari
         if (!(collisionAudioSource is null))
         {
+            float volume = 0.1f + collision.impulse.magnitude / 500;
+
             collisionAudioSource.pitch = Random.Range(0.9f, 1.1f);
-            collisionAudioSource.volume = Random.Range(0.25f, 0.50f);
+            collisionAudioSource.volume = volume;
             collisionAudioSource.Play();
         }
     }
@@ -214,8 +217,8 @@ public class KatamariMovement : MonoBehaviour
        {
             GameObject oldestObject = stuckObjects.Dequeue();
 
-            bool isDeletingColider = Random.value < 0.75;
-            if (isDeletingColider)
+            bool isDeletingCollider = Random.value < 0.75;
+            if (isDeletingCollider)
             {
                 // print("Deleting collider from old object");
                 Destroy(oldestObject.GetComponent<Collider>());
