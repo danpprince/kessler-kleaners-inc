@@ -23,6 +23,7 @@ public class GenerateTargetsInsideCube : MonoBehaviour
             ];
             Instantiate(objToInstance, point, rotation);
         }
+        Destroy(gameObject);
     }
 
     public Vector3 GetRandomPointInsideCube()
