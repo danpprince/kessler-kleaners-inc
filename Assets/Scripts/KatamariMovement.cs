@@ -36,6 +36,7 @@ public class KatamariMovement : MonoBehaviour
     private bool go_up;
     private float power;
     public float time_modifier;
+    private float angle_timer = 0;
     
     // Start is called before the first frame update
     void Start()
@@ -61,13 +62,31 @@ public class KatamariMovement : MonoBehaviour
         stopInput = Input.GetAxis("Stop");
         isGolfHitMode = Input.GetAxis("Mode") < 0.5;
 
-        hitXAngle += hitXAngleSpeed * verticalInput * Time.deltaTime;
-
-        if (power_bar.active ==true)
+       
+        // makes the power bar go up and down
+        if (power_bar.active == true)
         {
             PowerBar();
             strikeStrength = power * 10000;
         }
+        angle_timer += Time.deltaTime;
+
+        // increment the vertical angle in chunks
+        if (verticalInput > 0.5 && angle_timer >= 0.25)
+        {
+            
+            hitXAngle += 20;
+            angle_timer = 0;
+            
+        }
+
+        if (verticalInput < -0.5 && angle_timer >=0.25)
+        {
+
+            hitXAngle -= 20;
+            angle_timer = 0;
+        }
+
     }
 
     private void FixedUpdate() {
@@ -272,8 +291,7 @@ public class KatamariMovement : MonoBehaviour
         }
 
         power_bar.GetComponent<Image>().fillAmount = power;
-        print(power);
-
+        
     }
 
     // Returns True if in golf hit mode
