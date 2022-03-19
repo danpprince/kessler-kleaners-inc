@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class KatamariMovement : MonoBehaviour
 {
@@ -29,11 +30,19 @@ public class KatamariMovement : MonoBehaviour
     private Color nonColliderObjectColor = new Color(0.2f, 0.2f, 0.2f, 1.0f);
 
     private bool isGolfHitMode = false;
+
+    public GameObject power_bar;
+
+    private bool go_up;
+    private float power;
+    public float time_modifier;
     
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        power = 0;
+        go_up = true;
 
         Vector3 initialRotation = transform.rotation.eulerAngles;
         heading = Quaternion.Euler(0, transform.rotation.y, 0);
@@ -50,9 +59,15 @@ public class KatamariMovement : MonoBehaviour
         verticalInput = Input.GetAxis("Vertical");
         hitInput = Input.GetAxis("Jump");
         stopInput = Input.GetAxis("Stop");
-        isGolfHitMode = Input.GetAxis("Mode") > 0.5;
+        isGolfHitMode = Input.GetAxis("Mode") < 0.5;
 
         hitXAngle += hitXAngleSpeed * verticalInput * Time.deltaTime;
+
+        if (power_bar.active ==true)
+        {
+            PowerBar();
+            strikeStrength = power * 10000;
+        }
     }
 
     private void FixedUpdate() {
@@ -229,6 +244,36 @@ public class KatamariMovement : MonoBehaviour
                 }
             }
         }
+    }
+
+
+    void PowerBar()
+    {
+        
+
+        if (power <=1 && go_up)
+        {
+            power += 0.01f * time_modifier;
+        }
+
+        if (power >= 1)
+        {
+            go_up = false;
+        }
+
+        if (power >= 0 && go_up==false)
+        {
+            power -= 0.01f * time_modifier;
+        }
+
+        if (power <= 0)
+        {
+            go_up = true;
+        }
+
+        power_bar.GetComponent<Image>().fillAmount = power;
+        print(power);
+
     }
 
     // Returns True if in golf hit mode
