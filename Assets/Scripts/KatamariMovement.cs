@@ -178,6 +178,12 @@ public class KatamariMovement : MonoBehaviour
         // Make object "solid" by disabling the trigger
         colliderObject.GetComponent<Collider>().isTrigger = false;
 
+        RandomRotation rr = colliderObject.GetComponent<RandomRotation>();
+        if (rr != null)
+        {
+            rr.StopRotating();
+        }
+
         // TODO: Should objects have other mass?
         resourceManager.AddMass(1);
 
