@@ -29,7 +29,7 @@ public class KatamariMovement : MonoBehaviour
     private Color colliderObjectColor = new Color(1.0f, 0.25f, 0.95f, 1.0f);
     private Color nonColliderObjectColor = new Color(0.2f, 0.2f, 0.2f, 1.0f);
 
-    private bool isGolfHitMode = false;
+    private bool isGolfHitMode = true;
 
     public GameObject power_bar;
 
@@ -62,17 +62,22 @@ public class KatamariMovement : MonoBehaviour
         verticalInput = Input.GetAxis("Vertical");
         hitInput = Input.GetAxis("Jump");
         stopInput = Input.GetAxis("Stop");
-        isGolfHitMode = Input.GetAxis("Mode") < 0.5;
 
+
+        print(isGolfHitMode);
 
         // turn the power bar on and off dependin if we can hit hit the ball
     if (power_bar_active)
     {
         power_bar.SetActive(true);
+            isGolfHitMode = true;
+            
     }
     else
     {
         power_bar.SetActive(false);
+            
+
     }
 
     if (resourceManager.can_hit())
@@ -81,16 +86,20 @@ public class KatamariMovement : MonoBehaviour
     }
     
 
-        print(power_bar_active);
+       
 
 
-        // makes the power bar go up and down
+        // makes the power bar go up and down and apply strength if in gold mode
         PowerBar();
-        strikeStrength = power * 10000;
+       
+            strikeStrength = power * 2500;
+        
+
 
         if (hitInput >= 0.5)
         {
             power_bar_active = false;
+            
         }
 
 
@@ -133,6 +142,7 @@ public class KatamariMovement : MonoBehaviour
             if (!isHitSuccessful)
             {
                 hitInput = 0;
+                isGolfHitMode = false;
             }
         }
 
