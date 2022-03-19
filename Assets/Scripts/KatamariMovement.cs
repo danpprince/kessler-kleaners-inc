@@ -37,7 +37,9 @@ public class KatamariMovement : MonoBehaviour
     private float power;
     public float time_modifier;
     private float angle_timer = 0;
+    private bool power_bar_active = true;
     
+
     // Start is called before the first frame update
     void Start()
     {
@@ -62,16 +64,38 @@ public class KatamariMovement : MonoBehaviour
         stopInput = Input.GetAxis("Stop");
         isGolfHitMode = Input.GetAxis("Mode") < 0.5;
 
-       
+
+        // turn the power bar on and off dependin if we can hit hit the ball
+    if (power_bar_active)
+    {
+        power_bar.SetActive(true);
+    }
+    else
+    {
+        power_bar.SetActive(false);
+    }
+
+    if (resourceManager.can_hit())
+    {
+        power_bar_active = true;
+    }
+    
+
+        print(power_bar_active);
+
+
         // makes the power bar go up and down
-        if (power_bar.active == true)
+        PowerBar();
+        strikeStrength = power * 10000;
+
+        if (hitInput >= 0.5)
         {
-            PowerBar();
-            strikeStrength = power * 10000;
+            power_bar_active = false;
         }
-        angle_timer += Time.deltaTime;
+
 
         // increment the vertical angle in chunks
+        angle_timer += Time.deltaTime;
         if (verticalInput > 0.5 && angle_timer >= 0.25)
         {
             
@@ -87,6 +111,10 @@ public class KatamariMovement : MonoBehaviour
             angle_timer = 0;
         }
 
+        
+
+
+
     }
 
     private void FixedUpdate() {
@@ -96,11 +124,14 @@ public class KatamariMovement : MonoBehaviour
         heading *= Quaternion.Euler(0, yRotation, 0);
 
         ForceMode forceMode = isGolfHitMode ? ForceMode.Impulse : ForceMode.Force;
+        
+
 
         if (isGolfHitMode && hitInput > 0)
         {
             bool isHitSuccessful = resourceManager.tryToHit();
-            if (!isHitSuccessful) {
+            if (!isHitSuccessful)
+            {
                 hitInput = 0;
             }
         }
@@ -112,6 +143,8 @@ public class KatamariMovement : MonoBehaviour
 
         // Roll the katamari in the direction it is being hit
         rb.AddTorque(CalculateRollVector(accelerateFuelUsed), forceMode);
+
+       
 
         // Slow down based on input
         if (stopFuelUsed > 0.5)
@@ -290,7 +323,9 @@ public class KatamariMovement : MonoBehaviour
             go_up = true;
         }
 
-        power_bar.GetComponent<Image>().fillAmount = power;
+        
+            power_bar.GetComponent<Image>().fillAmount = power;
+        
         
     }
 

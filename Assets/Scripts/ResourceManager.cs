@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 public class ResourceManager : MonoBehaviour
@@ -23,6 +24,12 @@ public class ResourceManager : MonoBehaviour
     {
         timeElapsedSec += Time.deltaTime;
         UpdateUI();
+        if (Input.GetKeyDown("r"))
+        {
+
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name); 
+        }
+        
     }
 
     void UpdateUI()
@@ -68,6 +75,12 @@ public class ResourceManager : MonoBehaviour
         }
 
         return false;
+    }
+
+    public bool can_hit()
+    {
+        bool isTimeForNextHit = GetTimeSinceLastHit() >= timeBetweenHits;
+        return isTimeForNextHit;
     }
 
     public float GetTimeSinceLastHit()
