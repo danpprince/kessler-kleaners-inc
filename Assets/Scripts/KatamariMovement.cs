@@ -29,7 +29,7 @@ public class KatamariMovement : MonoBehaviour
     private Color colliderObjectColor = new Color(1.0f, 0.25f, 0.95f, 1.0f);
     private Color nonColliderObjectColor = new Color(0.2f, 0.2f, 0.2f, 1.0f);
 
-    private bool isGolfHitMode = true;
+    public bool isGolfHitMode = true;
 
     public GameObject power_bar;
 
@@ -71,14 +71,15 @@ public class KatamariMovement : MonoBehaviour
     {
         power_bar.SetActive(true);
             isGolfHitMode = true;
+            this.GetComponent<LineRenderer>().enabled = true;
             
-    }
+
+        }
     else
     {
         power_bar.SetActive(false);
-            
-
-    }
+            this.GetComponent<LineRenderer>().enabled = false;
+        }
 
     if (resourceManager.can_hit())
     {
@@ -92,7 +93,7 @@ public class KatamariMovement : MonoBehaviour
         // makes the power bar go up and down and apply strength if in gold mode
         PowerBar();
        
-            strikeStrength = power * 2500;
+        strikeStrength = power * 2500;
         
 
 
