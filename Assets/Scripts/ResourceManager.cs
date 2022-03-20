@@ -18,6 +18,7 @@ public class ResourceManager : MonoBehaviour
         fuelRemaining = initialFuel;
         // Initialize so a hit can be performed at the start
         lastHitTimeSec = Time.time - timeBetweenHits;
+        
     }
 
     void Update()
@@ -48,7 +49,7 @@ public class ResourceManager : MonoBehaviour
         bool allFuelRequestedIsAvailable = fuelRemaining - amountRequested >= 0;
         if (allFuelRequestedIsAvailable)
         {
-            fuelRemaining -= amountRequested;
+            fuelRemaining -= amountRequested * Time.timeScale;
             return amountRequested;
 
         } else

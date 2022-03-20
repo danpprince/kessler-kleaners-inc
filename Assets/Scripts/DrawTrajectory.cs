@@ -94,10 +94,9 @@ public class DrawTrajectory : MonoBehaviour
         predictionRigidbody.inertiaTensorRotation = subjectRigidbody.inertiaTensorRotation;
 
         predictionRigidbody.useGravity = true;
-        if (subject.GetComponent<KatamariMovement>().isGolfHitMode)
-        {
-            lineRenderer.positionCount = maxIterations;
-        }
+        
+        lineRenderer.positionCount = maxIterations;
+        
         bool isGolfHitMode = km.IsGolfHitMode();
         ForceMode forceMode = isGolfHitMode ? ForceMode.Impulse : ForceMode.Force;
         for (int i = 0; i < maxIterations; i++)

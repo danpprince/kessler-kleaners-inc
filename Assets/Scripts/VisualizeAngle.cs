@@ -10,6 +10,7 @@ public class VisualizeAngle : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        this.GetComponent<Transform>().localScale = this.GetComponent<Transform>().localScale * 2;
         
     }
 

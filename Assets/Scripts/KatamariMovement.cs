@@ -38,6 +38,7 @@ public class KatamariMovement : MonoBehaviour
     public float time_modifier;
     private float angle_timer = 0;
     private bool power_bar_active = true;
+    public TimeManager time_manager;
     
 
     // Start is called before the first frame update
@@ -53,6 +54,7 @@ public class KatamariMovement : MonoBehaviour
         stuckObjects = new Queue<GameObject>();
 
         collisionAudioSource = GetComponent<AudioSource>();
+        
     }
 
     // Update is called once per frame
@@ -64,7 +66,7 @@ public class KatamariMovement : MonoBehaviour
         stopInput = Input.GetAxis("Stop");
 
 
-        print(isGolfHitMode);
+        print(Time.timeScale);
 
         // turn the power bar on and off dependin if we can hit hit the ball
     if (power_bar_active)
@@ -87,8 +89,25 @@ public class KatamariMovement : MonoBehaviour
     }
     
 
-       
+       // SLOW MOTION
+ 
+     if (power_bar_active==false && hitInput > 0.5 && resourceManager.GetComponent<ResourceManager>().GetTimeSinceLastHit() >= 0.2f)
+        {
+           time_manager.SlowMotion();
+        }   
+           
+        
+    else
+        {
+            time_manager.NormalTime();
 
+        }
+
+     if (power_bar_active == false && hitInput > 0.5 && resourceManager.GetComponent<ResourceManager>().GetTimeSinceLastHit() <= 0.2f)
+        {
+            hitInput = 0;
+        }
+     
 
         // makes the power bar go up and down and apply strength if in gold mode
         PowerBar();
@@ -105,7 +124,7 @@ public class KatamariMovement : MonoBehaviour
 
 
         // increment the vertical angle in chunks
-        angle_timer += Time.deltaTime;
+        angle_timer += Time.unscaledDeltaTime;
         if (verticalInput > 0.5 && angle_timer >= 0.25)
         {
             
