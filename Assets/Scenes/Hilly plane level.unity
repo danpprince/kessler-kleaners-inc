@@ -1468,8 +1468,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41ef0d136bc296841aaaf538cae00d7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slowdownFactor: 0.75
-  slowdownLength: 2
+  slowdownFactor: 0.1
+  slowdownLength: 1
+  player: {fileID: 1453225961}
 --- !u!4 &1159325747
 Transform:
   m_ObjectHideFlags: 0
@@ -2041,7 +2042,7 @@ PrefabInstance:
       objectReference: {fileID: 1159325745}
     - target: {fileID: 8453875387259748961, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
       propertyPath: flyStrength
-      value: 20000
+      value: 2000
       objectReference: {fileID: 0}
     - target: {fileID: 8453875387259748961, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
       propertyPath: time_manager

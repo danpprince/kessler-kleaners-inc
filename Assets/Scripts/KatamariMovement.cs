@@ -34,7 +34,7 @@ public class KatamariMovement : MonoBehaviour
     public GameObject power_bar;
 
     private bool go_up;
-    private float power;
+    public float power;
     public float time_modifier;
     private float angle_timer = 0;
     private bool power_bar_active = true;
@@ -66,9 +66,9 @@ public class KatamariMovement : MonoBehaviour
         stopInput = Input.GetAxis("Stop");
 
 
-        print(Time.timeScale);
+        
 
-        // turn the power bar on and off dependin if we can hit hit the ball
+        // turn the power bar on and off depending if we can hit hit the ball
     if (power_bar_active)
     {
         power_bar.SetActive(true);
@@ -109,7 +109,7 @@ public class KatamariMovement : MonoBehaviour
         }
      
 
-        // makes the power bar go up and down and apply strength if in gold mode
+        // makes the power bar go up and down and apply strength if in golf mode
         PowerBar();
        
         strikeStrength = power * 2500;
@@ -337,11 +337,11 @@ public class KatamariMovement : MonoBehaviour
 
     void PowerBar()
     {
-        
 
+        time_modifier = Time.fixedDeltaTime;
         if (power <=1 && go_up)
         {
-            power += 0.01f * time_modifier;
+            power += 0.01f * (time_modifier/0.02f);
         }
 
         if (power >= 1)
@@ -351,7 +351,7 @@ public class KatamariMovement : MonoBehaviour
 
         if (power >= 0 && go_up==false)
         {
-            power -= 0.01f * time_modifier;
+            power -= 0.01f * (time_modifier/0.02f);
         }
 
         if (power <= 0)

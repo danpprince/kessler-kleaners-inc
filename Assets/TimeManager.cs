@@ -3,7 +3,7 @@ using UnityEngine;
 public class TimeManager : MonoBehaviour
 {
 
-    public float slowdownFactor = 0.75f;
+    public float slowdownFactor = 0.1f;
     public float slowdownLength = 1f;
     public GameObject player;
     private float current_velocity;
