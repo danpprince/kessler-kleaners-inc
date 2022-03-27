@@ -21,6 +21,7 @@ public class DrawTrajectory : MonoBehaviour
     private PhysicsScene predictionPhysicsScene;
     private Scene predictionScene;
     private float timeSinceLastUpdateSeconds = 0.0f;
+    
 
     void Start()
     {
@@ -55,7 +56,7 @@ public class DrawTrajectory : MonoBehaviour
     {
         timeSinceLastUpdateSeconds += Time.deltaTime;
 
-        if (timeSinceLastUpdateSeconds > collisionUpdateRateSeconds)
+        if (timeSinceLastUpdateSeconds > collisionUpdateRateSeconds && subject.GetComponent<KatamariMovement>().isGolfHitMode)
         {
             PredictKatamariPath();
             timeSinceLastUpdateSeconds = 0.0f;
@@ -93,8 +94,9 @@ public class DrawTrajectory : MonoBehaviour
         predictionRigidbody.inertiaTensorRotation = subjectRigidbody.inertiaTensorRotation;
 
         predictionRigidbody.useGravity = true;
+        
         lineRenderer.positionCount = maxIterations;
-
+        
         bool isGolfHitMode = km.IsGolfHitMode();
         ForceMode forceMode = isGolfHitMode ? ForceMode.Impulse : ForceMode.Force;
         for (int i = 0; i < maxIterations; i++)

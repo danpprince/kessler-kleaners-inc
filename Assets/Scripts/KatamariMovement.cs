@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class KatamariMovement : MonoBehaviour
 {
@@ -28,12 +29,24 @@ public class KatamariMovement : MonoBehaviour
     private Color colliderObjectColor = new Color(1.0f, 0.25f, 0.95f, 1.0f);
     private Color nonColliderObjectColor = new Color(0.2f, 0.2f, 0.2f, 1.0f);
 
-    private bool isGolfHitMode = false;
-    
+    public bool isGolfHitMode = true;
+
+    public GameObject power_bar;
+
+    private bool go_up;
+    public float power;
+    public float time_modifier;
+    private float angle_timer = 0;
+    private bool power_bar_active = true;
+    public TimeManager time_manager;
+
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        power = 0;
+        go_up = true;
 
         Vector3 initialRotation = transform.rotation.eulerAngles;
         heading = Quaternion.Euler(0, transform.rotation.y, 0);
@@ -41,6 +54,7 @@ public class KatamariMovement : MonoBehaviour
         stuckObjects = new Queue<GameObject>();
 
         collisionAudioSource = GetComponent<AudioSource>();
+
     }
 
     // Update is called once per frame
@@ -50,12 +64,96 @@ public class KatamariMovement : MonoBehaviour
         verticalInput = Input.GetAxis("Vertical");
         hitInput = Input.GetAxis("Jump");
         stopInput = Input.GetAxis("Stop");
-        isGolfHitMode = Input.GetAxis("Mode") > 0.5;
 
-        hitXAngle += hitXAngleSpeed * verticalInput * Time.deltaTime;
+
+
+
+        // turn the power bar on and off depending if we can hit hit the ball
+        if (power_bar_active)
+        {
+            power_bar.SetActive(true);
+            isGolfHitMode = true;
+            this.GetComponent<LineRenderer>().enabled = true;
+
+
+        }
+        else
+        {
+            power_bar.SetActive(false);
+            this.GetComponent<LineRenderer>().enabled = false;
+        }
+
+        if (resourceManager.can_hit())
+        {
+            power_bar_active = true;
+        }
+
+
+        // SLOW MOTION
+
+        float flyMovementDeadTime = 0.2f;
+        bool isFlyMovementDeadTime = resourceManager.GetTimeSinceLastHit() >= flyMovementDeadTime;
+
+        if (power_bar_active == false && hitInput > 0.5 && isFlyMovementDeadTime)
+        {
+            time_manager.SlowMotion();
+        }
+
+
+        else
+        {
+            time_manager.NormalTime();
+
+        }
+
+
+
+
+        if (power_bar_active == false && hitInput > 0.5 && !isFlyMovementDeadTime)
+        {
+            hitInput = 0;
+        }
+
+
+        // makes the power bar go up and down and apply strength if in golf mode
+        PowerBar();
+
+        strikeStrength = power * 2500;
+
+
+
+        if (hitInput >= 0.5)
+        {
+            power_bar_active = false;
+
+        }
+
+
+        // increment the vertical angle in chunks
+        angle_timer += Time.unscaledDeltaTime;
+        if (verticalInput > 0.5 && angle_timer >= 0.25)
+        {
+
+            hitXAngle += 20;
+            angle_timer = 0;
+
+        }
+
+        if (verticalInput < -0.5 && angle_timer >= 0.25)
+        {
+
+            hitXAngle -= 20;
+            angle_timer = 0;
+        }
+
+
+
+
+
     }
 
-    private void FixedUpdate() {
+    private void FixedUpdate()
+    {
         float yRotation = horizontalInput * rotationSpeed;
         Vector3 rotation = new Vector3(0, yRotation, 0);
         transform.Rotate(rotation, Space.World);
@@ -63,11 +161,15 @@ public class KatamariMovement : MonoBehaviour
 
         ForceMode forceMode = isGolfHitMode ? ForceMode.Impulse : ForceMode.Force;
 
+
+
         if (isGolfHitMode && hitInput > 0)
         {
             bool isHitSuccessful = resourceManager.tryToHit();
-            if (!isHitSuccessful) {
+            if (!isHitSuccessful)
+            {
                 hitInput = 0;
+                isGolfHitMode = false;
             }
         }
 
@@ -79,13 +181,16 @@ public class KatamariMovement : MonoBehaviour
         // Roll the katamari in the direction it is being hit
         rb.AddTorque(CalculateRollVector(accelerateFuelUsed), forceMode);
 
+
+
         // Slow down based on input
         if (stopFuelUsed > 0.5)
         {
             rb.velocity = 0.95f * rb.velocity;
             rb.angularVelocity = 0.95f * rb.angularVelocity;
             rb.useGravity = false;
-        } else
+        }
+        else
         {
             rb.useGravity = true;
         }
@@ -94,7 +199,7 @@ public class KatamariMovement : MonoBehaviour
     public Vector3 CalculateHitVector(float accelerateFuelUsed)
     {
         float strength;
-        
+
         if (isGolfHitMode)
         {
             strength = strikeStrength;
@@ -137,11 +242,13 @@ public class KatamariMovement : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider collider) {
+    private void OnTriggerEnter(Collider collider)
+    {
         print("Collided with " + collider.name);
 
         GameObject colliderObject = collider.gameObject;
-        if (colliderObject.tag == "Stickable") {
+        if (colliderObject.tag == "Stickable")
+        {
             StickToKatamari(colliderObject);
 
             AudioSource audioSource = colliderObject.GetComponent<AudioSource>();
@@ -153,7 +260,8 @@ public class KatamariMovement : MonoBehaviour
         }
     }
 
-    void StickToKatamari(GameObject colliderObject) {
+    void StickToKatamari(GameObject colliderObject)
+    {
         float towardsKatamariAmount = 0.0f;
         float jitterAmount = 0.0f;
 
@@ -202,8 +310,8 @@ public class KatamariMovement : MonoBehaviour
         {
             Destroy(colliderObject.GetComponent<Collider>());
             colliderMarkerColor = nonColliderObjectColor;
-        } 
-        else 
+        }
+        else
         {
             colliderMarkerColor = colliderObjectColor;
         }
@@ -219,8 +327,8 @@ public class KatamariMovement : MonoBehaviour
 
     void OptimizeOldestStuckObjects()
     {
-       if (stuckObjects.Count > stuckObjectCountLimit)
-       {
+        if (stuckObjects.Count > stuckObjectCountLimit)
+        {
             GameObject oldestObject = stuckObjects.Dequeue();
 
             bool isDeletingCollider = Random.value < 0.75;
@@ -237,11 +345,48 @@ public class KatamariMovement : MonoBehaviour
         }
     }
 
+
+    void PowerBar()
+    {
+
+        time_modifier = Time.fixedDeltaTime;
+        if (power <= 1 && go_up)
+        {
+            power += 0.01f * (time_modifier / 0.02f);
+        }
+
+        if (power >= 1)
+        {
+            go_up = false;
+        }
+
+        if (power >= 0 && go_up == false)
+        {
+            power -= 0.01f * (time_modifier / 0.02f);
+        }
+
+        if (power <= 0)
+        {
+            go_up = true;
+        }
+
+
+        power_bar.GetComponent<Image>().fillAmount = power;
+
+
+    }
+
     // Returns True if in golf hit mode
     public bool IsGolfHitMode()
     {
         return isGolfHitMode;
-    }   
+    }
+
+
+
+
+
+
 }
 
 

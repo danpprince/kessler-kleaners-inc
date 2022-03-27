@@ -17,11 +17,11 @@ public class RandomRotation : MonoBehaviour
         );
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (isRotating)
         {
-            transform.Rotate(rotationVector);
+            transform.Rotate(rotationVector * Time.fixedDeltaTime);
         }
     }
 

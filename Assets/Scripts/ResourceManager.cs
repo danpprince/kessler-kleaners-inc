@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 public class ResourceManager : MonoBehaviour
@@ -17,12 +18,19 @@ public class ResourceManager : MonoBehaviour
         fuelRemaining = initialFuel;
         // Initialize so a hit can be performed at the start
         lastHitTimeSec = Time.time - timeBetweenHits;
+        
     }
 
     void Update()
     {
         timeElapsedSec += Time.deltaTime;
         UpdateUI();
+        if (Input.GetKeyDown("r"))
+        {
+
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name); 
+        }
+        
     }
 
     void UpdateUI()
@@ -41,7 +49,7 @@ public class ResourceManager : MonoBehaviour
         bool allFuelRequestedIsAvailable = fuelRemaining - amountRequested >= 0;
         if (allFuelRequestedIsAvailable)
         {
-            fuelRemaining -= amountRequested;
+            fuelRemaining -= amountRequested * Time.timeScale;
             return amountRequested;
 
         } else
@@ -68,6 +76,12 @@ public class ResourceManager : MonoBehaviour
         }
 
         return false;
+    }
+
+    public bool can_hit()
+    {
+        bool isTimeForNextHit = GetTimeSinceLastHit() >= timeBetweenHits;
+        return isTimeForNextHit;
     }
 
     public float GetTimeSinceLastHit()

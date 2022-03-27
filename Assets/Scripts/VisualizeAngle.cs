@@ -6,10 +6,12 @@ public class VisualizeAngle : MonoBehaviour
 {
     public KatamariMovement km;
     public float positionOffset = 1;
+    
 
     // Start is called before the first frame update
     void Start()
     {
+        
         
     }
 
