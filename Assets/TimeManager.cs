@@ -39,11 +39,14 @@ public class TimeManager : MonoBehaviour
 
     public void time_state_machine()
     {
+
         float flyMovementDeadTime = .75f;
         bool isFlyMovementDeadTime = myResourceManager.GetTimeSinceLastHit() >= flyMovementDeadTime;
         float myHitInput = myKatamariMovement.hitInput;
         powerBarActive = myKatamariMovement.power_bar_active;
         player.GetComponent<KatamariMovement>().flyStrength = current_velocity;
+
+
 
 
 
@@ -101,6 +104,7 @@ public class TimeManager : MonoBehaviour
             }
         }
 
+        //Speed Up\\
         else if (myStateMachine == stateMachine.speedUp)
         {
 
