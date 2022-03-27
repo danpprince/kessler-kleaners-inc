@@ -66,7 +66,7 @@ public class KatamariMovement : MonoBehaviour
         hitInput = Input.GetAxis("Jump");
         stopInput = Input.GetAxis("Stop");
 
-        if (hitInput >= 0.5 && power_bar_active == true)
+        if (hitInput >= 0.5 && power_bar_active)
         {
             power_bar_active = false;
 
