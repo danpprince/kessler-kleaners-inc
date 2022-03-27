@@ -60,26 +60,13 @@ public class KatamariMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
         hitInput = Input.GetAxis("Jump");
         stopInput = Input.GetAxis("Stop");
 
-
-
-
-        
-
-
-
-
-
-        
-
-
-
-        if (hitInput >= 0.5&& power_bar_active == true)
+        if (hitInput >= 0.5 && power_bar_active == true)
         {
             power_bar_active = false;
 
@@ -119,7 +106,7 @@ public class KatamariMovement : MonoBehaviour
         ForceMode forceMode = isGolfHitMode ? ForceMode.Impulse : ForceMode.Force;
 
         // turn the power bar on and off depending if we can hit hit the ball
-        if (power_bar_active)
+        if (power_bar_active) // changed from powerbaractive?
         {
             power_bar.SetActive(true);
             isGolfHitMode = true;
@@ -153,9 +140,10 @@ public class KatamariMovement : MonoBehaviour
 
 
         //SLOW MOTION BEHAVIOR\\
-        
-        time_manager.time_state_machine();
-        
+        if (!isGolfHitMode)
+        {
+            time_manager.time_state_machine();
+        }
 
 
         float accelerateFuelUsed = resourceManager.UseFuel(hitInput);
