@@ -21,11 +21,7 @@ public class RandomRotation : MonoBehaviour
     {
         if (isRotating)
         {
-<<<<<<< HEAD
-            transform.Rotate(rotationVector*Time.fixedDeltaTime);
-=======
             transform.Rotate(rotationVector * Time.fixedDeltaTime);
->>>>>>> origin/master
         }
     }
 
