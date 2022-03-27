@@ -72,6 +72,7 @@ public class ResourceManager : MonoBehaviour
         if (isTimeForNextHit)
         {
             lastHitTimeSec = Time.time;
+            
             return true;
         }
 
