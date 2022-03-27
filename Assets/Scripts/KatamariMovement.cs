@@ -91,7 +91,10 @@ public class KatamariMovement : MonoBehaviour
 
         // SLOW MOTION
 
-        if (power_bar_active == false && hitInput > 0.5 && resourceManager.GetComponent<ResourceManager>().GetTimeSinceLastHit() >= 0.2f)
+        float flyMovementDeadTime = 0.2f;
+        bool isFlyMovementDeadTime = resourceManager.GetTimeSinceLastHit() >= flyMovementDeadTime;
+
+        if (power_bar_active == false && hitInput > 0.5 && isFlyMovementDeadTime)
         {
             time_manager.SlowMotion();
         }
@@ -106,7 +109,7 @@ public class KatamariMovement : MonoBehaviour
 
 
 
-        if (power_bar_active == false && hitInput > 0.5 && resourceManager.GetComponent<ResourceManager>().GetTimeSinceLastHit() <= 0.2f)
+        if (power_bar_active == false && hitInput > 0.5 && !isFlyMovementDeadTime)
         {
             hitInput = 0;
         }
