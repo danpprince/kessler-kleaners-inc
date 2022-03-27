@@ -16,7 +16,7 @@ public class TimeManager : MonoBehaviour
     private float current_time;
     private float time_elapsed;
     private float velocity_magnitude;
-
+    
     private enum stateMachine { normalSpeed, slowDown, slowMotion, speedUp };
     stateMachine myStateMachine;
     public GameObject powerBar;
@@ -29,8 +29,8 @@ public class TimeManager : MonoBehaviour
     {
         standard_velocity = myKatamariMovement.flyStrength;
         current_velocity = standard_velocity;
-
-
+        
+        
 
         myStateMachine = stateMachine.normalSpeed;
 
@@ -66,10 +66,10 @@ public class TimeManager : MonoBehaviour
         }
         ///SLOW DOWN\\\
         else if (myStateMachine == stateMachine.slowDown)
-        {
-            Time.timeScale -= (1f / slowdownLength) * Time.unscaledDeltaTime;
-            Time.timeScale = Mathf.Clamp(Time.timeScale, slowdownFactor, 1f);
-            Time.fixedDeltaTime = Time.timeScale * 0.02f;
+    {
+        Time.timeScale -= (1f / slowdownLength) * Time.unscaledDeltaTime;
+        Time.timeScale = Mathf.Clamp(Time.timeScale, slowdownFactor, 1f);
+        Time.fixedDeltaTime = Time.timeScale * 0.02f;
             current_velocity = 0;
             
             
@@ -77,17 +77,17 @@ public class TimeManager : MonoBehaviour
             
 
             //Transition to slowMotion\\
-            if (Time.timeScale == slowdownFactor)
-            {
+        if (Time.timeScale == slowdownFactor)
+        {
                 myStateMachine = stateMachine.slowMotion;
-                current_velocity = standard_velocity * 10f;
+            current_velocity = standard_velocity * 10f; 
             }   
 
             else if(myHitInput < 0.5)
             {
                 myStateMachine = stateMachine.speedUp;
-                
-            }
+
+        }
         }
         //SLOW MOTION\\\
         else if (myStateMachine == stateMachine.slowMotion)
@@ -97,7 +97,7 @@ public class TimeManager : MonoBehaviour
             
 
             if (myHitInput < 0.5)
-            {
+        {
                 ///Transition to Speed Up\\\
                 myStateMachine = stateMachine.speedUp;
                 
@@ -178,13 +178,13 @@ public class TimeManager : MonoBehaviour
         //if (Time.timeScale == 1)
         //{
         //    current_velocity = standard_velocity;
-
-
+            
+           
         //}
 
         player.GetComponent<KatamariMovement>().flyStrength = current_velocity;
     }
-
+    
 
 
 }
