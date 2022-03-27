@@ -43,7 +43,6 @@ public class TimeManager : MonoBehaviour
         float flyMovementDeadTime = .75f;
         bool isFlyMovementDeadTime = myResourceManager.GetTimeSinceLastHit() >= flyMovementDeadTime;
         float myHitInput = myKatamariMovement.hitInput;
-        //powerBarActive = myKatamariMovement.power_bar_active;
         player.GetComponent<KatamariMovement>().flyStrength = current_velocity;
 
 
