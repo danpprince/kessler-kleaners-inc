@@ -22,7 +22,7 @@ public class KatamariMovement : MonoBehaviour
 
     private Rigidbody rb;
 
-    private float horizontalInput, verticalInput, hitInput, stopInput;
+    public float horizontalInput, verticalInput, hitInput, stopInput;
 
     private Queue<GameObject> stuckObjects;
 
@@ -37,7 +37,7 @@ public class KatamariMovement : MonoBehaviour
     public float power;
     public float time_modifier;
     private float angle_timer = 0;
-    private bool power_bar_active = true;
+    public bool power_bar_active = true;
     public TimeManager time_manager;
 
 
@@ -60,6 +60,7 @@ public class KatamariMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
         hitInput = Input.GetAxis("Jump");
@@ -68,61 +69,17 @@ public class KatamariMovement : MonoBehaviour
 
 
 
-        // turn the power bar on and off depending if we can hit hit the ball
-        if (power_bar_active)
-        {
-            power_bar.SetActive(true);
-            isGolfHitMode = true;
-            this.GetComponent<LineRenderer>().enabled = true;
-
-
-        }
-        else
-        {
-            power_bar.SetActive(false);
-            this.GetComponent<LineRenderer>().enabled = false;
-        }
-
-        if (resourceManager.can_hit())
-        {
-            power_bar_active = true;
-        }
-
-
-        // SLOW MOTION
-
-        float flyMovementDeadTime = 0.2f;
-        bool isFlyMovementDeadTime = resourceManager.GetTimeSinceLastHit() >= flyMovementDeadTime;
-
-        if (power_bar_active == false && hitInput > 0.5 && isFlyMovementDeadTime)
-        {
-            time_manager.SlowMotion();
-        }
-
-
-        else
-        {
-            time_manager.NormalTime();
-
-        }
+        
 
 
 
 
-        if (power_bar_active == false && hitInput > 0.5 && !isFlyMovementDeadTime)
-        {
-            hitInput = 0;
-        }
 
-
-        // makes the power bar go up and down and apply strength if in golf mode
-        PowerBar();
-
-        strikeStrength = power * 2500;
+        
 
 
 
-        if (hitInput >= 0.5)
+        if (hitInput >= 0.5&& power_bar_active == true)
         {
             power_bar_active = false;
 
@@ -161,6 +118,27 @@ public class KatamariMovement : MonoBehaviour
 
         ForceMode forceMode = isGolfHitMode ? ForceMode.Impulse : ForceMode.Force;
 
+        // turn the power bar on and off depending if we can hit hit the ball
+        if (power_bar_active)
+        {
+            power_bar.SetActive(true);
+            isGolfHitMode = true;
+            this.GetComponent<LineRenderer>().enabled = true;
+
+
+        }
+        else
+        {
+            power_bar.SetActive(false);
+            this.GetComponent<LineRenderer>().enabled = false;
+        }
+
+        if (resourceManager.can_hit())
+        {
+            power_bar_active = true;
+        }
+        PowerBar();
+        strikeStrength = power * 2500;
 
 
         if (isGolfHitMode && hitInput > 0)
@@ -172,6 +150,13 @@ public class KatamariMovement : MonoBehaviour
                 isGolfHitMode = false;
             }
         }
+
+
+        //SLOW MOTION BEHAVIOR\\
+        
+        time_manager.time_state_machine();
+        
+
 
         float accelerateFuelUsed = resourceManager.UseFuel(hitInput);
         float stopFuelUsed = resourceManager.UseFuel(stopInput);
