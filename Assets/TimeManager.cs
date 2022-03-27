@@ -5,9 +5,17 @@ public class TimeManager : MonoBehaviour
 
     public float slowdownFactor = 0.1f;
     public float slowdownLength = 1f;
+
+
     public GameObject player;
     private float current_velocity;
     private float standard_velocity;
+
+    //For scaling down velocity\\
+    private float slowmo_start_time;
+    private float current_time;
+    private float time_elapsed;
+    private float velocity_magnitude;
     
 
 
@@ -15,6 +23,7 @@ public class TimeManager : MonoBehaviour
     {
         standard_velocity = player.GetComponent<KatamariMovement>().flyStrength;
         current_velocity = standard_velocity;
+        
         
 
     }
@@ -29,6 +38,7 @@ public class TimeManager : MonoBehaviour
         if (Time.timeScale == slowdownFactor)
         {
             current_velocity = standard_velocity * 10f; 
+
         }
         else
         {
@@ -55,10 +65,17 @@ public class TimeManager : MonoBehaviour
         Time.timeScale += (1f / slowdownLength) * Time.unscaledDeltaTime;
         Time.timeScale = Mathf.Clamp(Time.timeScale, slowdownFactor, 1f);
         Time.fixedDeltaTime = Time.timeScale * 0.02f;
+
+        if (Time.timeScale != 1)
+        {
+            velocity_magnitude = player.GetComponent<Rigidbody>().velocity.magnitude;
+        }
+
         if(Time.timeScale == 1)
         {
             current_velocity = standard_velocity;
-
+            
+           
         }
 
         player.GetComponent<KatamariMovement>().flyStrength = current_velocity;

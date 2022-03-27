@@ -103,6 +103,9 @@ public class KatamariMovement : MonoBehaviour
 
         }
 
+     
+
+
      if (power_bar_active == false && hitInput > 0.5 && resourceManager.GetComponent<ResourceManager>().GetTimeSinceLastHit() <= 0.2f)
         {
             hitInput = 0;
@@ -369,7 +372,13 @@ public class KatamariMovement : MonoBehaviour
     public bool IsGolfHitMode()
     {
         return isGolfHitMode;
-    }   
+    }
+
+
+    
+    
+
+
 }
 
 

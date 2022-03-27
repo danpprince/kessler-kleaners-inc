@@ -1082,6 +1082,7 @@ GameObject:
   - component: {fileID: 795177498}
   - component: {fileID: 795177497}
   - component: {fileID: 795177496}
+  - component: {fileID: 795177499}
   m_Layer: 5
   m_Name: Power Bar
   m_TagString: Untagged
@@ -1146,6 +1147,19 @@ RectTransform:
   m_AnchoredPosition: {x: 831.639, y: -4.377}
   m_SizeDelta: {x: 143.77, y: 1097.966}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &795177499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 795177495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aff95c5fe7f03754c8612328d72020e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1453225961}
 --- !u!1 &801076217
 GameObject:
   m_ObjectHideFlags: 0
