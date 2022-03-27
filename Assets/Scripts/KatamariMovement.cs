@@ -106,7 +106,7 @@ public class KatamariMovement : MonoBehaviour
         ForceMode forceMode = isGolfHitMode ? ForceMode.Impulse : ForceMode.Force;
 
         // turn the power bar on and off depending if we can hit hit the ball
-        if (power_bar_active) // changed from powerbaractive?
+        if (power_bar_active)
         {
             power_bar.SetActive(true);
             isGolfHitMode = true;
