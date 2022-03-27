@@ -39,7 +39,11 @@ public class KatamariMovement : MonoBehaviour
     private float angle_timer = 0;
     private bool power_bar_active = true;
     public TimeManager time_manager;
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> origin/master
 
     // Start is called before the first frame update
     void Start()
@@ -54,7 +58,11 @@ public class KatamariMovement : MonoBehaviour
         stuckObjects = new Queue<GameObject>();
 
         collisionAudioSource = GetComponent<AudioSource>();
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> origin/master
     }
 
     // Update is called once per frame
@@ -66,6 +74,7 @@ public class KatamariMovement : MonoBehaviour
         stopInput = Input.GetAxis("Stop");
 
 
+<<<<<<< HEAD
         
 
         // turn the power bar on and off depending if we can hit hit the ball
@@ -98,11 +107,49 @@ public class KatamariMovement : MonoBehaviour
            
         
     else
+=======
+
+
+        // turn the power bar on and off depending if we can hit hit the ball
+        if (power_bar_active)
+        {
+            power_bar.SetActive(true);
+            isGolfHitMode = true;
+            this.GetComponent<LineRenderer>().enabled = true;
+
+
+        }
+        else
+        {
+            power_bar.SetActive(false);
+            this.GetComponent<LineRenderer>().enabled = false;
+        }
+
+        if (resourceManager.can_hit())
+        {
+            power_bar_active = true;
+        }
+
+
+        // SLOW MOTION
+
+        float flyMovementDeadTime = 0.2f;
+        bool isFlyMovementDeadTime = resourceManager.GetTimeSinceLastHit() >= flyMovementDeadTime;
+
+        if (power_bar_active == false && hitInput > 0.5 && isFlyMovementDeadTime)
+        {
+            time_manager.SlowMotion();
+        }
+
+
+        else
+>>>>>>> origin/master
         {
             time_manager.NormalTime();
 
         }
 
+<<<<<<< HEAD
      
 
 
@@ -117,12 +164,32 @@ public class KatamariMovement : MonoBehaviour
        
         strikeStrength = power * 2500;
         
+=======
+
+
+
+        if (power_bar_active == false && hitInput > 0.5 && !isFlyMovementDeadTime)
+        {
+            hitInput = 0;
+        }
+
+
+        // makes the power bar go up and down and apply strength if in golf mode
+        PowerBar();
+
+        strikeStrength = power * 2500;
+
+>>>>>>> origin/master
 
 
         if (hitInput >= 0.5)
         {
             power_bar_active = false;
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> origin/master
         }
 
 
@@ -130,6 +197,7 @@ public class KatamariMovement : MonoBehaviour
         angle_timer += Time.unscaledDeltaTime;
         if (verticalInput > 0.5 && angle_timer >= 0.25)
         {
+<<<<<<< HEAD
             
             hitXAngle += 20;
             angle_timer = 0;
@@ -137,19 +205,33 @@ public class KatamariMovement : MonoBehaviour
         }
 
         if (verticalInput < -0.5 && angle_timer >=0.25)
+=======
+
+            hitXAngle += 20;
+            angle_timer = 0;
+
+        }
+
+        if (verticalInput < -0.5 && angle_timer >= 0.25)
+>>>>>>> origin/master
         {
 
             hitXAngle -= 20;
             angle_timer = 0;
         }
 
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> origin/master
 
 
 
     }
 
-    private void FixedUpdate() {
+    private void FixedUpdate()
+    {
         float yRotation = horizontalInput * rotationSpeed;
         Vector3 rotation = new Vector3(0, yRotation, 0);
         transform.Rotate(rotation, Space.World);
@@ -157,6 +239,8 @@ public class KatamariMovement : MonoBehaviour
 
         ForceMode forceMode = isGolfHitMode ? ForceMode.Impulse : ForceMode.Force;
         
+
+
 
 
         if (isGolfHitMode && hitInput > 0)
@@ -177,7 +261,11 @@ public class KatamariMovement : MonoBehaviour
         // Roll the katamari in the direction it is being hit
         rb.AddTorque(CalculateRollVector(accelerateFuelUsed), forceMode);
 
+<<<<<<< HEAD
        
+=======
+
+>>>>>>> origin/master
 
         // Slow down based on input
         if (stopFuelUsed > 0.5)
@@ -185,7 +273,8 @@ public class KatamariMovement : MonoBehaviour
             rb.velocity = 0.95f * rb.velocity;
             rb.angularVelocity = 0.95f * rb.angularVelocity;
             rb.useGravity = false;
-        } else
+        }
+        else
         {
             rb.useGravity = true;
         }
@@ -194,7 +283,7 @@ public class KatamariMovement : MonoBehaviour
     public Vector3 CalculateHitVector(float accelerateFuelUsed)
     {
         float strength;
-        
+
         if (isGolfHitMode)
         {
             strength = strikeStrength;
@@ -237,11 +326,13 @@ public class KatamariMovement : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider collider) {
+    private void OnTriggerEnter(Collider collider)
+    {
         print("Collided with " + collider.name);
 
         GameObject colliderObject = collider.gameObject;
-        if (colliderObject.tag == "Stickable") {
+        if (colliderObject.tag == "Stickable")
+        {
             StickToKatamari(colliderObject);
 
             AudioSource audioSource = colliderObject.GetComponent<AudioSource>();
@@ -253,7 +344,8 @@ public class KatamariMovement : MonoBehaviour
         }
     }
 
-    void StickToKatamari(GameObject colliderObject) {
+    void StickToKatamari(GameObject colliderObject)
+    {
         float towardsKatamariAmount = 0.0f;
         float jitterAmount = 0.0f;
 
@@ -302,8 +394,8 @@ public class KatamariMovement : MonoBehaviour
         {
             Destroy(colliderObject.GetComponent<Collider>());
             colliderMarkerColor = nonColliderObjectColor;
-        } 
-        else 
+        }
+        else
         {
             colliderMarkerColor = colliderObjectColor;
         }
@@ -319,8 +411,8 @@ public class KatamariMovement : MonoBehaviour
 
     void OptimizeOldestStuckObjects()
     {
-       if (stuckObjects.Count > stuckObjectCountLimit)
-       {
+        if (stuckObjects.Count > stuckObjectCountLimit)
+        {
             GameObject oldestObject = stuckObjects.Dequeue();
 
             bool isDeletingCollider = Random.value < 0.75;
@@ -342,9 +434,15 @@ public class KatamariMovement : MonoBehaviour
     {
 
         time_modifier = Time.fixedDeltaTime;
+<<<<<<< HEAD
         if (power <=1 && go_up)
         {
             power += 0.01f * (time_modifier/0.02f);
+=======
+        if (power <= 1 && go_up)
+        {
+            power += 0.01f * (time_modifier / 0.02f);
+>>>>>>> origin/master
         }
 
         if (power >= 1)
@@ -352,9 +450,15 @@ public class KatamariMovement : MonoBehaviour
             go_up = false;
         }
 
+<<<<<<< HEAD
         if (power >= 0 && go_up==false)
         {
             power -= 0.01f * (time_modifier/0.02f);
+=======
+        if (power >= 0 && go_up == false)
+        {
+            power -= 0.01f * (time_modifier / 0.02f);
+>>>>>>> origin/master
         }
 
         if (power <= 0)
@@ -362,10 +466,17 @@ public class KatamariMovement : MonoBehaviour
             go_up = true;
         }
 
+<<<<<<< HEAD
         
             power_bar.GetComponent<Image>().fillAmount = power;
         
         
+=======
+
+        power_bar.GetComponent<Image>().fillAmount = power;
+
+
+>>>>>>> origin/master
     }
 
     // Returns True if in golf hit mode
@@ -375,8 +486,13 @@ public class KatamariMovement : MonoBehaviour
     }
 
 
+<<<<<<< HEAD
     
     
+=======
+
+
+>>>>>>> origin/master
 
 
 }
