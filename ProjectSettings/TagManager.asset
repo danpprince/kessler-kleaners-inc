@@ -6,7 +6,6 @@ TagManager:
   tags:
   - Stickable
   - player
-  - goal
   layers:
   - Default
   - TransparentFX

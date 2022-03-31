@@ -8,10 +8,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Pats Level.unity
     guid: af219ac1cf080794a8e61473fc69bb8b
-  - enabled: 1
-    path: Assets/Scenes/Hilly plane level.unity
-    guid: 24c9e198b478c1149be22cc5696f1e7b
-  - enabled: 1
-    path: Assets/Scenes/Hilly plane level 2.unity
-    guid: 4442142d38892db48a20c096e76cf96c
   m_configObjects: {}
