@@ -40,7 +40,6 @@ public class KatamariMovement : MonoBehaviour
     public bool power_bar_active = true;
     public TimeManager time_manager;
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -54,7 +53,6 @@ public class KatamariMovement : MonoBehaviour
         stuckObjects = new Queue<GameObject>();
 
         collisionAudioSource = GetComponent<AudioSource>();
-
     }
 
     // Update is called once per frame
@@ -69,7 +67,6 @@ public class KatamariMovement : MonoBehaviour
         if (hitInput >= 0.5 && power_bar_active)
         {
             power_bar_active = false;
-
         }
 
 
@@ -90,7 +87,7 @@ public class KatamariMovement : MonoBehaviour
             angle_timer = 0;
         }
 
-
+        
 
 
 
@@ -104,6 +101,8 @@ public class KatamariMovement : MonoBehaviour
         heading *= Quaternion.Euler(0, yRotation, 0);
 
         ForceMode forceMode = isGolfHitMode ? ForceMode.Impulse : ForceMode.Force;
+        
+
 
         // turn the power bar on and off depending if we can hit hit the ball
         if (power_bar_active)
@@ -153,7 +152,6 @@ public class KatamariMovement : MonoBehaviour
 
         // Roll the katamari in the direction it is being hit
         rb.AddTorque(CalculateRollVector(accelerateFuelUsed), forceMode);
-
 
 
         // Slow down based on input
@@ -356,8 +354,8 @@ public class KatamariMovement : MonoBehaviour
     }
 
 
-
-
+    
+    
 
 
 }
