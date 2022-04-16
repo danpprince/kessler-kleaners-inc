@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Stickable
   - player
+  - goal
+  - boundary
   layers:
   - Default
   - TransparentFX
