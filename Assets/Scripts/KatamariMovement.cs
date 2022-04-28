@@ -40,12 +40,28 @@ public class KatamariMovement : MonoBehaviour
     public bool power_bar_active = true;
     public TimeManager time_manager;
 
-    // Start is called before the first frame update
+    // state machine stuff\\
+    private enum stateMachine { normalSpeed, slowDown, slowMotion, speedUp };
+    stateMachine myStateMachine;
+    float standardStrength = 0;
+
+    // for determing how much and attach/release time of time scaling\\
+    public float slowdownFactor = 0.1f;
+    public float slowdownLength = 1f;
+
+    //scaling back velocity\\
+    float velocityMagnitude = 0;
+
+
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         power = 0;
         go_up = true;
+        //for switching velocity strength in slow-mo\\
+        standardStrength = flyStrength;
 
         Vector3 initialRotation = transform.rotation.eulerAngles;
         heading = Quaternion.Euler(0, transform.rotation.y, 0);
@@ -53,6 +69,9 @@ public class KatamariMovement : MonoBehaviour
         stuckObjects = new Queue<GameObject>();
 
         collisionAudioSource = GetComponent<AudioSource>();
+        
+        //change once golf mode is implemented in state machine \\
+        myStateMachine = stateMachine.normalSpeed;
     }
 
     // Update is called once per frame
@@ -104,7 +123,9 @@ public class KatamariMovement : MonoBehaviour
         
 
 
-        // turn the power bar on and off depending if we can hit hit the ball
+        // turn the power bar on and off depending if we can hit hit the ball 
+        //goes into state machine
+
         if (power_bar_active)
         {
             power_bar.SetActive(true);
@@ -126,7 +147,7 @@ public class KatamariMovement : MonoBehaviour
         PowerBar();
         strikeStrength = power * 2500;
 
-
+        // goes into state machine
         if (isGolfHitMode && hitInput > 0)
         {
             bool isHitSuccessful = resourceManager.tryToHit();
@@ -138,10 +159,11 @@ public class KatamariMovement : MonoBehaviour
         }
 
 
-        //SLOW MOTION BEHAVIOR\\
+        //SLOW MOTION BEHAVIOR\\ // goes into state machine
         if (!isGolfHitMode)
         {
-            time_manager.time_state_machine();
+            
+            time_state_machine();
         }
 
 
@@ -157,7 +179,7 @@ public class KatamariMovement : MonoBehaviour
         // Slow down based on input
         if (stopFuelUsed > 0.5)
         {
-            rb.velocity = 0.95f * rb.velocity;
+            rb.velocity *= 0.95f;
             rb.angularVelocity = 0.95f * rb.angularVelocity;
             rb.useGravity = false;
         }
@@ -353,11 +375,58 @@ public class KatamariMovement : MonoBehaviour
         return isGolfHitMode;
     }
 
+    public void time_state_machine() {
+        bool isFlyMovementDeadTime = resourceManager.GetTimeSinceLastHit() >= 0.75f;
 
-    
-    
+        if (myStateMachine == stateMachine.normalSpeed)
+        {
+            flyStrength = 0;
+            // Transition to Slow Down\\
+            if (isFlyMovementDeadTime && hitInput > 0.5) {
+                myStateMachine = stateMachine.slowDown;
+            }
+        } else if (myStateMachine == stateMachine.slowDown) {
+            Time.timeScale -= (1f / slowdownLength) * Time.unscaledDeltaTime;
+            Time.timeScale = Mathf.Clamp(Time.timeScale, slowdownFactor, 1f);
+            Time.fixedDeltaTime = Time.timeScale * 0.02f;
+            flyStrength =0;
+
+            //Transition to slowMotion\\
+            if (Time.timeScale == slowdownFactor) {
+                myStateMachine = stateMachine.slowMotion;
+                flyStrength = standardStrength * (1 / slowdownFactor);
+            }
+            //Transition to Speed up if Played lets go of slow motion movement mid slowdown\\
+            if (hitInput <= 0.5)
+            {
+                myStateMachine = stateMachine.speedUp;
+            }
+        } else if (myStateMachine == stateMachine.slowMotion) {
+            if (hitInput < 0.5)
+            {
+                ///Transition to Speed Up\\\
+                myStateMachine = stateMachine.speedUp;
+            }
+        } else if (myStateMachine == stateMachine.speedUp) {
+            Time.timeScale += (1f / slowdownLength) * Time.unscaledDeltaTime;
+            Time.timeScale = Mathf.Clamp(Time.timeScale, slowdownFactor, 1f);
+            Time.fixedDeltaTime = Time.timeScale * 0.02f;
+            flyStrength = 0;
+
+            rb.velocity *= .98f;
 
 
+            if (hitInput >= 0.5) {
+                myStateMachine = stateMachine.slowDown;
+            }
+
+            if (Time.timeScale == 1) {
+                //Transition Back to Normal Speed\\
+                myStateMachine = stateMachine.normalSpeed;
+                flyStrength = 0;
+            }
+        }
+    }
 }
 
 

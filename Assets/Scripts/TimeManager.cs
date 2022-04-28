@@ -16,6 +16,7 @@ public class TimeManager : MonoBehaviour
     private float current_time;
     private float time_elapsed;
     private float velocity_magnitude;
+    // second round of implementation\\
 
     private enum stateMachine { normalSpeed, slowDown, slowMotion, speedUp };
     stateMachine myStateMachine;
@@ -69,7 +70,7 @@ public class TimeManager : MonoBehaviour
             Time.timeScale -= (1f / slowdownLength) * Time.unscaledDeltaTime;
             Time.timeScale = Mathf.Clamp(Time.timeScale, slowdownFactor, 1f);
             Time.fixedDeltaTime = Time.timeScale * 0.02f;
-            current_velocity = 0;
+            current_velocity = 0; //replace with flyStrength
 
 
 
