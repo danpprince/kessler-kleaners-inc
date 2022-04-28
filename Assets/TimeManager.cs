@@ -19,8 +19,6 @@ public class TimeManager : MonoBehaviour
 
     private enum stateMachine { normalSpeed, slowDown, slowMotion, speedUp };
     stateMachine myStateMachine;
-    public GameObject powerBar;
-    private bool powerBarActive;
     public KatamariMovement myKatamariMovement;
     public ResourceManager myResourceManager;
 
