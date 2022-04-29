@@ -17,6 +17,9 @@ public class KatamariMovement : MonoBehaviour
     public int stuckObjectCountLimit = 200;
 
     public bool isColorCodingColliders = false;
+
+    //For Sound Control\\
+    public AudioMixer slowMixer;
     private AudioSource collisionAudioSource;
 
     public ResourceManager resourceManager;
@@ -38,28 +41,24 @@ public class KatamariMovement : MonoBehaviour
     public float power;
     public float time_modifier;
     private float angle_timer = 0;
-    public bool powerBarActive = true;
-    public TimeManager time_manager;
 
     // state machine stuff\\
-    public enum stateMachine { normalSpeed, slowDown, slowMotion, speedUp, golfMode, toGolfMode };
-    public stateMachine myStateMachine;
+    public enum StateMachine { normalSpeed, slowDown, slowMotion, speedUp, golfMode, toGolfMode };
+    public StateMachine myStateMachine;
     float standardStrength = 0;
 
-    // for determing how much and attach/release time of time scaling\\
+    // for determing how much and attack/release time of time scaling\\
     public float slowdownFactor = 0.1f;
     public float slowdownLength = 1f;
     ForceMode forceMode;
 
-    //for Score Keeping\\
-    int strokeCount = 0;
-
-    //For Sound Control\\
-    public AudioMixer slowMixer;
+    //for Collision Stuff\\
+    public PhysicMaterial highFriction;
   
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+
         // for the powerbar
         power = 0;
         go_up = true;
@@ -75,7 +74,7 @@ public class KatamariMovement : MonoBehaviour
         collisionAudioSource = GetComponent<AudioSource>();
         
         
-        myStateMachine = stateMachine.toGolfMode;
+        myStateMachine = StateMachine.toGolfMode;
         forceMode = ForceMode.Impulse;
         
     }
@@ -213,6 +212,7 @@ public class KatamariMovement : MonoBehaviour
 
         // print("Sticking to katamari");
         colliderObject.transform.SetParent(transform, worldPositionStays: true);
+        colliderObject.GetComponent<Collider>().material = highFriction;
 
         Vector3 towardsKatamari = colliderPosition - transform.position;
         colliderPosition -= towardsKatamari * towardsKatamariAmount;
@@ -324,7 +324,7 @@ public class KatamariMovement : MonoBehaviour
     public bool IsGolfHitMode()
     {
 
-        if (myStateMachine == stateMachine.golfMode)
+        if (myStateMachine == StateMachine.golfMode)
         {
             isGolfHitMode = true;
         } else
@@ -341,7 +341,7 @@ public class KatamariMovement : MonoBehaviour
         bool isFlyMovementDeadTime = resourceManager.GetTimeSinceLastHit() >= 0.75f;
         
         //GOLF MODE\\
-        if (myStateMachine == stateMachine.golfMode)
+        if (myStateMachine == StateMachine.golfMode)
         {
             
             _PowerBar();
@@ -349,8 +349,8 @@ public class KatamariMovement : MonoBehaviour
 
             //Transition to Normal Speed\\
             if (hitInput >0.5){
-                
-                myStateMachine = stateMachine.normalSpeed;
+                rb.constraints = RigidbodyConstraints.None;
+                myStateMachine = StateMachine.normalSpeed;
                 powerBar.SetActive(false);
                 this.GetComponent<LineRenderer>().enabled = false;
                 resourceManager.tryToHit();
@@ -359,7 +359,7 @@ public class KatamariMovement : MonoBehaviour
             }
         }
 
-        if (myStateMachine == stateMachine.toGolfMode) {
+        if (myStateMachine == StateMachine.toGolfMode) {
             Time.timeScale += (1f / slowdownLength) * Time.unscaledDeltaTime;
             Time.timeScale = Mathf.Clamp(Time.timeScale, slowdownFactor, 1f);
             Time.fixedDeltaTime = Time.timeScale * 0.02f;
@@ -371,25 +371,28 @@ public class KatamariMovement : MonoBehaviour
                 this.GetComponent<LineRenderer>().enabled = true;
                 go_up = true;
                 forceMode = ForceMode.Impulse;
-                myStateMachine = stateMachine.golfMode;
+                rb.constraints = RigidbodyConstraints.FreezePosition;
+                rb.freezeRotation = true;
+                rb.freezeRotation = false;
+                myStateMachine = StateMachine.golfMode;
 
             }
 
         }
 
         //NORMAL SPEED\\
-        if (myStateMachine == stateMachine.normalSpeed)
+        if (myStateMachine == StateMachine.normalSpeed)
         {
             // Transition to Slow Down\\
             if (isFlyMovementDeadTime && hitInput > 0.5) {
-                myStateMachine = stateMachine.slowDown;
+                myStateMachine = StateMachine.slowDown;
             }
             //Or toGolfMOde\\
             if (resourceManager.can_hit()) {
-                myStateMachine = stateMachine.toGolfMode;
+                myStateMachine = StateMachine.toGolfMode;
             }
 
-        } else if (myStateMachine == stateMachine.slowDown) {
+        } else if (myStateMachine == StateMachine.slowDown) {
             Time.timeScale -= (1f / slowdownLength) * Time.unscaledDeltaTime;
             Time.timeScale = Mathf.Clamp(Time.timeScale, slowdownFactor, 1f);
             Time.fixedDeltaTime = Time.timeScale * 0.02f;
@@ -397,27 +400,27 @@ public class KatamariMovement : MonoBehaviour
 
             //Transition to slowMotion\\
             if (Time.timeScale == slowdownFactor) {
-                myStateMachine = stateMachine.slowMotion;
+                myStateMachine = StateMachine.slowMotion;
                 flyStrength = standardStrength * (1 / slowdownFactor);
             }
             //Transition to Speed up if Played lets go of slow motion movement mid slowdown\\
             if (hitInput <= 0.5){
-                myStateMachine = stateMachine.speedUp;
+                myStateMachine = StateMachine.speedUp;
             } //Or to toGolfMode\\
             if (resourceManager.can_hit()){
-                myStateMachine = stateMachine.toGolfMode;
+                myStateMachine = StateMachine.toGolfMode;
             }
 
-        } else if (myStateMachine == stateMachine.slowMotion) {
+        } else if (myStateMachine == StateMachine.slowMotion) {
             if (hitInput < 0.5) {
                 ///Transition to Speed Up\\\
-                myStateMachine = stateMachine.speedUp;
+                myStateMachine = StateMachine.speedUp;
             }
             if (resourceManager.can_hit()){
-                myStateMachine = stateMachine.toGolfMode;
+                myStateMachine = StateMachine.toGolfMode;
             }
             //SPEED UP\\
-        } else if (myStateMachine == stateMachine.speedUp) {
+        } else if (myStateMachine == StateMachine.speedUp) {
             Time.timeScale += (1f / slowdownLength) * Time.unscaledDeltaTime;
             Time.timeScale = Mathf.Clamp(Time.timeScale, slowdownFactor, 1f);
             Time.fixedDeltaTime = Time.timeScale * 0.02f;
@@ -427,19 +430,44 @@ public class KatamariMovement : MonoBehaviour
 
 
             if (hitInput >= 0.5) {
-                myStateMachine = stateMachine.slowDown;
+                myStateMachine = StateMachine.slowDown;
             }
             if (resourceManager.can_hit()) {
-                myStateMachine = stateMachine.toGolfMode;
+                myStateMachine = StateMachine.toGolfMode;
             }
 
             if (Time.timeScale == 1) {
                 //Transition Back to Normal Speed\\
-                myStateMachine = stateMachine.normalSpeed;
+                myStateMachine = StateMachine.normalSpeed;
                 flyStrength = 0;
             }
         }
     }
+
+    private void OnCollisionStay(Collision collision)
+    {
+
+        if (myStateMachine != StateMachine.golfMode && collision.gameObject.tag =="green")
+        {
+            rb.drag += 0.01f;
+            rb.angularDrag = Mathf.Clamp(rb.drag, 0f, 1f);
+
+            rb.angularDrag += .2f;
+            rb.angularDrag = Mathf.Clamp(rb.angularDrag, 0f, 40f);
+        } else
+        {
+            rb.drag = 0f;
+            rb.angularDrag = 0f;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        rb.drag = 0f;
+        rb.angularDrag = 0f;
+    }
+
+
 }
 
 
