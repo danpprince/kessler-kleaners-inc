@@ -10,6 +10,7 @@ public class ResourceManager : MonoBehaviour
     public float initialFuel;
     private float fuelRemaining, massCollected, timeElapsedSec, lastHitTimeSec;
     private float timeBetweenHits = 5.0f;
+    public KatamariMovement k_move;
 
     public Text resourceText;
 
@@ -39,7 +40,8 @@ public class ResourceManager : MonoBehaviour
             "Fuel remaining: " + fuelRemaining + "\n"
             + "Mass collected: " + massCollected + "\n"
             + "Time elapsed: " + timeElapsedSec.ToString("0.0") + "\n"
-            + "Time since last hit: " + GetTimeSinceLastHit().ToString("0.0");
+            + "Time since last hit: " + GetTimeSinceLastHit().ToString("0.0") +"\n"
+            + "Current State :" + k_move.myStateMachine; 
     }
 
     public float UseFuel(float amountRequested) 

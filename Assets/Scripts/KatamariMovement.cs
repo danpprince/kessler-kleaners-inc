@@ -41,8 +41,8 @@ public class KatamariMovement : MonoBehaviour
     public TimeManager time_manager;
 
     // state machine stuff\\
-    private enum stateMachine { normalSpeed, slowDown, slowMotion, speedUp, golfMode, toGolfMode };
-    stateMachine myStateMachine;
+    public enum stateMachine { normalSpeed, slowDown, slowMotion, speedUp, golfMode, toGolfMode };
+    public stateMachine myStateMachine;
     float standardStrength = 0;
 
     // for determing how much and attach/release time of time scaling\\
@@ -77,6 +77,8 @@ public class KatamariMovement : MonoBehaviour
         
     }
 
+   
+
     // Update is called once per frame
     void Update()
     {
@@ -104,9 +106,6 @@ public class KatamariMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
-
-
         float yRotation = horizontalInput * rotationSpeed;
         Vector3 rotation = new Vector3(0, yRotation, 0);
         transform.Rotate(rotation, Space.World);
@@ -139,7 +138,7 @@ public class KatamariMovement : MonoBehaviour
     {
         float strength;
 
-        if (isGolfHitMode)
+        if (IsGolfHitMode())
         {
             strength = strikeStrength;
         }
@@ -149,7 +148,7 @@ public class KatamariMovement : MonoBehaviour
         }
 
         Quaternion hitAngle = heading * Quaternion.Euler(-1 * hitXAngle, 0, 0);
-        Vector3 hitVector = accelerateFuelUsed * flyStrength * (hitAngle * Vector3.forward);
+        Vector3 hitVector = accelerateFuelUsed * strength * (hitAngle * Vector3.forward);
         return hitVector;
     }
 
@@ -157,7 +156,7 @@ public class KatamariMovement : MonoBehaviour
     {
         float strength;
 
-        if (isGolfHitMode)
+        if (IsGolfHitMode())
         {
             strength = 100000;
         }
@@ -344,10 +343,11 @@ public class KatamariMovement : MonoBehaviour
 
             //Transition to Normal Speed\\
             if (hitInput >0.5){
-                resourceManager.tryToHit();
+                
                 myStateMachine = stateMachine.normalSpeed;
                 powerBar.SetActive(false);
                 this.GetComponent<LineRenderer>().enabled = false;
+                resourceManager.tryToHit();
                 forceMode = ForceMode.Force;
                 
             }
@@ -360,12 +360,12 @@ public class KatamariMovement : MonoBehaviour
 
             if (Time.timeScale == 1)
             {
-                myStateMachine = stateMachine.golfMode;
                 power = 0;
                 powerBar.SetActive(true);
                 this.GetComponent<LineRenderer>().enabled = true;
                 go_up = true;
                 forceMode = ForceMode.Impulse;
+                myStateMachine = stateMachine.golfMode;
 
             }
 
@@ -374,7 +374,6 @@ public class KatamariMovement : MonoBehaviour
         //NORMAL SPEED\\
         if (myStateMachine == stateMachine.normalSpeed)
         {
-            flyStrength = 0;
             // Transition to Slow Down\\
             if (isFlyMovementDeadTime && hitInput > 0.5) {
                 myStateMachine = stateMachine.slowDown;
