@@ -600,7 +600,7 @@ AudioSource:
   m_GameObject: {fileID: 1453225961}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 93c9641a48ebebb4ba7b025cfa8fed9a, type: 2}
   m_audioClip: {fileID: 8300000, guid: 16050ee8c666c2a4b976ae7f7b35f24a, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.774
@@ -754,6 +754,10 @@ PrefabInstance:
       propertyPath: power_bar
       value: 
       objectReference: {fileID: 795177495}
+    - target: {fileID: 8453875387259748961, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
+      propertyPath: slowMixer
+      value: 
+      objectReference: {fileID: 24100000, guid: 93c9641a48ebebb4ba7b025cfa8fed9a, type: 2}
     - target: {fileID: 8453875387259748961, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
       propertyPath: flyStrength
       value: 1000
@@ -1114,19 +1118,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5283149634530290605, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000002147755
+      value: 0.0000000021477555
       objectReference: {fileID: 0}
     - target: {fileID: 5283149634530290605, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 1.14358786e-10
+      value: -1.1435881e-10
       objectReference: {fileID: 0}
     - target: {fileID: 5283149634754594846, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.0000000021611202
+      value: 0.0000000021611204
       objectReference: {fileID: 0}
     - target: {fileID: 5283149634754594846, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 1.13645926e-10
+      value: -1.1364599e-10
       objectReference: {fileID: 0}
     - target: {fileID: 5283149634754594847, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: katamari

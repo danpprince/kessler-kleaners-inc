@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public class KatamariMovement : MonoBehaviour
 {
@@ -53,6 +54,8 @@ public class KatamariMovement : MonoBehaviour
     //for Score Keeping\\
     int strokeCount = 0;
 
+    //For Sound Control\\
+    public AudioMixer slowMixer;
   
     void Start()
     {
@@ -77,7 +80,7 @@ public class KatamariMovement : MonoBehaviour
         
     }
 
-   
+
 
     // Update is called once per frame
     void Update()
@@ -90,7 +93,7 @@ public class KatamariMovement : MonoBehaviour
 
 
 
- 
+
         // increment the vertical angle in chunks
         angle_timer += Time.unscaledDeltaTime;
         if (verticalInput > 0.5 && angle_timer >= 0.25) {
@@ -102,6 +105,9 @@ public class KatamariMovement : MonoBehaviour
             hitXAngle -= 20;
             angle_timer = 0;
         }
+
+        slowMixer.SetFloat("Pitch", Time.timeScale);
+        print(slowMixer.GetFloat("Pitch", out float value));
     }
 
     private void FixedUpdate()
