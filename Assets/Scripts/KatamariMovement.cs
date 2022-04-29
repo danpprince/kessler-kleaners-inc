@@ -31,35 +31,36 @@ public class KatamariMovement : MonoBehaviour
 
     public bool isGolfHitMode = true;
 
-    public GameObject power_bar;
+    public GameObject powerBar;
 
     private bool go_up;
     public float power;
     public float time_modifier;
     private float angle_timer = 0;
-    public bool power_bar_active = true;
+    public bool powerBarActive = true;
     public TimeManager time_manager;
 
     // state machine stuff\\
-    private enum stateMachine { normalSpeed, slowDown, slowMotion, speedUp };
+    private enum stateMachine { normalSpeed, slowDown, slowMotion, speedUp, golfMode, toGolfMode };
     stateMachine myStateMachine;
     float standardStrength = 0;
 
     // for determing how much and attach/release time of time scaling\\
     public float slowdownFactor = 0.1f;
     public float slowdownLength = 1f;
+    ForceMode forceMode;
 
-    //scaling back velocity\\
-    float velocityMagnitude = 0;
+    //for Score Keeping\\
+    int strokeCount = 0;
 
-
-
-
+  
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        // for the powerbar
         power = 0;
         go_up = true;
+
         //for switching velocity strength in slow-mo\\
         standardStrength = flyStrength;
 
@@ -70,8 +71,10 @@ public class KatamariMovement : MonoBehaviour
 
         collisionAudioSource = GetComponent<AudioSource>();
         
-        //change once golf mode is implemented in state machine \\
-        myStateMachine = stateMachine.normalSpeed;
+        
+        myStateMachine = stateMachine.toGolfMode;
+        forceMode = ForceMode.Impulse;
+        
     }
 
     // Update is called once per frame
@@ -83,89 +86,31 @@ public class KatamariMovement : MonoBehaviour
         hitInput = Input.GetAxis("Jump");
         stopInput = Input.GetAxis("Stop");
 
-        if (hitInput >= 0.5 && power_bar_active)
-        {
-            power_bar_active = false;
-        }
 
 
+ 
         // increment the vertical angle in chunks
         angle_timer += Time.unscaledDeltaTime;
-        if (verticalInput > 0.5 && angle_timer >= 0.25)
-        {
-
+        if (verticalInput > 0.5 && angle_timer >= 0.25) {
             hitXAngle += 20;
             angle_timer = 0;
-
         }
 
-        if (verticalInput < -0.5 && angle_timer >= 0.25)
-        {
-
+        if (verticalInput < -0.5 && angle_timer >= 0.25) {
             hitXAngle -= 20;
             angle_timer = 0;
         }
-
-        
-
-
-
     }
 
     private void FixedUpdate()
     {
+        
+
+
         float yRotation = horizontalInput * rotationSpeed;
         Vector3 rotation = new Vector3(0, yRotation, 0);
         transform.Rotate(rotation, Space.World);
         heading *= Quaternion.Euler(0, yRotation, 0);
-
-        ForceMode forceMode = isGolfHitMode ? ForceMode.Impulse : ForceMode.Force;
-        
-
-
-        // turn the power bar on and off depending if we can hit hit the ball 
-        //goes into state machine
-
-        if (power_bar_active)
-        {
-            power_bar.SetActive(true);
-            isGolfHitMode = true;
-            this.GetComponent<LineRenderer>().enabled = true;
-
-
-        }
-        else
-        {
-            power_bar.SetActive(false);
-            this.GetComponent<LineRenderer>().enabled = false;
-        }
-
-        if (resourceManager.can_hit())
-        {
-            power_bar_active = true;
-        }
-        PowerBar();
-        strikeStrength = power * 2500;
-
-        // goes into state machine
-        if (isGolfHitMode && hitInput > 0)
-        {
-            bool isHitSuccessful = resourceManager.tryToHit();
-            if (!isHitSuccessful)
-            {
-                hitInput = 0;
-                isGolfHitMode = false;
-            }
-        }
-
-
-        //SLOW MOTION BEHAVIOR\\ // goes into state machine
-        if (!isGolfHitMode)
-        {
-            
-            time_state_machine();
-        }
-
 
         float accelerateFuelUsed = resourceManager.UseFuel(hitInput);
         float stopFuelUsed = resourceManager.UseFuel(stopInput);
@@ -183,10 +128,11 @@ public class KatamariMovement : MonoBehaviour
             rb.angularVelocity = 0.95f * rb.angularVelocity;
             rb.useGravity = false;
         }
-        else
-        {
+        else {
             rb.useGravity = true;
         }
+
+        time_state_machine();
     }
 
     public Vector3 CalculateHitVector(float accelerateFuelUsed)
@@ -203,7 +149,7 @@ public class KatamariMovement : MonoBehaviour
         }
 
         Quaternion hitAngle = heading * Quaternion.Euler(-1 * hitXAngle, 0, 0);
-        Vector3 hitVector = accelerateFuelUsed * strength * (hitAngle * Vector3.forward);
+        Vector3 hitVector = accelerateFuelUsed * flyStrength * (hitAngle * Vector3.forward);
         return hitVector;
     }
 
@@ -339,7 +285,7 @@ public class KatamariMovement : MonoBehaviour
     }
 
 
-    void PowerBar()
+    void _PowerBar()
     {
 
         time_modifier = Time.fixedDeltaTime;
@@ -364,7 +310,7 @@ public class KatamariMovement : MonoBehaviour
         }
 
 
-        power_bar.GetComponent<Image>().fillAmount = power;
+        powerBar.GetComponent<Image>().fillAmount = power;
 
 
     }
@@ -372,12 +318,60 @@ public class KatamariMovement : MonoBehaviour
     // Returns True if in golf hit mode
     public bool IsGolfHitMode()
     {
+
+        if (myStateMachine == stateMachine.golfMode)
+        {
+            isGolfHitMode = true;
+        } else
+        {
+            isGolfHitMode = false;
+        }
         return isGolfHitMode;
     }
 
     public void time_state_machine() {
-        bool isFlyMovementDeadTime = resourceManager.GetTimeSinceLastHit() >= 0.75f;
+        // THINGS TO CHANGE: Replace canhit() with end of stoke condition
+       
 
+        bool isFlyMovementDeadTime = resourceManager.GetTimeSinceLastHit() >= 0.75f;
+        
+        //GOLF MODE\\
+        if (myStateMachine == stateMachine.golfMode)
+        {
+            
+            _PowerBar();
+            strikeStrength = power * 2500; // make this editable
+
+            //Transition to Normal Speed\\
+            if (hitInput >0.5){
+                resourceManager.tryToHit();
+                myStateMachine = stateMachine.normalSpeed;
+                powerBar.SetActive(false);
+                this.GetComponent<LineRenderer>().enabled = false;
+                forceMode = ForceMode.Force;
+                
+            }
+        }
+
+        if (myStateMachine == stateMachine.toGolfMode) {
+            Time.timeScale += (1f / slowdownLength) * Time.unscaledDeltaTime;
+            Time.timeScale = Mathf.Clamp(Time.timeScale, slowdownFactor, 1f);
+            Time.fixedDeltaTime = Time.timeScale * 0.02f;
+
+            if (Time.timeScale == 1)
+            {
+                myStateMachine = stateMachine.golfMode;
+                power = 0;
+                powerBar.SetActive(true);
+                this.GetComponent<LineRenderer>().enabled = true;
+                go_up = true;
+                forceMode = ForceMode.Impulse;
+
+            }
+
+        }
+
+        //NORMAL SPEED\\
         if (myStateMachine == stateMachine.normalSpeed)
         {
             flyStrength = 0;
@@ -385,6 +379,11 @@ public class KatamariMovement : MonoBehaviour
             if (isFlyMovementDeadTime && hitInput > 0.5) {
                 myStateMachine = stateMachine.slowDown;
             }
+            //Or toGolfMOde\\
+            if (resourceManager.can_hit()) {
+                myStateMachine = stateMachine.toGolfMode;
+            }
+
         } else if (myStateMachine == stateMachine.slowDown) {
             Time.timeScale -= (1f / slowdownLength) * Time.unscaledDeltaTime;
             Time.timeScale = Mathf.Clamp(Time.timeScale, slowdownFactor, 1f);
@@ -397,27 +396,36 @@ public class KatamariMovement : MonoBehaviour
                 flyStrength = standardStrength * (1 / slowdownFactor);
             }
             //Transition to Speed up if Played lets go of slow motion movement mid slowdown\\
-            if (hitInput <= 0.5)
-            {
+            if (hitInput <= 0.5){
                 myStateMachine = stateMachine.speedUp;
+            } //Or to toGolfMode\\
+            if (resourceManager.can_hit()){
+                myStateMachine = stateMachine.toGolfMode;
             }
+
         } else if (myStateMachine == stateMachine.slowMotion) {
-            if (hitInput < 0.5)
-            {
+            if (hitInput < 0.5) {
                 ///Transition to Speed Up\\\
                 myStateMachine = stateMachine.speedUp;
             }
+            if (resourceManager.can_hit()){
+                myStateMachine = stateMachine.toGolfMode;
+            }
+            //SPEED UP\\
         } else if (myStateMachine == stateMachine.speedUp) {
             Time.timeScale += (1f / slowdownLength) * Time.unscaledDeltaTime;
             Time.timeScale = Mathf.Clamp(Time.timeScale, slowdownFactor, 1f);
             Time.fixedDeltaTime = Time.timeScale * 0.02f;
             flyStrength = 0;
 
-            rb.velocity *= .98f;
+            rb.velocity *= .98f; // maybe a better more dynamic way to do this but this works for now
 
 
             if (hitInput >= 0.5) {
                 myStateMachine = stateMachine.slowDown;
+            }
+            if (resourceManager.can_hit()) {
+                myStateMachine = stateMachine.toGolfMode;
             }
 
             if (Time.timeScale == 1) {
