@@ -216,17 +216,20 @@ MonoBehaviour:
   hitXAngleSpeed: 25
   stuckObjectCountLimit: 200
   isColorCodingColliders: 0
+  slowMixer: {fileID: 24100000, guid: 93c9641a48ebebb4ba7b025cfa8fed9a, type: 2}
   resourceManager: {fileID: 8453875387259748974}
   horizontalInput: 0
   verticalInput: 0
   hitInput: 0
   stopInput: 0
   isGolfHitMode: 1
-  power_bar: {fileID: 0}
+  powerBar: {fileID: 0}
   power: 0
   time_modifier: 0
-  power_bar_active: 1
-  time_manager: {fileID: 0}
+  myStateMachine: 0
+  slowdownFactor: 0.1
+  slowdownLength: 1
+  highFriction: {fileID: 0}
 --- !u!114 &8453875387259748974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,6 +243,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialFuel: 1000
+  k_move: {fileID: 0}
+  strokeCount: 0
   resourceText: {fileID: 0}
 --- !u!120 &8342835830873079450
 LineRenderer:

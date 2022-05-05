@@ -11,7 +11,9 @@ public class KatamariMovement : MonoBehaviour
     public Quaternion heading;
     public float strikeStrength = 100;
     public float flyStrength = 10;
+    [System.NonSerialized]
     public float hitXAngle = 45;
+    [System.NonSerialized]
     public float hitXAngleSpeed = 10;
 
     public int stuckObjectCountLimit = 200;
@@ -25,30 +27,37 @@ public class KatamariMovement : MonoBehaviour
     public ResourceManager resourceManager;
 
     private Rigidbody rb;
-
+    [System.NonSerialized]
     public float horizontalInput, verticalInput, hitInput, stopInput;
 
     private Queue<GameObject> stuckObjects;
 
     private Color colliderObjectColor = new Color(1.0f, 0.25f, 0.95f, 1.0f);
     private Color nonColliderObjectColor = new Color(0.2f, 0.2f, 0.2f, 1.0f);
-
+    [System.NonSerialized]
     public bool isGolfHitMode = true;
 
     public GameObject powerBar;
 
     private bool go_up;
+    [System.NonSerialized]
     public float power;
     public float time_modifier;
     private float angle_timer = 0;
 
     // state machine stuff\\
+
+
     public enum StateMachine { normalSpeed, slowDown, slowMotion, speedUp, golfMode, toGolfMode };
+    [System.NonSerialized]
     public StateMachine myStateMachine;
+    [System.NonSerialized]
     float standardStrength = 0;
 
     // for determing how much and attack/release time of time scaling\\
+    [System.NonSerialized]
     public float slowdownFactor = 0.1f;
+    [System.NonSerialized]
     public float slowdownLength = 1f;
     ForceMode forceMode;
 
@@ -371,7 +380,7 @@ public class KatamariMovement : MonoBehaviour
                 this.GetComponent<LineRenderer>().enabled = true;
                 go_up = true;
                 forceMode = ForceMode.Impulse;
-                rb.constraints = RigidbodyConstraints.FreezePosition;
+                //rb.constraints = RigidbodyConstraints.FreezePosition;
                 rb.freezeRotation = true;
                 rb.freezeRotation = false;
                 myStateMachine = StateMachine.golfMode;
