@@ -6,6 +6,7 @@ using UnityEngine.Audio;
 
 public class KatamariMovement : MonoBehaviour
 {
+
     public float movementSpeed = 1;
     public float rotationSpeed = 1;
     public Quaternion heading;
@@ -53,6 +54,8 @@ public class KatamariMovement : MonoBehaviour
     public StateMachine myStateMachine;
     [System.NonSerialized]
     float standardStrength = 0;
+    [System.NonSerialized]
+    public bool strokeDone = false;
 
     // for determing how much and attack/release time of time scaling\\
     [System.NonSerialized]
@@ -63,7 +66,9 @@ public class KatamariMovement : MonoBehaviour
 
     //for Collision Stuff\\
     public PhysicMaterial highFriction;
-  
+    private float timeOnGround = 0;
+    public float timeToStop = 5;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -115,7 +120,7 @@ public class KatamariMovement : MonoBehaviour
         }
 
         slowMixer.SetFloat("Pitch", Time.timeScale);
-        print(slowMixer.GetFloat("Pitch", out float value));
+        
     }
 
     private void FixedUpdate()
@@ -349,6 +354,7 @@ public class KatamariMovement : MonoBehaviour
 
         bool isFlyMovementDeadTime = resourceManager.GetTimeSinceLastHit() >= 0.75f;
         
+        
         //GOLF MODE\\
         if (myStateMachine == StateMachine.golfMode)
         {
@@ -380,9 +386,10 @@ public class KatamariMovement : MonoBehaviour
                 this.GetComponent<LineRenderer>().enabled = true;
                 go_up = true;
                 forceMode = ForceMode.Impulse;
-                //rb.constraints = RigidbodyConstraints.FreezePosition;
+                rb.constraints = RigidbodyConstraints.FreezePosition; //currently this make the line renderer not work as there is no possible velocity when this is true!
                 rb.freezeRotation = true;
                 rb.freezeRotation = false;
+                strokeDone = false;
                 myStateMachine = StateMachine.golfMode;
 
             }
@@ -397,10 +404,11 @@ public class KatamariMovement : MonoBehaviour
                 myStateMachine = StateMachine.slowDown;
             }
             //Or toGolfMOde\\
-            if (resourceManager.can_hit()) {
+            if (strokeDone) {
                 myStateMachine = StateMachine.toGolfMode;
             }
 
+            
         } else if (myStateMachine == StateMachine.slowDown) {
             Time.timeScale -= (1f / slowdownLength) * Time.unscaledDeltaTime;
             Time.timeScale = Mathf.Clamp(Time.timeScale, slowdownFactor, 1f);
@@ -416,7 +424,7 @@ public class KatamariMovement : MonoBehaviour
             if (hitInput <= 0.5){
                 myStateMachine = StateMachine.speedUp;
             } //Or to toGolfMode\\
-            if (resourceManager.can_hit()){
+            if (strokeDone){
                 myStateMachine = StateMachine.toGolfMode;
             }
 
@@ -425,7 +433,7 @@ public class KatamariMovement : MonoBehaviour
                 ///Transition to Speed Up\\\
                 myStateMachine = StateMachine.speedUp;
             }
-            if (resourceManager.can_hit()){
+            if (strokeDone){
                 myStateMachine = StateMachine.toGolfMode;
             }
             //SPEED UP\\
@@ -441,7 +449,7 @@ public class KatamariMovement : MonoBehaviour
             if (hitInput >= 0.5) {
                 myStateMachine = StateMachine.slowDown;
             }
-            if (resourceManager.can_hit()) {
+            if (strokeDone) {
                 myStateMachine = StateMachine.toGolfMode;
             }
 
@@ -458,22 +466,30 @@ public class KatamariMovement : MonoBehaviour
 
         if (myStateMachine != StateMachine.golfMode && collision.gameObject.tag =="green")
         {
-            rb.drag += 0.01f;
-            rb.angularDrag = Mathf.Clamp(rb.drag, 0f, 1f);
+            timeOnGround += Time.deltaTime;
 
+            rb.drag += 0.01f;
             rb.angularDrag += .2f;
-            rb.angularDrag = Mathf.Clamp(rb.angularDrag, 0f, 40f);
-        } else
+            
+        } else if (myStateMachine == StateMachine.golfMode)
         {
             rb.drag = 0f;
             rb.angularDrag = 0f;
-        }
+            
+        } 
+        
+            if (timeOnGround >= timeToStop && rb.velocity.magnitude <= 0.5f)
+            {
+                strokeDone = true;
+            }
+        
     }
 
     private void OnCollisionExit(Collision collision)
     {
         rb.drag = 0f;
         rb.angularDrag = 0f;
+        timeOnGround = 0;
     }
 
 

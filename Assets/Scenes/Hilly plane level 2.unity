@@ -222,6 +222,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Launch Pad
       objectReference: {fileID: 0}
+    - target: {fileID: 6672891423884329837, guid: e0f171cfa1e76b143b83239ce455063d, type: 3}
+      propertyPath: m_TagString
+      value: green
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e0f171cfa1e76b143b83239ce455063d, type: 3}
 --- !u!1001 &292114053
@@ -289,11 +293,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5283149633265286508, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000004290639
+      value: -0.0000000042906407
       objectReference: {fileID: 0}
     - target: {fileID: 5283149633265286508, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -3.068127e-10
+      value: 3.068128e-10
       objectReference: {fileID: 0}
     - target: {fileID: 5283149634530290605, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1258,9 +1262,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4818807213455843096, guid: 2c54bcf61ff9cb44cb3e41feb5daf360, type: 3}
+      propertyPath: m_TagString
+      value: green
+      objectReference: {fileID: 0}
     - target: {fileID: 5745370606821421971, guid: 2c54bcf61ff9cb44cb3e41feb5daf360, type: 3}
       propertyPath: m_Name
       value: Terrain
+      objectReference: {fileID: 0}
+    - target: {fileID: 5745370606821421971, guid: 2c54bcf61ff9cb44cb3e41feb5daf360, type: 3}
+      propertyPath: m_TagString
+      value: green
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c54bcf61ff9cb44cb3e41feb5daf360, type: 3}
