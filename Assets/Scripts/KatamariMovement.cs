@@ -68,6 +68,7 @@ public class KatamariMovement : MonoBehaviour
     public PhysicMaterial highFriction;
     private float timeOnGround = 0;
     public float timeToStop = 5;
+    
 
     //for determing where to point the "heading"
     public GameObject _camera;
@@ -94,6 +95,7 @@ public class KatamariMovement : MonoBehaviour
         
         myStateMachine = StateMachine.toGolfMode;
         forceMode = ForceMode.Impulse;
+        rb.sleepThreshold = 0;
         
     }
 
@@ -234,7 +236,9 @@ public class KatamariMovement : MonoBehaviour
         // print("Sticking to katamari");
         colliderObject.transform.SetParent(transform, worldPositionStays: true);
         colliderObject.GetComponent<Collider>().material = highFriction;
-
+        
+        
+      
         Vector3 towardsKatamari = colliderPosition - transform.position;
         colliderPosition -= towardsKatamari * towardsKatamariAmount;
 
@@ -398,7 +402,9 @@ public class KatamariMovement : MonoBehaviour
                 rb.freezeRotation = false;
                 strokeDone = false;
                 _pointArrowAwayFromKatamari();
+                hitXAngle = 45;
                 arrow.SetActive(true);
+                rb.mass = 100;
                 myStateMachine = StateMachine.golfMode;
 
             }
@@ -428,6 +434,7 @@ public class KatamariMovement : MonoBehaviour
             //Transition to slowMotion\\
             if (Time.timeScale == slowdownFactor) {
                 myStateMachine = StateMachine.slowMotion;
+                rb.mass = 100;
                 flyStrength = standardStrength * (1 / slowdownFactor);
                 _pointArrowAwayFromKatamari();
                 arrow.SetActive(true);
@@ -480,27 +487,35 @@ public class KatamariMovement : MonoBehaviour
         }
     }
 
-    private void OnCollisionStay(Collision collision)
+    public virtual void OnCollisionStay(Collision collision)
     {
 
-        if (myStateMachine != StateMachine.golfMode && collision.gameObject.tag =="green")
+        if (myStateMachine != StateMachine.golfMode && myStateMachine != StateMachine.slowMotion && collision.gameObject.tag =="green")
         {
             timeOnGround += Time.deltaTime;
+            print(timeOnGround);
 
-            rb.drag += 0.01f;
+            rb.drag += 0.005f;
             rb.angularDrag += .2f;
+            rb.mass = 100000;
             
-        } else if (myStateMachine == StateMachine.golfMode)
+            
+
+        } else if (myStateMachine == StateMachine.golfMode || myStateMachine == StateMachine.slowMotion)
         {
             rb.drag = 0f;
             rb.angularDrag = 0f;
+          
             
         } 
         
             if (timeOnGround >= timeToStop && rb.velocity.magnitude <= 0.5f)
             {
                 strokeDone = true;
+            rb.mass = 100;
             }
+
+        
         
     }
 
@@ -511,6 +526,7 @@ public class KatamariMovement : MonoBehaviour
             rb.drag = 0f;
             rb.angularDrag = 0f;
             timeOnGround = 0;
+            rb.mass = 100;
         }
     }
 
