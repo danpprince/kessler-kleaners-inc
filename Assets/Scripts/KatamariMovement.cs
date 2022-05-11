@@ -497,7 +497,7 @@ public class KatamariMovement : MonoBehaviour
 
             rb.drag += 0.005f;
             rb.angularDrag += .2f;
-            rb.mass = 100000;
+           // rb.mass = 100000;
             
             
 
@@ -512,7 +512,7 @@ public class KatamariMovement : MonoBehaviour
             if (timeOnGround >= timeToStop && rb.velocity.magnitude <= 0.5f)
             {
                 strokeDone = true;
-            rb.mass = 100;
+            //rb.mass = 100;
             }
 
         
@@ -526,7 +526,7 @@ public class KatamariMovement : MonoBehaviour
             rb.drag = 0f;
             rb.angularDrag = 0f;
             timeOnGround = 0;
-            rb.mass = 100;
+            //rb.mass = 100;
         }
     }
 
