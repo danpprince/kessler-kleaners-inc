@@ -858,7 +858,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.802082
@@ -915,13 +915,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1572065245}
-  m_LocalRotation: {x: -0.29752606, y: 0.375173, z: 0.5284704, w: -0.7010296}
-  m_LocalPosition: {x: 0, y: 54, z: 0}
+  m_LocalRotation: {x: 0.41397837, y: 0, z: 0, w: 0.9102867}
+  m_LocalPosition: {x: -63.7, y: 14.8, z: -37.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 10
-  m_LocalEulerAnglesHint: {x: 1.181, y: 302.79, z: -74.666}
+  m_LocalEulerAnglesHint: {x: 48.91, y: 0, z: 0}
 --- !u!1001 &1662557431
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1235,11 +1235,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5283149634530290605, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.0000000042955115
+      value: 0.0000000042955097
       objectReference: {fileID: 0}
     - target: {fileID: 5283149634530290605, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 2.2871761e-10
+      value: -2.2871753e-10
       objectReference: {fileID: 0}
     - target: {fileID: 5283149634754594846, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1263,11 +1263,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5283149634754594846, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000004298702
+      value: 0.0000000042987
       objectReference: {fileID: 0}
     - target: {fileID: 5283149634754594846, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 2.2854522e-10
+      value: -2.2854517e-10
       objectReference: {fileID: 0}
     - target: {fileID: 6604589245286658942, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_Name
@@ -1339,6 +1339,7 @@ GameObject:
   - component: {fileID: 2058016415619796744}
   - component: {fileID: 4281652550981139394}
   - component: {fileID: 2336101841643739672}
+  - component: {fileID: 2336101841643739673}
   m_Layer: 0
   m_Name: tunnel level 1
   m_TagString: Untagged
@@ -1360,6 +1361,20 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -6940246184706110475, guid: 1c327edf77b66eb4bb0eb0abf35b9b3c, type: 3}
+--- !u!114 &2336101841643739673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2336101841643739671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd6d8192bd52d49458f892bd1edb9cf4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speedX: 0
+  speedY: 0.5
 --- !u!4 &3107572339286458541
 Transform:
   m_ObjectHideFlags: 0
