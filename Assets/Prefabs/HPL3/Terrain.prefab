@@ -279,7 +279,7 @@ GameObject:
   - component: {fileID: 5867146812741377569}
   - component: {fileID: 3717328696673123886}
   m_Layer: 0
-  m_Name: Hilly plane level 2
+  m_Name: Hilly plane level 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -375,7 +375,7 @@ GameObject:
   - component: {fileID: 2014791089491050439}
   - component: {fileID: 3929117287462048612}
   m_Layer: 0
-  m_Name: Hilly plane level 2.001
+  m_Name: Hilly plane level 3.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
