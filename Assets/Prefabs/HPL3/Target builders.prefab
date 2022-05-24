@@ -48,15 +48,15 @@ MonoBehaviour:
     _bezierPath:
       points:
       - {x: 0.3961525, y: -4.0710163, z: -27.927948}
-      - {x: 0.4318023, y: -1.1857934, z: -18.42299}
-      - {x: 0.4674521, y: 1.6994296, z: -8.918033}
-      - {x: 0.5922203, y: 2.341156, z: -0.48995972}
-      - {x: 0.67041993, y: 2.7433639, z: 4.7924113}
-      - {x: 0.8993514, y: 0.09017897, z: 11.889669}
-      - {x: 0.9845123, y: 0.9720154, z: 17.113312}
-      - {x: 1.0364857, y: 1.5101967, z: 20.301281}
-      - {x: 1.0588675, y: 3.3993092, z: 23.645193}
-      - {x: 1.0812492, y: 5.2884216, z: 26.989105}
+      - {x: -3.2025652, y: -2.6660433, z: -21.647848}
+      - {x: -6.801283, y: -1.2610703, z: -15.367749}
+      - {x: -8.177311, y: -2.0166054, z: -9.4218445}
+      - {x: -9.37528, y: -2.6743739, z: -4.2453427}
+      - {x: -9.174448, y: -7.140419, z: 2.1757164}
+      - {x: -8.333561, y: -7.98925, z: 7.394562}
+      - {x: -6.8753023, y: -9.461286, z: 16.445034}
+      - {x: -2.7528691, y: -8.307049, z: 26.60803}
+      - {x: 1.369564, y: -7.152813, z: 36.771027}
       isClosed: 0
       space: 0
       controlMode: 3
@@ -72,7 +72,7 @@ MonoBehaviour:
       - 0
       globalNormalsAngle: 0
       flipNormals: 0
-    vertexPathUpToDate: 1
+    vertexPathUpToDate: 0
     vertexPathMaxAngleError: 0.3
     vertexPathMinVertexSpacing: 0.01
     showTransformTool: 1
@@ -80,7 +80,7 @@ MonoBehaviour:
     showPerSegmentBounds: 0
     displayAnchorPoints: 1
     displayControlPoints: 1
-    bezierHandleScale: 10
+    bezierHandleScale: 34.92
     globalDisplaySettingsFoldout: 0
     keepConstantHandleSize: 0
     showNormalsInVertexMode: 0
@@ -189,13 +189,13 @@ MonoBehaviour:
   editorData:
     _bezierPath:
       points:
-      - {x: -19.604744, y: -6.722969, z: -60.445175}
-      - {x: -19.183887, y: 0.053216696, z: -47.72078}
-      - {x: -18.763031, y: 6.8294024, z: -34.996384}
-      - {x: -18.016964, y: 7.120781, z: -23.051537}
-      - {x: -17.024757, y: 7.5082893, z: -7.165905}
-      - {x: -15.448317, y: -0.66918564, z: 10.112261}
-      - {x: -13.871876, y: -8.846661, z: 27.390427}
+      - {x: -19.996876, y: -6.7263947, z: -49.888824}
+      - {x: -19.460957, y: -4.4869576, z: -39.431725}
+      - {x: -18.92504, y: -2.247521, z: -28.974625}
+      - {x: -18.153126, y: -3.4457016, z: -20.071976}
+      - {x: -16.885752, y: -5.4129486, z: -5.455057}
+      - {x: -14.933501, y: -13.485928, z: 10.039706}
+      - {x: -12.981251, y: -21.558907, z: 25.53447}
       isClosed: 0
       space: 0
       controlMode: 3
@@ -210,7 +210,7 @@ MonoBehaviour:
       - 0
       globalNormalsAngle: 0
       flipNormals: 0
-    vertexPathUpToDate: 0
+    vertexPathUpToDate: 1
     vertexPathMaxAngleError: 0.3
     vertexPathMinVertexSpacing: 0.01
     showTransformTool: 1
