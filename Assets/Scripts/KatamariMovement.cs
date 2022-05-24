@@ -124,8 +124,6 @@ public class KatamariMovement : MonoBehaviour
             power_bar_active = true;
         }
         PowerBar();
-        strikeStrength = power * 2500;
-
 
         if (isGolfHitMode && hitInput > 0)
         {
@@ -173,7 +171,7 @@ public class KatamariMovement : MonoBehaviour
 
         if (isGolfHitMode)
         {
-            strength = strikeStrength;
+            strength = strikeStrength * power;
         }
         else
         {
@@ -233,12 +231,11 @@ public class KatamariMovement : MonoBehaviour
 
     void StickToKatamari(GameObject colliderObject)
     {
-        float towardsKatamariAmount = 0.0f;
+        float towardsKatamariAmount = 0.1f;
         float jitterAmount = 0.0f;
 
         Vector3 colliderPosition = colliderObject.transform.position;
 
-        // print("Sticking to katamari");
         colliderObject.transform.SetParent(transform, worldPositionStays: true);
 
         Vector3 towardsKatamari = colliderPosition - transform.position;
