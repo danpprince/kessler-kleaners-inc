@@ -9,7 +9,9 @@ public class ResourceManager : MonoBehaviour
 {
     public float initialFuel;
     private float fuelRemaining, massCollected, timeElapsedSec, lastHitTimeSec;
-    private float timeBetweenHits = 5.0f;
+    public float timeBetweenHits = 5.0f;
+    public KatamariMovement k_move;
+    public int strokeCount;
 
     public Text resourceText;
 
@@ -18,6 +20,7 @@ public class ResourceManager : MonoBehaviour
         fuelRemaining = initialFuel;
         // Initialize so a hit can be performed at the start
         lastHitTimeSec = Time.time - timeBetweenHits;
+        strokeCount = 0;
         
     }
 
@@ -39,7 +42,9 @@ public class ResourceManager : MonoBehaviour
             "Fuel remaining: " + fuelRemaining + "\n"
             + "Mass collected: " + massCollected + "\n"
             + "Time elapsed: " + timeElapsedSec.ToString("0.0") + "\n"
-            + "Time since last hit: " + GetTimeSinceLastHit().ToString("0.0");
+            + "Time since last hit: " + GetTimeSinceLastHit().ToString("0.0") + "\n"
+            + "Current State :" + k_move.myStateMachine + "\n"
+            + "Strokes :" + strokeCount;
     }
 
     public float UseFuel(float amountRequested) 
@@ -72,6 +77,7 @@ public class ResourceManager : MonoBehaviour
         if (isTimeForNextHit)
         {
             lastHitTimeSec = Time.time;
+            strokeCount += 1;
             
             return true;
         }
