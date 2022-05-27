@@ -198,8 +198,6 @@ public class KatamariMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-        print("Collided with " + collider.name);
-
         GameObject colliderObject = collider.gameObject;
         if (colliderObject.tag == "Stickable")
         {
@@ -440,6 +438,10 @@ public class KatamariMovement : MonoBehaviour
 
     public virtual void OnCollisionStay(Collision collision)
     {
+        // DrawTrajectory simulation may run this before Start() is called, so the RigidBody
+        // component reference may not have happened yet
+        if (rb is null) { rb = GetComponent<Rigidbody>(); }
+
         if (movementState != StateMachine.golfMode && movementState != StateMachine.slowMotion && collision.gameObject.tag == "green")
         {
             timeOnGround += Time.deltaTime;
@@ -455,6 +457,8 @@ public class KatamariMovement : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
+        if (rb is null) { rb = GetComponent<Rigidbody>(); }
+
         if (collision.gameObject.tag == "green")
         {
             rb.drag = 0f;
