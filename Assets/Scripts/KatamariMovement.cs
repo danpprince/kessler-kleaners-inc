@@ -362,7 +362,7 @@ public class KatamariMovement : MonoBehaviour
         {
             
             _PowerBar();
-            strikeStrength = power * 2500; // make this editable
+            strikeStrength = power * 5000; // make this editable
 
             //Transition to Normal Speed\\
             if (hitInput >0.5){
