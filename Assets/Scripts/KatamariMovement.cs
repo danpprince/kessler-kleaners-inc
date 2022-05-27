@@ -348,7 +348,7 @@ public class KatamariMovement : MonoBehaviour
 
                 // Set up physics
                 forceMode = ForceMode.Impulse;
-                rb.constraints = RigidbodyConstraints.FreezePosition; //currently this make the line renderer not work as there is no possible velocity when this is true!
+                rb.constraints = RigidbodyConstraints.FreezePosition;
                 rb.freezeRotation = false;
 
                 break;
@@ -358,12 +358,18 @@ public class KatamariMovement : MonoBehaviour
 
                 if (isHitInputActive)
                 {
-                    rb.constraints = RigidbodyConstraints.None;
-                    movementState = StateMachine.normalSpeed;
-                    powerBar.SetActive(false);
-                    arrow.SetActive(false);
-                    resourceManager.tryToHit();
-                    forceMode = ForceMode.Force;
+                    bool isHitSuccessful = resourceManager.tryToHit();
+                    if (isHitSuccessful)
+                    {
+                        movementState = StateMachine.normalSpeed;
+
+                        rb.constraints = RigidbodyConstraints.None;
+                        forceMode = ForceMode.Force;
+
+                        powerBar.SetActive(false);
+                        arrow.SetActive(false);
+                        this.GetComponent<LineRenderer>().enabled = false;
+                    }
                 }
                 break;
 
@@ -417,9 +423,7 @@ public class KatamariMovement : MonoBehaviour
 
                 if (isHitInputActive)
                 {
-                    //arrow.SetActive(true);
                     movementState = StateMachine.slowDown;
-
                 }
 
                 if (Time.timeScale == 1)
