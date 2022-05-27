@@ -11,11 +11,12 @@ public class KatamariMovement : MonoBehaviour
 {
     public float movementSpeed = 1;
     public float rotationSpeed = 1;
-    private Quaternion heading;
+    [System.NonSerialized]
+    public Quaternion heading;
     public float strikeStrength = 100;
     public float flyStrength = 10;
-    private float hitXAngle = 45;
-    private float hitXAngleSpeed = 10;
+    [System.NonSerialized]
+    public float hitXAngle = 45;
 
     public int stuckObjectCountLimit = 200;
 
@@ -38,15 +39,14 @@ public class KatamariMovement : MonoBehaviour
 
     public GameObject powerBar;
 
-    private bool go_up;
-    private float power;
+    private bool isPowerBarIncreasing = true;
+    private float powerBarValue = 0;
     public float time_modifier;
     private float angle_timer = 0;
 
-    // state machine stuff\\
-    private enum StateMachine { normalSpeed, slowDown, slowMotion, speedUp, golfMode, toGolfMode };
-    private StateMachine movementState;
-    private bool strokeDone = false;
+    public enum StateMachine { normalSpeed, slowDown, slowMotion, speedUp, golfMode, toGolfMode };
+    [System.NonSerialized]
+    public StateMachine movementState;
 
     // time scaling
     public float slowdownFactor = 0.1f;
@@ -66,10 +66,6 @@ public class KatamariMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-
-        // for the powerbar
-        power = 0;
-        go_up = true;
 
         Vector3 initialRotation = transform.rotation.eulerAngles;
         heading = Quaternion.Euler(0, transform.rotation.y, 0);
@@ -160,7 +156,7 @@ public class KatamariMovement : MonoBehaviour
 
         if (IsGolfHitMode())
         {
-            strength = strikeStrength * power;
+            strength = strikeStrength * powerBarValue;
         }
         else
         {
@@ -306,27 +302,27 @@ public class KatamariMovement : MonoBehaviour
     void UpdatePowerBar()
     {
         time_modifier = Time.fixedDeltaTime;
-        if (power <= 1 && go_up)
+        if (powerBarValue <= 1 && isPowerBarIncreasing)
         {
-            power += 0.01f * (time_modifier / 0.02f);
+            powerBarValue += 0.01f * (time_modifier / 0.02f);
         }
 
-        if (power >= 1)
+        if (powerBarValue >= 1)
         {
-            go_up = false;
+            isPowerBarIncreasing = false;
         }
 
-        if (power >= 0 && go_up == false)
+        if (powerBarValue >= 0 && isPowerBarIncreasing == false)
         {
-            power -= 0.01f * (time_modifier / 0.02f);
+            powerBarValue -= 0.01f * (time_modifier / 0.02f);
         }
 
-        if (power <= 0)
+        if (powerBarValue <= 0)
         {
-            go_up = true;
+            isPowerBarIncreasing = true;
         }
 
-        powerBar.GetComponent<Image>().fillAmount = power;
+        powerBar.GetComponent<Image>().fillAmount = powerBarValue;
     }
 
     // Returns True if in golf hit mode
@@ -337,13 +333,29 @@ public class KatamariMovement : MonoBehaviour
 
     public void UpdateTimeStateMachine()
     {
-        bool isFlyMovementDeadTime = resourceManager.GetTimeSinceLastHit() >= 0.75f;
-
         switch (movementState) {
+            case StateMachine.toGolfMode:
+                movementState = StateMachine.golfMode;
+
+                // Set up UI
+                powerBarValue = 0;
+                powerBar.SetActive(true);
+                this.GetComponent<LineRenderer>().enabled = true;
+                isPowerBarIncreasing = true;
+                arrow.SetActive(true);
+                PointArrowAwayFromKatamari();
+                hitXAngle = 45;
+
+                // Set up physics
+                forceMode = ForceMode.Impulse;
+                rb.constraints = RigidbodyConstraints.FreezePosition; //currently this make the line renderer not work as there is no possible velocity when this is true!
+                rb.freezeRotation = false;
+
+                break;
+
             case StateMachine.golfMode:
                 UpdatePowerBar();
 
-                //Transition to Normal Speed\\
                 if (isHitInputActive)
                 {
                     rb.constraints = RigidbodyConstraints.None;
@@ -352,115 +364,73 @@ public class KatamariMovement : MonoBehaviour
                     arrow.SetActive(false);
                     resourceManager.tryToHit();
                     forceMode = ForceMode.Force;
-
-                }
-                break;
-
-            case StateMachine.toGolfMode:
-
-                Time.timeScale += (1f / slowdownLength) * Time.unscaledDeltaTime;
-                Time.timeScale = Mathf.Clamp(Time.timeScale, slowdownFactor, 1f);
-                Time.fixedDeltaTime = Time.timeScale * 0.02f;
-
-                //transition to golf mode
-                if (Time.timeScale == 1)
-                {
-                    power = 0;
-                    powerBar.SetActive(true);
-                    this.GetComponent<LineRenderer>().enabled = true;
-                    go_up = true;
-                    forceMode = ForceMode.Impulse;
-                    rb.constraints = RigidbodyConstraints.FreezePosition; //currently this make the line renderer not work as there is no possible velocity when this is true!
-                    rb.freezeRotation = true;
-                    rb.freezeRotation = false;
-                    strokeDone = false;
-                    _pointArrowAwayFromKatamari();
-                    hitXAngle = 45;
-                    arrow.SetActive(true);
-                    movementState = StateMachine.golfMode;
                 }
                 break;
 
             case StateMachine.normalSpeed:
-                // Transition to Slow Down\\
-                if (isFlyMovementDeadTime && isHitInputActive)
+                bool isFlyMovementDeadTime = resourceManager.GetTimeSinceLastHit() <= 0.75f;
+                if (!isFlyMovementDeadTime && isHitInputActive)
                 {
                     movementState = StateMachine.slowDown;
                 }
-                //Or toGolfMOde\\
-                if (strokeDone)
+
+                if (timeOnGround >= timeToStop && rb.velocity.magnitude <= 0.5f)
                 {
                     movementState = StateMachine.toGolfMode;
                     arrow.SetActive(false);
                 }
+                break;
 
             case StateMachine.slowDown:
                 DecreaseTimeScale();
 
-                //Transition to slowMotion\\
                 if (Time.timeScale == slowdownFactor)
                 {
                     movementState = StateMachine.slowMotion;
 
-                    _pointArrowAwayFromKatamari();
+                    PointArrowAwayFromKatamari();
                     arrow.SetActive(true);
-
                 }
-                //Transition to Speed up if player lets go of slow motion movement mid slowdown\\
+
                 if (!isHitInputActive)
                 {
                     movementState = StateMachine.speedUp;
                     arrow.SetActive(false); //maybe
-                } //Or to toGolfMode\\
-                if (strokeDone)
-                {
-                    movementState = StateMachine.toGolfMode;
-                    arrow.SetActive(false); //maybe
                 }
+
                 break;
 
             case StateMachine.slowMotion:
-
                 if (!isHitInputActive)
                 {
-                    ///Transition to Speed Up\\\
                     movementState = StateMachine.speedUp;
                     arrow.SetActive(false); // maybe
                 }
-                if (strokeDone)
-                {
-                    movementState = StateMachine.toGolfMode;
-                }
+
                 break;
 
             case StateMachine.speedUp:
                 IncreaseTimeScale();
 
-                // scale back the velocity from slow motion to prevent unexpected momentum
-                rb.velocity *= .98f; // maybe a better more dynamic way to do this but this works for now
+                // Scale back the velocity from slow motion to prevent unexpected momentum
+                rb.velocity *= .98f;
 
-                //transition to slow down
                 if (isHitInputActive)
                 {
-
                     //arrow.SetActive(true);
                     movementState = StateMachine.slowDown;
 
                 }
-                if (strokeDone)
-                {
-                    movementState = StateMachine.toGolfMode;
-                }
 
                 if (Time.timeScale == 1)
                 {
-                    //Transition Back to Normal Speed\\
                     movementState = StateMachine.normalSpeed;
                 }
                 break;
 
-            case default:
+            default:
                 print("Unrecognized state reached: " + movementState);
+                break;
         }
     }
 
@@ -476,11 +446,6 @@ public class KatamariMovement : MonoBehaviour
         {
             rb.drag = 0f;
             rb.angularDrag = 0f;
-        }
-
-        if (timeOnGround >= timeToStop && rb.velocity.magnitude <= 0.5f)
-        {
-            strokeDone = true;
         }
     }
 

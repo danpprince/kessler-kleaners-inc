@@ -43,8 +43,8 @@ public class ResourceManager : MonoBehaviour
             + "Mass collected: " + massCollected + "\n"
             + "Time elapsed: " + timeElapsedSec.ToString("0.0") + "\n"
             + "Time since last hit: " + GetTimeSinceLastHit().ToString("0.0") + "\n"
-            + "Current State :" + k_move.myStateMachine + "\n"
-            + "Strokes :" + strokeCount;
+            + "Current State: " + k_move.movementState + "\n"
+            + "Strokes: " + strokeCount;
     }
 
     public float UseFuel(float amountRequested) 
