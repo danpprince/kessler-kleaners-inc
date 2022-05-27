@@ -1,1 +1,83 @@
-<mxfile host="app.diagrams.net" modified="2022-05-27T16:03:44.973Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36 Edg/101.0.1210.53" version="18.1.3" etag="v0yH-Ra5IcDf622YwC9o" type="github"><diagram id="6MxUP0zVEcZ57GTSZVpq">UzV2zq1wL0osyPDNT0nNUTV2VTV2LsrPL4GwciucU3NyVI0MMlNUjV1UjYwMgFjVyA2HrCFY1qAgsSg1rwSLBiADYTaQg2Y1AA==</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2022-05-27T16:10:10.528Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36 Edg/101.0.1210.53" etag="T7w71YJCmfv2er_iEuVu" version="18.1.3" type="github">
+  <diagram id="6MxUP0zVEcZ57GTSZVpq" name="Page-1">
+    <mxGraphModel dx="981" dy="548" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ZUOGAFcgS8hYkPNvRxQh-1" value="Golf mode" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="270" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ZUOGAFcgS8hYkPNvRxQh-3" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;edgeStyle=orthogonalEdgeStyle;curved=1;" edge="1" parent="1" source="ZUOGAFcgS8hYkPNvRxQh-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="150" y="230" as="sourcePoint" />
+            <mxPoint x="170" y="270" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="190" y="270" />
+              <mxPoint x="190" y="230" />
+              <mxPoint x="150" y="230" />
+              <mxPoint x="150" y="270" />
+              <mxPoint x="170" y="270" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZUOGAFcgS8hYkPNvRxQh-4" value="Update power bar" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="ZUOGAFcgS8hYkPNvRxQh-3">
+          <mxGeometry x="-0.1764" y="2" relative="1" as="geometry">
+            <mxPoint x="-14" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZUOGAFcgS8hYkPNvRxQh-5" value="Normal &lt;br&gt;flying speed" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="330" y="270" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ZUOGAFcgS8hYkPNvRxQh-6" value="" style="endArrow=classic;html=1;rounded=0;curved=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="ZUOGAFcgS8hYkPNvRxQh-1" target="ZUOGAFcgS8hYkPNvRxQh-5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="260" y="380" as="sourcePoint" />
+            <mxPoint x="310" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZUOGAFcgS8hYkPNvRxQh-7" value="Hit input active" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="ZUOGAFcgS8hYkPNvRxQh-6">
+          <mxGeometry x="-0.3429" y="-1" relative="1" as="geometry">
+            <mxPoint x="17" y="-16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZUOGAFcgS8hYkPNvRxQh-8" value="Slow down&lt;br&gt;flying" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="180" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ZUOGAFcgS8hYkPNvRxQh-9" value="Speed up&lt;br&gt;flying" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="360" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ZUOGAFcgS8hYkPNvRxQh-10" value="Slow mo&lt;br&gt;flying" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="690" y="270" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ZUOGAFcgS8hYkPNvRxQh-11" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;edgeStyle=orthogonalEdgeStyle;curved=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="ZUOGAFcgS8hYkPNvRxQh-5" target="ZUOGAFcgS8hYkPNvRxQh-5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="389.97" y="260" as="sourcePoint" />
+            <mxPoint x="389.97" y="260" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="410" y="270" />
+              <mxPoint x="410" y="230" />
+              <mxPoint x="370" y="230" />
+              <mxPoint x="370" y="270" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZUOGAFcgS8hYkPNvRxQh-12" value="Update power bar" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="ZUOGAFcgS8hYkPNvRxQh-11">
+          <mxGeometry x="-0.1764" y="2" relative="1" as="geometry">
+            <mxPoint x="-14" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZUOGAFcgS8hYkPNvRxQh-13" value="To golf mode" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="390" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ZUOGAFcgS8hYkPNvRxQh-14" value="" style="endArrow=classic;html=1;rounded=0;curved=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="ZUOGAFcgS8hYkPNvRxQh-13" target="ZUOGAFcgS8hYkPNvRxQh-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="170" y="440" as="sourcePoint" />
+            <mxPoint x="220" y="390" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="170" y="400" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
