@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2715588525673464894}
   - component: {fileID: -7923014900911682887}
   - component: {fileID: 7071759584526372955}
+  - component: {fileID: 595975843741158178}
   m_Layer: 0
   m_Name: Broccoli
   m_TagString: Stickable
@@ -92,7 +93,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 521388060154036800}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 70395789efc59a54f98e98933a92e46b, type: 2}
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.51
@@ -108,7 +109,7 @@ AudioSource:
   m_GameObject: {fileID: 521388060154036800}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 93c9641a48ebebb4ba7b025cfa8fed9a, type: 2}
   m_audioClip: {fileID: 8300000, guid: e2176cba06e36884e82f305a328ecbd2, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -208,3 +209,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxRotationSpeed: 60
+--- !u!114 &595975843741158178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 521388060154036800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 507b42241ab524446adc6720ba1b3f50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
