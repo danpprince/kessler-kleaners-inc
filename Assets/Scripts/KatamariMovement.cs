@@ -35,8 +35,8 @@ public class KatamariMovement : MonoBehaviour
 
     private Color colliderObjectColor = new Color(1.0f, 0.25f, 0.95f, 1.0f);
     private Color nonColliderObjectColor = new Color(0.2f, 0.2f, 0.2f, 1.0f);
-    [System.NonSerialized]
-    public bool isGolfHitMode = true;
+    
+    
 
     public GameObject powerBar;
 
@@ -65,7 +65,6 @@ public class KatamariMovement : MonoBehaviour
     ForceMode forceMode;
 
     //for Collision Stuff\\
-    public PhysicMaterial highFriction;
     private float timeOnGround = 0;
     public float timeToStop = 5;
     
@@ -109,9 +108,13 @@ public class KatamariMovement : MonoBehaviour
         verticalInput = Input.GetAxis("Vertical");
         hitInput = Input.GetAxis("Jump");
         stopInput = Input.GetAxis("Stop");
+        float ForceToGolfMOde = Input.GetAxis("Fire3");
 
 
-
+        if (ForceToGolfMOde > 0.5)
+        {
+            myStateMachine = StateMachine.golfMode;
+        }
 
         // increment the vertical angle in chunks
         angle_timer += Time.unscaledDeltaTime;
@@ -235,10 +238,7 @@ public class KatamariMovement : MonoBehaviour
 
         // print("Sticking to katamari");
         colliderObject.transform.SetParent(transform, worldPositionStays: true);
-        colliderObject.GetComponent<Collider>().material = highFriction;
-        
-        
-      
+
         Vector3 towardsKatamari = colliderPosition - transform.position;
         colliderPosition -= towardsKatamari * towardsKatamariAmount;
 
@@ -348,15 +348,7 @@ public class KatamariMovement : MonoBehaviour
     // Returns True if in golf hit mode
     public bool IsGolfHitMode()
     {
-
-        if (myStateMachine == StateMachine.golfMode)
-        {
-            isGolfHitMode = true;
-        } else
-        {
-            isGolfHitMode = false;
-        }
-        return isGolfHitMode;
+        return myStateMachine == StateMachine.golfMode;
     }
 
     public void time_state_machine() {
@@ -403,8 +395,7 @@ public class KatamariMovement : MonoBehaviour
                 strokeDone = false;
                 _pointArrowAwayFromKatamari();
                 hitXAngle = 45;
-                arrow.SetActive(true);
-                rb.mass = 100;
+                arrow.SetActive(true);              
                 myStateMachine = StateMachine.golfMode;
 
             }
@@ -434,7 +425,7 @@ public class KatamariMovement : MonoBehaviour
             //Transition to slowMotion\\
             if (Time.timeScale == slowdownFactor) {
                 myStateMachine = StateMachine.slowMotion;
-                rb.mass = 100;
+              
                 flyStrength = standardStrength * (1 / slowdownFactor);
                 _pointArrowAwayFromKatamari();
                 arrow.SetActive(true);
@@ -466,6 +457,7 @@ public class KatamariMovement : MonoBehaviour
             Time.fixedDeltaTime = Time.timeScale * 0.02f;
             flyStrength = 0;
 
+            // scale back the velocity from slow motion to prevent unexpected momentum
             rb.velocity *= .98f; // maybe a better more dynamic way to do this but this works for now
 
             //transition to slow down
@@ -497,7 +489,7 @@ public class KatamariMovement : MonoBehaviour
 
             rb.drag += 0.005f;
             rb.angularDrag += .2f;
-           // rb.mass = 100000;
+         
             
             
 
@@ -512,7 +504,7 @@ public class KatamariMovement : MonoBehaviour
             if (timeOnGround >= timeToStop && rb.velocity.magnitude <= 0.5f)
             {
                 strokeDone = true;
-            //rb.mass = 100;
+            
             }
 
         
@@ -526,7 +518,6 @@ public class KatamariMovement : MonoBehaviour
             rb.drag = 0f;
             rb.angularDrag = 0f;
             timeOnGround = 0;
-            //rb.mass = 100;
         }
     }
 

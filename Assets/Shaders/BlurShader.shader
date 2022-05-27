@@ -1,11 +1,11 @@
-Shader "Hidden/GrayScale"
+Shader "Hidden/BlurShader"
 {
     Properties
     {
 
         
         _MainTex("Texture", 2D) = "white" {}
-        _Samples("Samples", Range(4, 32)) = 16
+        _Samples("Samples", Range(4, 32)) = 32
         _EffectAmount("Effect amount", float) =0
         _CenterX("Center X", float) = 0.5
         _CenterY("Center Y", float) = 0.5

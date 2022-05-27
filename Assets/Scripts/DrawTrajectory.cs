@@ -56,7 +56,7 @@ public class DrawTrajectory : MonoBehaviour
     {
         timeSinceLastUpdateSeconds += Time.deltaTime;
 
-        if (timeSinceLastUpdateSeconds > collisionUpdateRateSeconds && subject.GetComponent<KatamariMovement>().isGolfHitMode)
+        if (timeSinceLastUpdateSeconds > collisionUpdateRateSeconds && subject.GetComponent<KatamariMovement>().IsGolfHitMode())
         {
             PredictKatamariPath();
             timeSinceLastUpdateSeconds = 0.0f;
