@@ -96,7 +96,7 @@ public class KatamariMovement : MonoBehaviour
 
         if (forceToGolfModeInput > 0.5)
         {
-            movementState = StateMachine.golfMode;
+            movementState = StateMachine.toGolfMode;
         }
 
         // increment the vertical angle in chunks
@@ -186,7 +186,7 @@ public class KatamariMovement : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        // Audio source may be null for objects stuck to the katamari
+        // Audio source may be null during trajectory simulation
         if (!(collisionAudioSource is null))
         {
             float volume = 0.1f + collision.impulse.magnitude / 500;
@@ -337,9 +337,10 @@ public class KatamariMovement : MonoBehaviour
 
                 // Set up UI
                 powerBarValue = 0;
+                powerBar.GetComponent<Image>().fillAmount = 0;
                 powerBar.SetActive(true);
-                this.GetComponent<LineRenderer>().enabled = true;
                 isPowerBarIncreasing = true;
+                this.GetComponent<LineRenderer>().enabled = true;
                 arrow.SetActive(true);
                 PointArrowAwayFromKatamari();
                 hitXAngle = 45;
