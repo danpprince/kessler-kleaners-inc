@@ -7,6 +7,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
 
+
+public static class FlyingConstants
+{
+    public const float SlowDownDebounceSec = 0.75f;
+    public const float StopVelocityMagnitude = 0.5f;
+}
+
 public class KatamariMovement : MonoBehaviour
 {
     public float movementSpeed = 1;
@@ -372,13 +379,14 @@ public class KatamariMovement : MonoBehaviour
                 break;
 
             case StateMachine.normalSpeed:
-                bool isFlyMovementDeadTime = resourceManager.GetTimeSinceLastHit() <= 0.75f;
+                bool isFlyMovementDeadTime =
+                    resourceManager.GetTimeSinceLastHit() <= FlyingConstants.SlowDownDebounceSec;
                 if (!isFlyMovementDeadTime && isHitInputActive)
                 {
                     movementState = StateMachine.slowDown;
                 }
 
-                if (timeOnGround >= timeToStop && rb.velocity.magnitude <= 0.5f)
+                if (timeOnGround >= timeToStop && rb.velocity.magnitude <= FlyingConstants.StopVelocityMagnitude)
                 {
                     movementState = StateMachine.toGolfMode;
                     arrow.SetActive(false);
