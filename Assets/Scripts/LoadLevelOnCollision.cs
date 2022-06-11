@@ -58,6 +58,7 @@ public class LoadLevelOnCollision : MonoBehaviour
                 Time.timeScale = 1;
                 Time.fixedDeltaTime = Time.timeScale * 0.02f;
                 SceneManager.LoadScene(strSceneName);
+                cam.GetComponent<PostProcess>().enabled = true;
                 isAtEndOfLevel = false;
             }
         }
