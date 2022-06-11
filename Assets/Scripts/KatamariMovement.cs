@@ -108,22 +108,35 @@ public class KatamariMovement : MonoBehaviour
 
         // increment the vertical angle in chunks
         angle_timer += Time.unscaledDeltaTime;
-        if (verticalInput > 0.5 && angle_timer >= 0.25)
+        if (movementState == StateMachine.golfMode)
         {
-            hitXAngle += 20;
-            angle_timer = 0;
-        }
+            if (verticalInput > 0.5 && angle_timer >= 0.25)
+            {
+                hitXAngle += 20;
+                angle_timer = 0;
+            }
 
-        if (verticalInput < -0.5 && angle_timer >= 0.25)
-        {
-            hitXAngle -= 20;
-            angle_timer = 0;
+            if (verticalInput < -0.5 && angle_timer >= 0.25)
+            {
+                hitXAngle -= 20;
+                angle_timer = 0;
+            }
         }
-        
+        else
+        {
+            if (verticalInput > 0.5)
+            {
+                hitXAngle++;
+            }
+            if (verticalInput < -0.5)
+            {
+                hitXAngle--;
+            }
+        }
         slowMixer.SetFloat("Pitch", Time.timeScale);
     }
 
-    private void FixedUpdate()
+        private void FixedUpdate()
     {
         float yRotation = horizontalInput * rotationSpeed;
         Vector3 rotation = new Vector3(0, yRotation, 0);
