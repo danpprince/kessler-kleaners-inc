@@ -103,7 +103,7 @@ public class KatamariMovement : MonoBehaviour
 
         if (forceToGolfModeInput > 0.5)
         {
-            movementState = StateMachine.golfMode;
+            movementState = StateMachine.toGolfMode;
         }
 
         // increment the vertical angle in chunks
@@ -128,6 +128,7 @@ public class KatamariMovement : MonoBehaviour
         float yRotation = horizontalInput * rotationSpeed;
         Vector3 rotation = new Vector3(0, yRotation, 0);
         transform.Rotate(rotation, Space.World);
+
         if (movementState == StateMachine.golfMode || movementState == StateMachine.slowMotion || movementState == StateMachine.slowDown)
         {
             heading *= Quaternion.Euler(0, yRotation, 0);
@@ -192,7 +193,7 @@ public class KatamariMovement : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        // Audio source may be null for objects stuck to the katamari
+        // Audio source may be null during trajectory simulation
         if (!(collisionAudioSource is null))
         {
             float volume = 0.1f + collision.impulse.magnitude / 500;
@@ -221,12 +222,11 @@ public class KatamariMovement : MonoBehaviour
 
     void StickToKatamari(GameObject colliderObject)
     {
-        float towardsKatamariAmount = 0.0f;
+        float towardsKatamariAmount = 0.1f;
         float jitterAmount = 0.0f;
 
         Vector3 colliderPosition = colliderObject.transform.position;
 
-        // print("Sticking to katamari");
         colliderObject.transform.SetParent(transform, worldPositionStays: true);
 
         Vector3 towardsKatamari = colliderPosition - transform.position;
@@ -344,9 +344,10 @@ public class KatamariMovement : MonoBehaviour
 
                 // Set up UI
                 powerBarValue = 0;
+                powerBar.GetComponent<Image>().fillAmount = 0;
                 powerBar.SetActive(true);
-                this.GetComponent<LineRenderer>().enabled = true;
                 isPowerBarIncreasing = true;
+                this.GetComponent<LineRenderer>().enabled = true;
                 arrow.SetActive(true);
                 PointArrowAwayFromKatamari();
                 hitXAngle = 45;
