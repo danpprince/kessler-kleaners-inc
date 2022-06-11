@@ -1,51 +1,78 @@
+// Prefer Microsoft C# coding style conventions in this file:
+// https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
+
+
+public static class FlyingConstants
+{
+    public const float SlowDownDebounceSec = 0.75f;
+    public const float StopVelocityMagnitude = 0.5f;
+}
 
 public class KatamariMovement : MonoBehaviour
 {
     public float movementSpeed = 1;
     public float rotationSpeed = 1;
+    [System.NonSerialized]
     public Quaternion heading;
     public float strikeStrength = 100;
     public float flyStrength = 10;
+    [System.NonSerialized]
     public float hitXAngle = 45;
-    public float hitXAngleSpeed = 10;
 
     public int stuckObjectCountLimit = 200;
 
     public bool isColorCodingColliders = false;
+
+    //For Sound Control\\
+    public AudioMixer slowMixer;
     private AudioSource collisionAudioSource;
 
     public ResourceManager resourceManager;
 
     private Rigidbody rb;
-
-    public float horizontalInput, verticalInput, hitInput, stopInput;
+    private float horizontalInput, verticalInput, hitInput, stopInput;
+    private bool isHitInputActive;
 
     private Queue<GameObject> stuckObjects;
 
     private Color colliderObjectColor = new Color(1.0f, 0.25f, 0.95f, 1.0f);
     private Color nonColliderObjectColor = new Color(0.2f, 0.2f, 0.2f, 1.0f);
 
-    public bool isGolfHitMode = true;
+    public GameObject powerBar;
 
-    public GameObject power_bar;
-
-    private bool go_up;
-    public float power;
+    private bool isPowerBarIncreasing = true;
+    private float powerBarValue = 0;
     public float time_modifier;
     private float angle_timer = 0;
-    public bool power_bar_active = true;
-    public TimeManager time_manager;
 
-    // Start is called before the first frame update
+    public enum StateMachine { normalSpeed, slowDown, slowMotion, speedUp, golfMode, toGolfMode };
+    [System.NonSerialized]
+    public StateMachine movementState;
+
+    // time scaling
+    public float slowdownFactor = 0.1f;
+    public float slowdownLength = 1f;
+
+    // for determing how much and attack/release time of time scaling\\
+    ForceMode forceMode;
+
+    //for Collision Stuff\\
+    private float timeOnGround = 0;
+    public float timeToStop = 5;
+
+    //for determing where to point the "heading"
+    public GameObject _camera;
+    public GameObject arrow;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        power = 0;
-        go_up = true;
 
         Vector3 initialRotation = transform.rotation.eulerAngles;
         heading = Quaternion.Euler(0, transform.rotation.y, 0);
@@ -53,6 +80,14 @@ public class KatamariMovement : MonoBehaviour
         stuckObjects = new Queue<GameObject>();
 
         collisionAudioSource = GetComponent<AudioSource>();
+
+        movementState = StateMachine.toGolfMode;
+        forceMode = ForceMode.Impulse;
+
+        // If the katamari rigidbody falls asleep, it will disable the OnCollisionStay
+        // callback. Setting the sleep threshold to zero makes sure this callback
+        // continues to be called when the katamari is stationary on a collider.
+        rb.sleepThreshold = 0;
     }
 
     // Update is called once per frame
@@ -62,35 +97,30 @@ public class KatamariMovement : MonoBehaviour
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
         hitInput = Input.GetAxis("Jump");
+        isHitInputActive = hitInput > 0.5;
         stopInput = Input.GetAxis("Stop");
+        float forceToGolfModeInput = Input.GetAxis("Fire3");
 
-        if (hitInput >= 0.5 && power_bar_active)
+        if (forceToGolfModeInput > 0.5)
         {
-            power_bar_active = false;
+            movementState = StateMachine.toGolfMode;
         }
-
 
         // increment the vertical angle in chunks
         angle_timer += Time.unscaledDeltaTime;
         if (verticalInput > 0.5 && angle_timer >= 0.25)
         {
-
             hitXAngle += 20;
             angle_timer = 0;
-
         }
 
         if (verticalInput < -0.5 && angle_timer >= 0.25)
         {
-
             hitXAngle -= 20;
             angle_timer = 0;
         }
-
         
-
-
-
+        slowMixer.SetFloat("Pitch", Time.timeScale);
     }
 
     private void FixedUpdate()
@@ -98,52 +128,11 @@ public class KatamariMovement : MonoBehaviour
         float yRotation = horizontalInput * rotationSpeed;
         Vector3 rotation = new Vector3(0, yRotation, 0);
         transform.Rotate(rotation, Space.World);
-        heading *= Quaternion.Euler(0, yRotation, 0);
 
-        ForceMode forceMode = isGolfHitMode ? ForceMode.Impulse : ForceMode.Force;
-        
-
-
-        // turn the power bar on and off depending if we can hit hit the ball
-        if (power_bar_active)
+        if (movementState == StateMachine.golfMode || movementState == StateMachine.slowMotion || movementState == StateMachine.slowDown)
         {
-            power_bar.SetActive(true);
-            isGolfHitMode = true;
-            this.GetComponent<LineRenderer>().enabled = true;
-
-
+            heading *= Quaternion.Euler(0, yRotation, 0);
         }
-        else
-        {
-            power_bar.SetActive(false);
-            this.GetComponent<LineRenderer>().enabled = false;
-        }
-
-        if (resourceManager.can_hit())
-        {
-            power_bar_active = true;
-        }
-        PowerBar();
-        strikeStrength = power * 2500;
-
-
-        if (isGolfHitMode && hitInput > 0)
-        {
-            bool isHitSuccessful = resourceManager.tryToHit();
-            if (!isHitSuccessful)
-            {
-                hitInput = 0;
-                isGolfHitMode = false;
-            }
-        }
-
-
-        //SLOW MOTION BEHAVIOR\\
-        if (!isGolfHitMode)
-        {
-            time_manager.time_state_machine();
-        }
-
 
         float accelerateFuelUsed = resourceManager.UseFuel(hitInput);
         float stopFuelUsed = resourceManager.UseFuel(stopInput);
@@ -157,7 +146,7 @@ public class KatamariMovement : MonoBehaviour
         // Slow down based on input
         if (stopFuelUsed > 0.5)
         {
-            rb.velocity = 0.95f * rb.velocity;
+            rb.velocity *= 0.95f;
             rb.angularVelocity = 0.95f * rb.angularVelocity;
             rb.useGravity = false;
         }
@@ -165,15 +154,17 @@ public class KatamariMovement : MonoBehaviour
         {
             rb.useGravity = true;
         }
+
+        UpdateTimeStateMachine();
     }
 
     public Vector3 CalculateHitVector(float accelerateFuelUsed)
     {
         float strength;
 
-        if (isGolfHitMode)
+        if (IsGolfHitMode())
         {
-            strength = strikeStrength;
+            strength = strikeStrength * powerBarValue;
         }
         else
         {
@@ -189,7 +180,7 @@ public class KatamariMovement : MonoBehaviour
     {
         float strength;
 
-        if (isGolfHitMode)
+        if (IsGolfHitMode())
         {
             strength = 100000;
         }
@@ -202,7 +193,7 @@ public class KatamariMovement : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        // Audio source may be null for objects stuck to the katamari
+        // Audio source may be null during trajectory simulation
         if (!(collisionAudioSource is null))
         {
             float volume = 0.1f + collision.impulse.magnitude / 500;
@@ -215,8 +206,6 @@ public class KatamariMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-        print("Collided with " + collider.name);
-
         GameObject colliderObject = collider.gameObject;
         if (colliderObject.tag == "Stickable")
         {
@@ -233,12 +222,11 @@ public class KatamariMovement : MonoBehaviour
 
     void StickToKatamari(GameObject colliderObject)
     {
-        float towardsKatamariAmount = 0.0f;
+        float towardsKatamariAmount = 0.1f;
         float jitterAmount = 0.0f;
 
         Vector3 colliderPosition = colliderObject.transform.position;
 
-        // print("Sticking to katamari");
         colliderObject.transform.SetParent(transform, worldPositionStays: true);
 
         Vector3 towardsKatamari = colliderPosition - transform.position;
@@ -316,48 +304,198 @@ public class KatamariMovement : MonoBehaviour
         }
     }
 
-
-    void PowerBar()
+    void UpdatePowerBar()
     {
-
         time_modifier = Time.fixedDeltaTime;
-        if (power <= 1 && go_up)
+        if (powerBarValue <= 1 && isPowerBarIncreasing)
         {
-            power += 0.01f * (time_modifier / 0.02f);
+            powerBarValue += 0.01f * (time_modifier / 0.02f);
         }
 
-        if (power >= 1)
+        if (powerBarValue >= 1)
         {
-            go_up = false;
+            isPowerBarIncreasing = false;
         }
 
-        if (power >= 0 && go_up == false)
+        if (powerBarValue >= 0 && isPowerBarIncreasing == false)
         {
-            power -= 0.01f * (time_modifier / 0.02f);
+            powerBarValue -= 0.01f * (time_modifier / 0.02f);
         }
 
-        if (power <= 0)
+        if (powerBarValue <= 0)
         {
-            go_up = true;
+            isPowerBarIncreasing = true;
         }
 
-
-        power_bar.GetComponent<Image>().fillAmount = power;
-
-
+        powerBar.GetComponent<Image>().fillAmount = powerBarValue;
     }
 
     // Returns True if in golf hit mode
     public bool IsGolfHitMode()
     {
-        return isGolfHitMode;
+        return movementState == StateMachine.golfMode;
     }
 
+    public void UpdateTimeStateMachine()
+    {
+        switch (movementState) {
+            case StateMachine.toGolfMode:
+                movementState = StateMachine.golfMode;
 
-    
-    
+                // Set up UI
+                powerBarValue = 0;
+                powerBar.GetComponent<Image>().fillAmount = 0;
+                powerBar.SetActive(true);
+                isPowerBarIncreasing = true;
+                this.GetComponent<LineRenderer>().enabled = true;
+                arrow.SetActive(true);
+                PointArrowAwayFromKatamari();
+                hitXAngle = 45;
 
+                // Set up physics
+                forceMode = ForceMode.Impulse;
+                rb.constraints = RigidbodyConstraints.FreezePosition;
+                rb.freezeRotation = false;
 
+                break;
+
+            case StateMachine.golfMode:
+                UpdatePowerBar();
+
+                if (isHitInputActive)
+                {
+                    bool isHitSuccessful = resourceManager.tryToHit();
+                    if (isHitSuccessful)
+                    {
+                        movementState = StateMachine.normalSpeed;
+
+                        rb.constraints = RigidbodyConstraints.None;
+                        forceMode = ForceMode.Force;
+
+                        powerBar.SetActive(false);
+                        arrow.SetActive(false);
+                        this.GetComponent<LineRenderer>().enabled = false;
+                    }
+                }
+                break;
+
+            case StateMachine.normalSpeed:
+                bool isFlyMovementDeadTime =
+                    resourceManager.GetTimeSinceLastHit() <= FlyingConstants.SlowDownDebounceSec;
+                if (!isFlyMovementDeadTime && isHitInputActive)
+                {
+                    movementState = StateMachine.slowDown;
+                }
+
+                if (timeOnGround >= timeToStop && rb.velocity.magnitude <= FlyingConstants.StopVelocityMagnitude)
+                {
+                    movementState = StateMachine.toGolfMode;
+                    arrow.SetActive(false);
+                }
+                break;
+
+            case StateMachine.slowDown:
+                DecreaseTimeScale();
+
+                if (Time.timeScale == slowdownFactor)
+                {
+                    movementState = StateMachine.slowMotion;
+
+                    PointArrowAwayFromKatamari();
+                    arrow.SetActive(true);
+                }
+
+                if (!isHitInputActive)
+                {
+                    movementState = StateMachine.speedUp;
+                    arrow.SetActive(false); //maybe
+                }
+
+                break;
+
+            case StateMachine.slowMotion:
+                if (!isHitInputActive)
+                {
+                    movementState = StateMachine.speedUp;
+                    arrow.SetActive(false); // maybe
+                }
+
+                break;
+
+            case StateMachine.speedUp:
+                IncreaseTimeScale();
+
+                // Scale back the velocity from slow motion to prevent unexpected momentum
+                rb.velocity *= .98f;
+
+                if (isHitInputActive)
+                {
+                    movementState = StateMachine.slowDown;
+                }
+
+                if (Time.timeScale == 1)
+                {
+                    movementState = StateMachine.normalSpeed;
+                }
+                break;
+
+            default:
+                print("Unrecognized state reached: " + movementState);
+                break;
+        }
+    }
+
+    public virtual void OnCollisionStay(Collision collision)
+    {
+        // DrawTrajectory simulation may run this before Start() is called, so the RigidBody
+        // component reference may not have happened yet
+        if (rb is null) { rb = GetComponent<Rigidbody>(); }
+
+        if (movementState != StateMachine.golfMode && movementState != StateMachine.slowMotion && collision.gameObject.tag == "green")
+        {
+            timeOnGround += Time.deltaTime;
+            rb.drag += 0.005f;
+            rb.angularDrag += .2f;
+        }
+        else if (movementState == StateMachine.golfMode || movementState == StateMachine.slowMotion)
+        {
+            rb.drag = 0f;
+            rb.angularDrag = 0f;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (rb is null) { rb = GetComponent<Rigidbody>(); }
+
+        if (collision.gameObject.tag == "green")
+        {
+            rb.drag = 0f;
+            rb.angularDrag = 0f;
+            timeOnGround = 0;
+        }
+    }
+
+    private void PointArrowAwayFromKatamari()
+    {
+        heading = Quaternion.LookRotation(this.transform.position - _camera.transform.position, Vector3.up);
+        hitXAngle = heading.x;
+    }
+
+    private void ModifyTimeScale(bool isSpeedingUp)
+    {
+        if (isSpeedingUp)
+        {
+            Time.timeScale += (1f / slowdownLength) * Time.unscaledDeltaTime;
+        }
+        else
+        {
+            Time.timeScale -= (1f / slowdownLength) * Time.unscaledDeltaTime;
+        }
+        Time.timeScale = Mathf.Clamp(Time.timeScale, slowdownFactor, 1f);
+        Time.fixedDeltaTime = Time.timeScale * 0.02f;
+    }
+
+    private void IncreaseTimeScale() { ModifyTimeScale(true); }
+    private void DecreaseTimeScale() { ModifyTimeScale(false); }
 }
-
-

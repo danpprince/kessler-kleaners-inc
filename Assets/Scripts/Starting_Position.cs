@@ -7,7 +7,7 @@ public class Starting_Position : MonoBehaviour
     public GameObject platform;
     public Vector3 starting_position;
     public Vector3 size;
-    public MeshRenderer renderer;
+    public MeshRenderer meshRenderer;
     private Renderer player_render;
     
 
@@ -34,9 +34,9 @@ public class Starting_Position : MonoBehaviour
 
         player_size = player.GetComponent<MeshRenderer>().bounds.size;
         width = player_size.x;
-        renderer = platform.GetComponent<MeshRenderer>();
-        h = renderer.bounds.size.y;
-        starting_position = renderer.bounds.center + new Vector3 (0f, ((h/2) + (width/2)), 0f);
+        meshRenderer = platform.GetComponent<MeshRenderer>();
+        h = meshRenderer.bounds.size.y;
+        starting_position = meshRenderer.bounds.center + new Vector3 (0f, ((h/2) + (width/2)), 0f);
         player.transform.position = starting_position;
         before_stroke = true;
         default_movementSpeed = player.GetComponent<KatamariMovement>().movementSpeed;

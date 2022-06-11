@@ -35,7 +35,6 @@ public class DrawTrajectory : MonoBehaviour
         predictionScene = SceneManager.CreateScene("Prediction", parameters);
         predictionPhysicsScene = predictionScene.GetPhysicsScene();
 
-
         CopyAllObstacles();
         PredictKatamariPath();
     }
@@ -56,7 +55,7 @@ public class DrawTrajectory : MonoBehaviour
     {
         timeSinceLastUpdateSeconds += Time.deltaTime;
 
-        if (timeSinceLastUpdateSeconds > collisionUpdateRateSeconds && subject.GetComponent<KatamariMovement>().isGolfHitMode)
+        if (timeSinceLastUpdateSeconds > collisionUpdateRateSeconds && subject.GetComponent<KatamariMovement>().IsGolfHitMode())
         {
             PredictKatamariPath();
             timeSinceLastUpdateSeconds = 0.0f;
@@ -86,6 +85,7 @@ public class DrawTrajectory : MonoBehaviour
 
         Rigidbody subjectRigidbody = subject.GetComponent<Rigidbody>();
         Rigidbody predictionRigidbody = predictionSubject.GetComponent<Rigidbody>();
+        predictionRigidbody.constraints = RigidbodyConstraints.None;
 
         // Copy the Rigidbody state from the subject to the prediction
         predictionRigidbody.velocity = subjectRigidbody.velocity;
