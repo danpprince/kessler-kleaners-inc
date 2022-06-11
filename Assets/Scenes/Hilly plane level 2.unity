@@ -293,11 +293,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5283149633265286508, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000004290639
+      value: -0.0000000042906407
       objectReference: {fileID: 0}
     - target: {fileID: 5283149633265286508, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -3.068127e-10
+      value: 3.068128e-10
       objectReference: {fileID: 0}
     - target: {fileID: 5283149634530290605, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_LocalRotation.w
@@ -309,11 +309,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5283149634530290605, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000017315758
+      value: 0.000000017315756
       objectReference: {fileID: 0}
     - target: {fileID: 5283149634530290605, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 9.2198976e-10
+      value: -9.2198965e-10
       objectReference: {fileID: 0}
     - target: {fileID: 5283149634754594846, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_LocalPosition.x
@@ -337,11 +337,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5283149634754594846, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.00000001731591
+      value: 0.000000017315909
       objectReference: {fileID: 0}
     - target: {fileID: 5283149634754594846, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 9.2197167e-10
+      value: -9.219716e-10
       objectReference: {fileID: 0}
     - target: {fileID: 5283149634754594847, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: katamari
@@ -597,6 +597,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 795177495, guid: 42758af1e9410f745a63d3d1fa2dcc2b, type: 3}
   m_PrefabInstance: {fileID: 379676037}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1324073848 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5283149634754594843, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
+  m_PrefabInstance: {fileID: 292114053}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1334919572
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -684,6 +689,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   strTag: goal
   strSceneName: Hilly plane level
+  cam: {fileID: 1324073848}
+  endOfLevelTime: 3
 --- !u!4 &1453225968 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8453875387259748963, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
@@ -766,7 +773,7 @@ PrefabInstance:
       objectReference: {fileID: 24100000, guid: 93c9641a48ebebb4ba7b025cfa8fed9a, type: 2}
     - target: {fileID: 8453875387259748961, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
       propertyPath: flyStrength
-      value: 1000
+      value: 2000
       objectReference: {fileID: 0}
     - target: {fileID: 8453875387259748961, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
       propertyPath: highFriction
@@ -830,6 +837,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8453875387259748963, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8453875387259748964, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
+      propertyPath: m_Interpolate
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8453875387259748967, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}

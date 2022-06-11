@@ -9,9 +9,11 @@ public class RestartLevelOnCollision : MonoBehaviour
     string strTag;
 
     // Restart Scene on Collision
-    private void OnCollisionEnter(Collision collision)
+    
+
+    private void OnTriggerExit(Collider other)
     {
-        if (collision.collider.tag == strTag)
+        if (other.GetComponent<Collider>().tag == strTag)
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

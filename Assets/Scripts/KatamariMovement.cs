@@ -161,6 +161,7 @@ public class KatamariMovement : MonoBehaviour
     public Vector3 CalculateHitVector(float accelerateFuelUsed)
     {
         float strength;
+        
 
         if (IsGolfHitMode())
         {
@@ -168,7 +169,7 @@ public class KatamariMovement : MonoBehaviour
         }
         else
         {
-            strength = flyStrength;
+            strength = flyStrength/Time.timeScale;
         }
 
         Quaternion hitAngle = heading * Quaternion.Euler(-1 * hitXAngle, 0, 0);
@@ -396,7 +397,7 @@ public class KatamariMovement : MonoBehaviour
 
             case StateMachine.slowDown:
                 DecreaseTimeScale();
-
+                
                 if (Time.timeScale == slowdownFactor)
                 {
                     movementState = StateMachine.slowMotion;
