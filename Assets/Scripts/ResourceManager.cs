@@ -9,7 +9,7 @@ public class ResourceManager : MonoBehaviour
 {
     public float initialFuel;
     private float fuelRemaining, massCollected, timeElapsedSec, lastHitTimeSec;
-    public float timeBetweenHits = 5.0f;
+    private float timeBetweenHits = 5.0f;
     public KatamariMovement k_move;
     public int strokeCount;
 
@@ -44,6 +44,8 @@ public class ResourceManager : MonoBehaviour
             + "Time elapsed: " + timeElapsedSec.ToString("0.0") + "\n"
             + "Time since last hit: " + GetTimeSinceLastHit().ToString("0.0") + "\n"
             + "Current State: " + k_move.movementState + "\n"
+            + "RB constraints: " + k_move.GetRigidbodyConstraints() + "\n"
+            + "Hit input: " + Input.GetAxis("Jump") + "\n"
             + "Strokes: " + strokeCount;
     }
 
