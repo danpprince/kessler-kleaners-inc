@@ -106,7 +106,7 @@ public class DrawTrajectory : MonoBehaviour
             float accelerateFuelUsed = 1.0f;
 
             bool isFirstHitIteration = isGolfHitMode && i == 0;
-            if (isFirstHitIteration || !isGolfHitMode)
+            if (isFirstHitIteration)
             {
                 Vector3 hitVector = km.CalculateHitVector(accelerateFuelUsed);
                 predictionRigidbody.AddForce(hitVector, forceMode);
