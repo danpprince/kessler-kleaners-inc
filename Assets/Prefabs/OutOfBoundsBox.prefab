@@ -28,7 +28,8 @@ Transform:
   m_GameObject: {fileID: 2565263748383406619}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -30, y: 0, z: 10}
-  m_LocalScale: {x: 100, y: 50, z: 120}
+  m_LocalScale: {x: 132.25099, y: 161.26524, z: 371.12146}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -68,3 +69,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   strTag: Player
+  katamari: {fileID: 0}
+  cam: {fileID: 0}

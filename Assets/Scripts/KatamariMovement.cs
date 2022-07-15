@@ -63,8 +63,11 @@ public class KatamariMovement : MonoBehaviour
     ForceMode forceMode;
 
     //for Collision Stuff\\
-    private float timeOnGround = 0;
+    [System.NonSerialized]
+    public float timeOnGround = 0;
     public float timeToStop = 5;
+    public Vector3 originalPosition;
+    public Quaternion originalRotation;
 
     //for determing where to point the "heading"
     public GameObject _camera;
@@ -76,6 +79,9 @@ public class KatamariMovement : MonoBehaviour
 
         Vector3 initialRotation = transform.rotation.eulerAngles;
         heading = Quaternion.Euler(0, transform.rotation.y, 0);
+
+        originalPosition = transform.position;
+        originalRotation = transform.rotation.normalized;
 
         stuckObjects = new Queue<GameObject>();
 

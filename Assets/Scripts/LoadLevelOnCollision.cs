@@ -8,6 +8,7 @@ public class LoadLevelOnCollision : MonoBehaviour
 {
     [SerializeField]
     string strTag;
+    public string strTagStickable;
 
     [SerializeField]
     string strSceneName;
@@ -18,22 +19,25 @@ public class LoadLevelOnCollision : MonoBehaviour
 
     private Vector2 originalPosition;
     public  float endOfLevelTime;
-    private float timeThusFar = 0;
-    private bool isAtEndOfLevel;
+    private float timeThusFar;
+    public bool isAtEndOfLevel;
 
     private void Start()
     {
-        originalPosition = scoreBox.rectTransform.anchoredPosition;
+        Vector2 anchoredPosition = scoreBox.rectTransform.anchoredPosition;
+        originalPosition = anchoredPosition;
+        timeThusFar = 0;
     }
 
 
     // Restart Scene on Collision
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.tag == strTag)
+        if (collision.collider.tag == strTag || collision.collider.tag == strTagStickable)
         {
             cam.GetComponent<PostProcess>().enabled = false;
             isAtEndOfLevel = true;
+            print("Collision Detected for End of Level");
         }
     }
 
@@ -47,7 +51,8 @@ public class LoadLevelOnCollision : MonoBehaviour
     private void EndLevel() {
         if (isAtEndOfLevel){
             DisplayScore();
-            timeThusFar += Time.unscaledDeltaTime * 0.001f;
+            timeThusFar += Time.unscaledDeltaTime; 
+            print(timeThusFar);
             if (timeThusFar <= endOfLevelTime)
             {
                 Time.timeScale -= 0.3f * Time.unscaledDeltaTime;

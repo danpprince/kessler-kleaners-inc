@@ -110,8 +110,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f0c66b2b7fdbd941adfbb624c41b6f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  strTag: player
-  strSceneName: Hilly plane level 3
+  strTag: Player
+  strTagStickable: Stickable
+  strSceneName: Hilly Plane level 2
   cam: {fileID: 0}
   scoreBox: {fileID: 0}
   endOfLevelTime: 5
+  isAtEndOfLevel: 0
