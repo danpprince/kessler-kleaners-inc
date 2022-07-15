@@ -22,38 +22,13 @@ public class RestartLevelOnCollision : MonoBehaviour
 
         if (capturedTag == strTag && shouldRestart==true)
         {
-            StartCoroutine(restartLevel());
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 
     
 
-    private IEnumerator restartLevel()
-    {
-        km = katamari.GetComponent<KatamariMovement>();
-        rb = katamari.GetComponent<Rigidbody>();
-        cam.GetComponent<Cinemachine.CinemachineFreeLook>().ForceCameraPosition
-            (cam.GetComponent<OriginalPositionRotation>().originalPosition, cam.GetComponent<OriginalPositionRotation>().originalRotation);
-        
-        yield return StartCoroutine(resetTransforms());
-        km.movementState = KatamariMovement.StateMachine.toGolfMode;
-        shouldRestart = false;
-
-    }
-
-
-    private IEnumerator resetTransforms()
-    {
-        katamari.transform.position = km.originalPosition;
-        rb.angularVelocity = Vector3.zero;
-        rb.velocity = Vector3.zero;
-        katamari.transform.rotation = km.originalRotation;
-        Time.timeScale = 1f;
-        Time.fixedDeltaTime = Time.timeScale * 0.02f;
-        yield return new WaitForFixedUpdate();
-
-
-    }
+   
 
 
 
