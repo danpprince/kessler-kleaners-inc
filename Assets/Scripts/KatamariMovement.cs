@@ -59,9 +59,6 @@ public class KatamariMovement : MonoBehaviour
     public float slowdownFactor = 0.1f;
     public float slowdownLength = 1f;
 
-    // for determing how much and attack/release time of time scaling\\
-    ForceMode forceMode;
-
     //for Collision Stuff\\
     [System.NonSerialized]
     public float timeOnGround = 0;
@@ -72,6 +69,8 @@ public class KatamariMovement : MonoBehaviour
     //for determing where to point the "heading"
     public GameObject _camera;
     public GameObject arrow;
+
+    private bool isFlyMovementDeadTime = false;
 
     void Start()
     {
@@ -88,7 +87,6 @@ public class KatamariMovement : MonoBehaviour
         collisionAudioSource = GetComponent<AudioSource>();
 
         movementState = StateMachine.toGolfMode;
-        forceMode = ForceMode.Impulse;
 
         // If the katamari rigidbody falls asleep, it will disable the OnCollisionStay
         // callback. Setting the sleep threshold to zero makes sure this callback
@@ -153,25 +151,34 @@ public class KatamariMovement : MonoBehaviour
             heading *= Quaternion.Euler(0, yRotation, 0);
         }
 
-        float accelerateFuelUsed = resourceManager.UseFuel(hitInput);
-        float stopFuelUsed = resourceManager.UseFuel(stopInput);
-
-        rb.AddForce(CalculateHitVector(accelerateFuelUsed), forceMode);
-
-        // Roll the katamari in the direction it is being hit
-        rb.AddTorque(CalculateRollVector(accelerateFuelUsed), forceMode);
-
-
-        // Slow down based on input
-        if (stopFuelUsed > 0.5)
+        if (
+            (
+                movementState == StateMachine.normalSpeed ||
+                movementState == StateMachine.speedUp ||
+                movementState == StateMachine.slowMotion ||
+                movementState == StateMachine.speedUp
+            ) && !isFlyMovementDeadTime
+        )
         {
-            rb.velocity *= 0.95f;
-            rb.angularVelocity = 0.95f * rb.angularVelocity;
-            rb.useGravity = false;
-        }
-        else
-        {
-            rb.useGravity = true;
+            float accelerateFuelUsed = resourceManager.UseFuel(hitInput);
+            float stopFuelUsed = resourceManager.UseFuel(stopInput);
+
+            ForceMode forceMode = ForceMode.Force;
+            rb.AddForce(CalculateHitVector(accelerateFuelUsed), forceMode);
+            // Roll the katamari in the direction it is being hit
+            rb.AddTorque(CalculateRollVector(accelerateFuelUsed), forceMode);
+
+            // Slow down based on input
+            if (stopFuelUsed > 0.5)
+            {
+                rb.velocity *= 0.95f;
+                rb.angularVelocity = 0.95f * rb.angularVelocity;
+                rb.useGravity = false;
+            }
+            else
+            {
+                rb.useGravity = true;
+            }
         }
 
         UpdateTimeStateMachine();
@@ -373,9 +380,10 @@ public class KatamariMovement : MonoBehaviour
                 hitXAngle = 45;
 
                 // Set up physics
-                forceMode = ForceMode.Impulse;
                 rb.constraints = RigidbodyConstraints.FreezePosition;
                 rb.freezeRotation = false;
+                Time.timeScale = 1.0f;
+                Time.fixedDeltaTime = Time.timeScale * 0.02f;
 
                 break;
 
@@ -387,10 +395,14 @@ public class KatamariMovement : MonoBehaviour
                     bool isHitSuccessful = resourceManager.tryToHit();
                     if (isHitSuccessful)
                     {
-                        movementState = StateMachine.normalSpeed;
-
                         rb.constraints = RigidbodyConstraints.None;
-                        forceMode = ForceMode.Force;
+
+                        // Make sure force is calculated in golf state
+                        ForceMode forceMode = ForceMode.Impulse;
+                        rb.AddForce(CalculateHitVector(1), forceMode);
+                        rb.AddTorque(CalculateRollVector(1), forceMode);
+
+                        movementState = StateMachine.normalSpeed;
 
                         powerBar.SetActive(false);
                         arrow.SetActive(false);
@@ -400,7 +412,7 @@ public class KatamariMovement : MonoBehaviour
                 break;
 
             case StateMachine.normalSpeed:
-                bool isFlyMovementDeadTime =
+                isFlyMovementDeadTime =
                     resourceManager.GetTimeSinceLastHit() <= FlyingConstants.SlowDownDebounceSec;
                 if (!isFlyMovementDeadTime && isHitInputActive)
                 {
@@ -518,4 +530,9 @@ public class KatamariMovement : MonoBehaviour
 
     private void IncreaseTimeScale() { ModifyTimeScale(true); }
     private void DecreaseTimeScale() { ModifyTimeScale(false); }
+
+    public RigidbodyConstraints GetRigidbodyConstraints()
+    {
+        return rb.constraints;
+    }
 }
