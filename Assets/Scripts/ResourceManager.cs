@@ -9,7 +9,7 @@ public class ResourceManager : MonoBehaviour
 {
     public float initialFuel;
     private float fuelRemaining, massCollected, timeElapsedSec, lastHitTimeSec;
-    public float timeBetweenHits = 5.0f;
+    private float timeBetweenHits = 5.0f;
     public KatamariMovement k_move;
     public LoadLevelOnCollision EndOfLevel;
     public int strokeCount;
