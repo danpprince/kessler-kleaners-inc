@@ -6,9 +6,9 @@ using UnityEngine.UI;
 
 public class LoadLevelOnCollision : MonoBehaviour
 {
-    [SerializeField]
-    string strTag;
-    public string strTagStickable;
+    
+    private string strTag = "Player";
+    private string strTagStickable = "Stickable";
 
     [SerializeField]
     string strSceneName;

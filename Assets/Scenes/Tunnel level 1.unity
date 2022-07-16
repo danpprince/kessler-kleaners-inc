@@ -291,11 +291,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1132650026189727252, guid: 42758af1e9410f745a63d3d1fa2dcc2b, type: 3}
       propertyPath: orthographic size
-      value: 225.1
+      value: 237.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 1710303498287503759, guid: 42758af1e9410f745a63d3d1fa2dcc2b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -992
       objectReference: {fileID: 0}
     - target: {fileID: 1710303498287503759, guid: 42758af1e9410f745a63d3d1fa2dcc2b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 257
+      value: 559
       objectReference: {fileID: 0}
     - target: {fileID: 5122255303124867541, guid: 42758af1e9410f745a63d3d1fa2dcc2b, type: 3}
       propertyPath: m_Pivot.x
@@ -738,6 +742,18 @@ PrefabInstance:
     - target: {fileID: 2353669563216425166, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2957965629056205411, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2957965629056205411, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2957965629056205411, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 8183482591349809909, guid: a2b949d11531b954698ca9aba8386dc7, type: 3}
       propertyPath: m_Enabled
