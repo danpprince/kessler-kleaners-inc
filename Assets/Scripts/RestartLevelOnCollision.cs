@@ -12,7 +12,6 @@ public class RestartLevelOnCollision : MonoBehaviour
     private string capturedTag = "";
     private KatamariMovement km;
     private Rigidbody rb;
-    public GameObject cam;
     
     private void Update()
     {
