@@ -17,7 +17,8 @@ public static class FlyingConstants
 public class KatamariMovement : MonoBehaviour
 {
     public float movementSpeed = 1;
-    public float rotationSpeed = 1;
+    private float horizontalRotationSpeed = 3;
+    private float verticalRotationSpeed = 3;
     [System.NonSerialized]
     public Quaternion heading;
     public float strikeStrength = 100;
@@ -126,23 +127,16 @@ public class KatamariMovement : MonoBehaviour
                 angle_timer = 0;
             }
         }
-        else
+        else if (movementState == StateMachine.slowMotion)
         {
-            if (verticalInput > 0.5)
-            {
-                hitXAngle++;
-            }
-            if (verticalInput < -0.5)
-            {
-                hitXAngle--;
-            }
+            hitXAngle += verticalInput * verticalRotationSpeed;
         }
         slowMixer.SetFloat("Pitch", Time.timeScale);
     }
 
         private void FixedUpdate()
     {
-        float yRotation = horizontalInput * rotationSpeed;
+        float yRotation = horizontalInput * horizontalRotationSpeed;
         Vector3 rotation = new Vector3(0, yRotation, 0);
         transform.Rotate(rotation, Space.World);
 
