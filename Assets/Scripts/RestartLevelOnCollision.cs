@@ -14,28 +14,17 @@ public class RestartLevelOnCollision : MonoBehaviour
     private Rigidbody rb;
     public GameObject cam;
     
-
-    // Restart Scene on Collision
     private void Update()
     {
-        
-
-        if (capturedTag == strTag && shouldRestart==true)
+        if (capturedTag == strTag && shouldRestart)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 
-    
-
-   
-
-
-
-
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerExit(Collider collider)
     {
-        capturedTag = collision.collider.tag;
+        capturedTag = collider.tag;
         shouldRestart = true;
     }
 }
