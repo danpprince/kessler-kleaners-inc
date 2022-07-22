@@ -1210,8 +1210,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 178496445004164148, guid: ffeea95f32b6b234ebcd2a04dbcda2d1, type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
+      propertyPath: m_Size.x
+      value: 124.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 178496445004164148, guid: ffeea95f32b6b234ebcd2a04dbcda2d1, type: 3}
+      propertyPath: m_Size.y
+      value: 107.57
+      objectReference: {fileID: 0}
+    - target: {fileID: 178496445004164148, guid: ffeea95f32b6b234ebcd2a04dbcda2d1, type: 3}
+      propertyPath: m_Size.z
+      value: 165.47
       objectReference: {fileID: 0}
     - target: {fileID: 2565263748383406617, guid: ffeea95f32b6b234ebcd2a04dbcda2d1, type: 3}
       propertyPath: m_Enabled
@@ -1221,10 +1229,6 @@ PrefabInstance:
       propertyPath: katamari
       value: 
       objectReference: {fileID: 713525636}
-    - target: {fileID: 2565263748383406618, guid: ffeea95f32b6b234ebcd2a04dbcda2d1, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2565263748383406619, guid: ffeea95f32b6b234ebcd2a04dbcda2d1, type: 3}
       propertyPath: m_Name
       value: OutOfBoundsBox
@@ -1232,18 +1236,6 @@ PrefabInstance:
     - target: {fileID: 2565263748383406622, guid: ffeea95f32b6b234ebcd2a04dbcda2d1, type: 3}
       propertyPath: m_RootOrder
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2565263748383406622, guid: ffeea95f32b6b234ebcd2a04dbcda2d1, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 126
-      objectReference: {fileID: 0}
-    - target: {fileID: 2565263748383406622, guid: ffeea95f32b6b234ebcd2a04dbcda2d1, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 129.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 2565263748383406622, guid: ffeea95f32b6b234ebcd2a04dbcda2d1, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 191.4
       objectReference: {fileID: 0}
     - target: {fileID: 2565263748383406622, guid: ffeea95f32b6b234ebcd2a04dbcda2d1, type: 3}
       propertyPath: m_LocalPosition.x
