@@ -21,8 +21,10 @@ public class KatamariMovement : MonoBehaviour
     private float verticalRotationSpeed = 3;
     [System.NonSerialized]
     public Quaternion heading;
-    public float strikeStrength = 100;
-    public float flyStrength = 10;
+
+    private float strikeStrength = 5000;
+    private float flyStrength = 2000;
+
     [System.NonSerialized]
     public float hitXAngle = 45;
 
