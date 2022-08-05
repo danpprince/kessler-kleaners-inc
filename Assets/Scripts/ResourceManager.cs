@@ -52,7 +52,9 @@ public class ResourceManager : MonoBehaviour
                 + "Strokes: " + strokeCount;
         } else
         {
-            resourceText.text = "TEST SUCCESS";
+            resourceText.text = 
+                "Strokes taken: " + strokeCount + "\n"
+                + "Mass collected: " + massCollected;
         }
     }
 
