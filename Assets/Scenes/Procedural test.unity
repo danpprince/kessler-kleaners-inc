@@ -534,14 +534,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1572065245}
-  m_LocalRotation: {x: -0.29752606, y: 0.375173, z: 0.5284704, w: -0.7010296}
+  m_LocalRotation: {x: -0.30304956, y: 0.10228375, z: 0.5293215, w: -0.78582305}
   m_LocalPosition: {x: 0, y: 54, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 1.181, y: 302.79, z: -74.666}
+  m_LocalEulerAnglesHint: {x: 21.593, y: 328.807, z: -74.021}
 --- !u!1001 &1662557431
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1170,7 +1170,7 @@ MonoBehaviour:
   thickness: 7.43
   flattenSurface: 0
   noiseAmount: 0.52
-  material: {fileID: 2926557707537190794, guid: e2ccee36ac2f5314586abb53e4831079, type: 3}
+  material: {fileID: 2100000, guid: 20c5f6857dbd4b24397cd04fe98b998f, type: 2}
   xAmpModAmount: 1
   xAmpModFrequency: 1
   yAmpModAmount: 1

@@ -54,9 +54,6 @@ public class GenerateTerrain : MonoBehaviour
             new ExtrusionSegment.Vertex(new Vector2(-10, 1), new Vector2(-1, 1), 0)
         );
         shapeVertices.Add( 
-            new ExtrusionSegment.Vertex(new Vector2(-9, 0), new Vector2(0.5f, 1), 0)
-        );
-        shapeVertices.Add( 
             new ExtrusionSegment.Vertex(new Vector2(-4, 0), new Vector2(0.5f, 1), 0)
         );
         shapeVertices.Add( 
@@ -64,9 +61,6 @@ public class GenerateTerrain : MonoBehaviour
         );
         shapeVertices.Add( 
             new ExtrusionSegment.Vertex(new Vector2(4, 0), new Vector2(0.5f, 1), 0)
-        );
-        shapeVertices.Add( 
-            new ExtrusionSegment.Vertex(new Vector2(9, 0), new Vector2(0.5f, 1), 0)
         );
         shapeVertices.Add(
             new ExtrusionSegment.Vertex(new Vector2(10, 1), new Vector2(1, 1), 0.25f)
