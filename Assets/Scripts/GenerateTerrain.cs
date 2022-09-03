@@ -43,10 +43,10 @@ public class GenerateTerrain : MonoBehaviour
             new Vector3(0, 0, 0), new Vector3(0, 0, 25)
         ));
         spline.AddNode(new SplineNode(
-            new Vector3(10, 0, 100), new Vector3(90, 0, 100)
+            new Vector3(10, 0, 200), new Vector3(90, 0, 200)
         ));
         spline.AddNode(new SplineNode(
-            new Vector3(20, -9, 70), new Vector3(9, -9, 70)
+            new Vector3(20, -9, 270), new Vector3(9, -9, 270)
         ));
 
         List<ExtrusionSegment.Vertex> shapeVertices = new List<ExtrusionSegment.Vertex>();
