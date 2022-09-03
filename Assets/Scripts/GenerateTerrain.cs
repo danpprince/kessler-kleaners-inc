@@ -1,4 +1,5 @@
 using PathCreation;
+using SplineMesh;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,20 +14,15 @@ public class GenerateTerrain : MonoBehaviour
     public float thickness;
     public bool flattenSurface;
     public float noiseAmount;
+    public Material material;
 
     void Start()
     {
-        CreateMeshObject();
-        CreatePath();
         GenerateMesh();
-        SetupCollider();
     }
 
     void CreateMeshObject()
     {
-        terrainObject = new GameObject("Terrain");
-        terrainObject.transform.SetParent(gameObject.transform);
-        terrainObject.tag = "green";
 
         MeshRenderer meshRenderer = terrainObject.AddComponent<MeshRenderer> ();
         MeshFilter meshFilter = terrainObject.AddComponent<MeshFilter> ();
@@ -52,109 +48,65 @@ public class GenerateTerrain : MonoBehaviour
 
     void GenerateMesh()
     {
-        Vector3[] verts = new Vector3[path.NumPoints * 8];
-        Vector2[] uvs = new Vector2[verts.Length];
-        Vector3[] normals = new Vector3[verts.Length];
+        terrainObject = new GameObject("Terrain");
+        terrainObject.transform.SetParent(gameObject.transform, false);
+        terrainObject.tag = "green";
 
-        int numTris = 2 * (path.NumPoints - 1) + ((path.isClosedLoop) ? 2 : 0);
-        int[] roadTriangles = new int[numTris * 3];
-        int[] underRoadTriangles = new int[numTris * 3];
-        int[] sideOfRoadTriangles = new int[numTris * 2 * 3];
+        Spline spline = gameObject.AddComponent<Spline>();
 
-        int vertIndex = 0;
-        int triIndex = 0;
+        spline.AddNode(new SplineNode(
+            new Vector3(0, 0, 0), new Vector3(0, 0, 25)
+        ));
+        spline.AddNode(new SplineNode(
+            new Vector3(10, 0, 100), new Vector3(90, 0, 100)
+        ));
+        spline.AddNode(new SplineNode(
+            new Vector3(20, -9, 70), new Vector3(9, -9, 70)
+        ));
 
-        // Vertices for the top of the road are layed out:
-        // 0  1
-        // 8  9
-        // and so on... So the triangle map 0,8,1 for example, defines a triangle from top left to bottom left to bottom right.
-        int[] triangleMap = { 0, 8, 1, 1, 8, 9 };
-        int[] sidesTriangleMap = { 4, 6, 14, 12, 4, 14, 5, 15, 7, 13, 15, 5 };
+        List<ExtrusionSegment.Vertex> shapeVertices = new List<ExtrusionSegment.Vertex>();
+        shapeVertices.Add( 
+            new ExtrusionSegment.Vertex(new Vector2(-10, 1), new Vector2(-1, 1), 0)
+        );
+        shapeVertices.Add( 
+            new ExtrusionSegment.Vertex(new Vector2(-9, 0), new Vector2(0.5f, 1), 0)
+        );
+        shapeVertices.Add( 
+            new ExtrusionSegment.Vertex(new Vector2(0, -0.5f), new Vector2(0, 1), 0)
+        );
+        shapeVertices.Add( 
+            new ExtrusionSegment.Vertex(new Vector2(9, 0), new Vector2(0.5f, 1), 0)
+        );
+        shapeVertices.Add(
+            new ExtrusionSegment.Vertex(new Vector2(10, 1), new Vector2(1, 1), 0.25f)
+        );
+        shapeVertices.Add(
+            new ExtrusionSegment.Vertex(new Vector2(10, -1), new Vector2(1, -1), 0.5f)
+        );
+        shapeVertices.Add(
+            new ExtrusionSegment.Vertex(new Vector2(-10, -1), new Vector2(-1, -1), 0.75f)
+        );
 
-        bool usePathNormals = !(path.space == PathSpace.xyz && flattenSurface);
+        int i = 0;
+        float textureOffset = 0.0f;
+        foreach (CubicBezierCurve curve in spline.GetCurves()) {
+            GameObject go = UOUtility.Create("segment " + i++,
+                terrainObject,
+                typeof(MeshFilter),
+                typeof(MeshRenderer),
+                typeof(ExtrusionSegment),
+                typeof(MeshCollider));
+            go.GetComponent<MeshRenderer>().material = material;
+            ExtrusionSegment seg = go.GetComponent<ExtrusionSegment>();
+            seg.ShapeVertices = shapeVertices;
+            seg.TextureScale = 1;
+            seg.TextureOffset = textureOffset;
+            seg.SampleSpacing = 5f;
+            seg.SetInterval(curve);
 
-        for (int i = 0; i < path.NumPoints; i++) {
-            Vector3 localUp = (usePathNormals) ? Vector3.Cross (path.GetTangent (i), path.GetNormal (i)) : path.up;
-            Vector3 localRight = (usePathNormals) ? path.GetNormal (i) : Vector3.Cross (localUp, path.GetTangent (i));
-
-            // Find position to left and right of current path vertex
-            Vector3 vertSideA = path.GetPoint (i) - localRight * Mathf.Abs (width);
-            Vector3 vertSideB = path.GetPoint (i) + localRight * Mathf.Abs (width);
-
-            // Add noise to verticies
-            vertSideA += new Vector3(
-                Random.Range(-noiseAmount, noiseAmount),
-                Random.Range(-noiseAmount, noiseAmount),
-                Random.Range(-noiseAmount, noiseAmount)
-            );
-            vertSideB += new Vector3(
-                Random.Range(-noiseAmount, noiseAmount),
-                Random.Range(-noiseAmount, noiseAmount),
-                Random.Range(-noiseAmount, noiseAmount)
-            );
-
-            // Add top of road vertices
-            verts[vertIndex + 0] = vertSideA;
-            verts[vertIndex + 1] = vertSideB;
-            // Add bottom of road vertices
-            verts[vertIndex + 2] = vertSideA - localUp * thickness;
-            verts[vertIndex + 3] = vertSideB - localUp * thickness;
-
-            // Duplicate vertices to get flat shading for sides of road
-            verts[vertIndex + 4] = verts[vertIndex + 0];
-            verts[vertIndex + 5] = verts[vertIndex + 1];
-            verts[vertIndex + 6] = verts[vertIndex + 2];
-            verts[vertIndex + 7] = verts[vertIndex + 3];
-
-            // Set uv on y axis to path time (0 at start of path, up to 1 at end of path)
-            uvs[vertIndex + 0] = new Vector2 (0, path.times[i]);
-            uvs[vertIndex + 1] = new Vector2 (1, path.times[i]);
-
-            // Top of road normals
-            normals[vertIndex + 0] = localUp;
-            normals[vertIndex + 1] = localUp;
-            // Bottom of road normals
-            normals[vertIndex + 2] = -localUp;
-            normals[vertIndex + 3] = -localUp;
-            // Sides of road normals
-            normals[vertIndex + 4] = -localRight;
-            normals[vertIndex + 5] = localRight;
-            normals[vertIndex + 6] = -localRight;
-            normals[vertIndex + 7] = localRight;
-
-            // Set triangle indices
-            if (i < path.NumPoints - 1 || path.isClosedLoop) {
-                for (int j = 0; j < triangleMap.Length; j++) {
-                    roadTriangles[triIndex + j] = (vertIndex + triangleMap[j]) % verts.Length;
-                    // reverse triangle map for under road so that triangles wind the other way and are visible from underneath
-                    underRoadTriangles[triIndex + j] = (vertIndex + triangleMap[triangleMap.Length - 1 - j] + 2) % verts.Length;
-                }
-                for (int j = 0; j < sidesTriangleMap.Length; j++) {
-                    sideOfRoadTriangles[triIndex * 2 + j] = (vertIndex + sidesTriangleMap[j]) % verts.Length;
-                }
-
-            }
-
-            vertIndex += 8;
-            triIndex += 6;
+            textureOffset += curve.Length;
         }
-
-        mesh.Clear ();
-        mesh.vertices = verts;
-        mesh.uv = uvs;
-        // mesh.normals = normals;
-        mesh.subMeshCount = 3;
-        mesh.SetTriangles (roadTriangles, 0);
-        mesh.SetTriangles (underRoadTriangles, 1);
-        mesh.SetTriangles (sideOfRoadTriangles, 2);
-        mesh.RecalculateBounds ();
-        mesh.RecalculateNormals ();
     }
 
-    void SetupCollider()
-    {
-        MeshCollider collider = terrainObject.AddComponent<MeshCollider> ();
-        collider.sharedMesh = mesh;
-    }
 
 }
