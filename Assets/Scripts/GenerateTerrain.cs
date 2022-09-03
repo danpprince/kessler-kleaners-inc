@@ -16,34 +16,19 @@ public class GenerateTerrain : MonoBehaviour
     public float noiseAmount;
     public Material material;
 
+    public float xAmpModAmount = 1.0f;
+    public float xAmpModFrequency = 0.11f;
+    public float yAmpModAmount = 20.0f;
+    public float yAmpModFrequency = 1.0f;
+    public float zAmpModAmount = 1.0f;
+    public float zAmpModFrequency = 0.1f;
+
+    private List<GameObject> segmentObjects;
+
     void Start()
     {
         GenerateMesh();
-    }
-
-    void CreateMeshObject()
-    {
-
-        MeshRenderer meshRenderer = terrainObject.AddComponent<MeshRenderer> ();
-        MeshFilter meshFilter = terrainObject.AddComponent<MeshFilter> ();
-        if (mesh == null) {
-            mesh = new Mesh();
-            mesh.name = "Terrain mesh";
-        }
-        meshFilter.sharedMesh = mesh;
-    }
-
-    void CreatePath()
-    {
-        List<Vector3> points = new List<Vector3>(){
-            new Vector3(0, 0, 0),
-            new Vector3(30, 0, 100),
-            new Vector3(-30, 0, 200)
-        };
-
-        path = new VertexPath(new BezierPath(points), gameObject.transform);
-
-        print("Num points in path: " + path.NumPoints);
+        ModulateSegments();
     }
 
     void GenerateMesh()
@@ -72,7 +57,13 @@ public class GenerateTerrain : MonoBehaviour
             new ExtrusionSegment.Vertex(new Vector2(-9, 0), new Vector2(0.5f, 1), 0)
         );
         shapeVertices.Add( 
+            new ExtrusionSegment.Vertex(new Vector2(-4, 0), new Vector2(0.5f, 1), 0)
+        );
+        shapeVertices.Add( 
             new ExtrusionSegment.Vertex(new Vector2(0, -0.5f), new Vector2(0, 1), 0)
+        );
+        shapeVertices.Add( 
+            new ExtrusionSegment.Vertex(new Vector2(4, 0), new Vector2(0.5f, 1), 0)
         );
         shapeVertices.Add( 
             new ExtrusionSegment.Vertex(new Vector2(9, 0), new Vector2(0.5f, 1), 0)
@@ -81,14 +72,15 @@ public class GenerateTerrain : MonoBehaviour
             new ExtrusionSegment.Vertex(new Vector2(10, 1), new Vector2(1, 1), 0.25f)
         );
         shapeVertices.Add(
-            new ExtrusionSegment.Vertex(new Vector2(10, -1), new Vector2(1, -1), 0.5f)
+            new ExtrusionSegment.Vertex(new Vector2(10, -7), new Vector2(1, -1), 0.5f)
         );
         shapeVertices.Add(
-            new ExtrusionSegment.Vertex(new Vector2(-10, -1), new Vector2(-1, -1), 0.75f)
+            new ExtrusionSegment.Vertex(new Vector2(-10, -7), new Vector2(-1, -1), 0.75f)
         );
 
         int i = 0;
         float textureOffset = 0.0f;
+        segmentObjects = new List<GameObject>();
         foreach (CubicBezierCurve curve in spline.GetCurves()) {
             GameObject go = UOUtility.Create("segment " + i++,
                 terrainObject,
@@ -103,10 +95,45 @@ public class GenerateTerrain : MonoBehaviour
             seg.TextureOffset = textureOffset;
             seg.SampleSpacing = 5f;
             seg.SetInterval(curve);
+            seg.Compute();
 
             textureOffset += curve.Length;
+
+            segmentObjects.Add(go);
         }
     }
 
+    void ModulateSegments()
+    {
+        foreach (GameObject segment in segmentObjects)
+        {
+            segment.tag = "green";
+
+            // Remove the ExtrusionSegment to prevent vertex changes from being overwritten
+            Destroy(segment.GetComponent<ExtrusionSegment>());
+
+            MeshFilter meshFilter = segment.GetComponent<MeshFilter>();
+            Mesh mesh = meshFilter.mesh;
+
+            Vector3[] vertices = mesh.vertices;
+            
+            for (int vertexIndex = 0; vertexIndex < vertices.Length; vertexIndex++) {
+                Vector3 vertex = vertices[vertexIndex];
+                vertex.x += xAmpModAmount * Mathf.Sin(vertex.x * xAmpModFrequency);
+                vertex.y += yAmpModAmount * Mathf.Sin(vertex.x * yAmpModFrequency);
+                vertex.z += zAmpModAmount * Mathf.Sin(vertex.z * zAmpModFrequency);
+                vertices[vertexIndex] = vertex;
+            }
+
+            mesh.SetVertices(vertices);
+            mesh.RecalculateNormals();
+
+            // Update the mesh collider
+            MeshCollider meshCollider = segment.GetComponent<MeshCollider>();
+            meshCollider.sharedMesh = null;
+            meshCollider.sharedMesh = mesh;
+        }
+
+    }
 
 }
