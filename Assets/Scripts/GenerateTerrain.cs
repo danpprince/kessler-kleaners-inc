@@ -12,8 +12,6 @@ public class GenerateTerrain : MonoBehaviour
 
     public float width;
     public float thickness;
-    public bool flattenSurface;
-    public float noiseAmount;
     public Material material;
 
     public float xAmpModAmount = 1.0f;
@@ -24,6 +22,7 @@ public class GenerateTerrain : MonoBehaviour
     public float zAmpModFrequency = 0.1f;
 
     private List<GameObject> segmentObjects;
+    private Spline spline;
 
     void Start()
     {
@@ -31,45 +30,51 @@ public class GenerateTerrain : MonoBehaviour
         ModulateSegments();
     }
 
-    void GenerateMesh()
+    public void GenerateMesh()
     {
+
+        if (terrainObject is not null)
+        {
+            DestroyImmediate(terrainObject);
+        }
+
         terrainObject = new GameObject("Terrain");
         terrainObject.transform.SetParent(gameObject.transform, false);
         terrainObject.tag = "green";
 
-        Spline spline = gameObject.AddComponent<Spline>();
+        spline = gameObject.GetComponent<Spline>();
 
-        spline.AddNode(new SplineNode(
-            new Vector3(0, 0, 0), new Vector3(0, 0, 25)
-        ));
-        spline.AddNode(new SplineNode(
-            new Vector3(10, 0, 200), new Vector3(90, 0, 200)
-        ));
-        spline.AddNode(new SplineNode(
-            new Vector3(20, -9, 270), new Vector3(9, -9, 270)
-        ));
+        //spline.AddNode(new SplineNode(
+        //    new Vector3(0, 0, 0), new Vector3(0, 0, 25)
+        //));
+        //spline.AddNode(new SplineNode(
+        //    new Vector3(10, 0, 200), new Vector3(90, 0, 200)
+        //));
+        //spline.AddNode(new SplineNode(
+        //    new Vector3(20, -9, 270), new Vector3(9, -9, 270)
+        //));
 
         List<ExtrusionSegment.Vertex> shapeVertices = new List<ExtrusionSegment.Vertex>();
         shapeVertices.Add( 
-            new ExtrusionSegment.Vertex(new Vector2(-10, 1), new Vector2(-1, 1), 0)
+            new ExtrusionSegment.Vertex(new Vector2(-1 * width, 1), new Vector2(-1, 1), 0)
         );
         shapeVertices.Add( 
-            new ExtrusionSegment.Vertex(new Vector2(-4, 0), new Vector2(0.5f, 1), 0)
+            new ExtrusionSegment.Vertex(new Vector2(-0.4f * width, 0), new Vector2(0.5f, 1), 0)
         );
         shapeVertices.Add( 
             new ExtrusionSegment.Vertex(new Vector2(0, -0.5f), new Vector2(0, 1), 0)
         );
         shapeVertices.Add( 
-            new ExtrusionSegment.Vertex(new Vector2(4, 0), new Vector2(0.5f, 1), 0)
+            new ExtrusionSegment.Vertex(new Vector2(0.4f * width, 0), new Vector2(0.5f, 1), 0)
         );
         shapeVertices.Add(
-            new ExtrusionSegment.Vertex(new Vector2(10, 1), new Vector2(1, 1), 0.25f)
+            new ExtrusionSegment.Vertex(new Vector2(width, 1), new Vector2(1, 1), 0.25f)
         );
         shapeVertices.Add(
-            new ExtrusionSegment.Vertex(new Vector2(10, -7), new Vector2(1, -1), 0.5f)
+            new ExtrusionSegment.Vertex(new Vector2(width, -7), new Vector2(1, -1), 0.5f)
         );
         shapeVertices.Add(
-            new ExtrusionSegment.Vertex(new Vector2(-10, -7), new Vector2(-1, -1), 0.75f)
+            new ExtrusionSegment.Vertex(new Vector2(-1 * width, -7), new Vector2(-1, -1), 0.75f)
         );
 
         int i = 0;
@@ -97,25 +102,34 @@ public class GenerateTerrain : MonoBehaviour
         }
     }
 
-    void ModulateSegments()
+    public void ModulateSegments()
     {
         foreach (GameObject segment in segmentObjects)
         {
             segment.tag = "green";
 
             // Remove the ExtrusionSegment to prevent vertex changes from being overwritten
-            Destroy(segment.GetComponent<ExtrusionSegment>());
-
+            if (Application.isPlaying)
+            {
+                Destroy(segment.GetComponent<ExtrusionSegment>());
+            } else
+            {
+                DestroyImmediate(segment.GetComponent<ExtrusionSegment>());
+            }
+            
             MeshFilter meshFilter = segment.GetComponent<MeshFilter>();
-            Mesh mesh = meshFilter.mesh;
+            Mesh mesh = meshFilter.sharedMesh;
 
             Vector3[] vertices = mesh.vertices;
             
             for (int vertexIndex = 0; vertexIndex < vertices.Length; vertexIndex++) {
                 Vector3 vertex = vertices[vertexIndex];
-                vertex.x += xAmpModAmount * Mathf.Sin(vertex.x * xAmpModFrequency);
-                vertex.y += yAmpModAmount * Mathf.Sin(vertex.x * yAmpModFrequency);
-                vertex.z += zAmpModAmount * Mathf.Sin(vertex.z * zAmpModFrequency);
+
+                float t = spline.GetProjectionSample(vertex).timeInCurve;
+
+                vertex.x += xAmpModAmount * Mathf.Sin(t * xAmpModFrequency);
+                vertex.y += yAmpModAmount * Mathf.Cos(t * yAmpModFrequency);
+                vertex.z += zAmpModAmount * Mathf.Sin(t * zAmpModFrequency);
                 vertices[vertexIndex] = vertex;
             }
 
