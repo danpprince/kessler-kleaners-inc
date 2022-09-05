@@ -35,11 +35,14 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
+    - _Animation_speed: 0.25
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
-    - _Height: 0
+    - _Height: 0.21
+    - _Noise_scale: 1.23
+    - _Pixelation_scale: 2.46
     - _Scale: 0.78
     - _Scale_1: 1.25
-    - _Scale_2: 1.1
+    - _Scale_2: 0.5
     m_Colors: []
   m_BuildTextureStacks: []
