@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -12,6 +11,7 @@ public class HighscoreTable : MonoBehaviour
     private List<Transform> highscoreEntryTransformList;
     private string sceneName;
 
+    
     private void Awake()
     {
         entryContainer = transform.Find("highscoreEntryContainer");
@@ -19,13 +19,15 @@ public class HighscoreTable : MonoBehaviour
 
         sceneName = SceneManager.GetActiveScene().name;
 
+        SaveSystem.Init();
+        
         entryTemplate.gameObject.SetActive(false); //hide template
 
         // load highscores from json and convert to highscores object
-        string jsonString = File.ReadAllText(Application.dataPath + "/Highscores/" + sceneName + "highscoreTable.txt");
+        string jsonString = SaveSystem.Load(sceneName + "HighScores");
         Highscores highscores = JsonUtility.FromJson<Highscores>(jsonString);
 
-        // sort entry list by score on load
+        // sort entry list by score after load
         for (int i = 0; i < highscores.highscoreEntryList.Count; i++)
         {
             for (int j = i + 1; j < highscores.highscoreEntryList.Count; j++)
@@ -59,6 +61,8 @@ public class HighscoreTable : MonoBehaviour
      
         Transform entryTransform = Instantiate(entryTemplate, container);
         RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();
+
+        // place new template below last existing entry
         entryRectTransform.anchoredPosition = new Vector2(0, -templateHeight * transformList.Count);
         entryTransform.gameObject.SetActive(true);
 
@@ -100,7 +104,7 @@ public class HighscoreTable : MonoBehaviour
         HighscoreEntry highscoreEntry = new HighscoreEntry { score = score, name = name };
 
         // load highscores from json
-        string jsonString = File.ReadAllText(Application.dataPath + "/Highscores/" + sceneName + "highscoreTable.txt");
+        string jsonString = SaveSystem.Load(sceneName + "HighScores");
         Highscores highscores = JsonUtility.FromJson<Highscores>(jsonString);
 
         // add new entry to list
@@ -108,7 +112,7 @@ public class HighscoreTable : MonoBehaviour
 
         // save new list to json
         string json = JsonUtility.ToJson(highscores);
-        File.WriteAllText(Application.dataPath + "/Highscores/" + sceneName + "highscoreTable.txt", json);
+        SaveSystem.Save(json, sceneName + "HighScores");
 
     }
 
