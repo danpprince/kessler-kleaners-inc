@@ -28,6 +28,7 @@ public static class SaveSystem
         }
         else
         {
+            Debug.Log("No File: " + saveName + ".txt at " + SAVE_FOLDER);
             return null;
         }
     }
