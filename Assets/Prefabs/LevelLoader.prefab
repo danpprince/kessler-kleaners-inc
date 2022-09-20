@@ -396,3 +396,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   transition: {fileID: 7769110160279463527}
   transitionTime: 1
+  keyRestart: 114
+  keyLoadNextScene: 110
