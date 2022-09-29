@@ -415,6 +415,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5283149634754594843, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
   m_PrefabInstance: {fileID: 292114053}
   m_PrefabAsset: {fileID: 0}
+--- !u!20 &292114058 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 5283149634754594841, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
+  m_PrefabInstance: {fileID: 292114053}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &379676037
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -441,6 +446,10 @@ PrefabInstance:
     - target: {fileID: 5122255302856479316, guid: 42758af1e9410f745a63d3d1fa2dcc2b, type: 3}
       propertyPath: m_Name
       value: Resource Image
+      objectReference: {fileID: 0}
+    - target: {fileID: 5122255303124867540, guid: 42758af1e9410f745a63d3d1fa2dcc2b, type: 3}
+      propertyPath: m_TargetDisplay
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5122255303124867541, guid: 42758af1e9410f745a63d3d1fa2dcc2b, type: 3}
       propertyPath: m_Pivot.x
@@ -1075,6 +1084,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7769110160279463546, guid: 1cc3aeb8cbcf2f04ba5673fc99e73ff4, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 292114058}
     - target: {fileID: 7769110161081372807, guid: 1cc3aeb8cbcf2f04ba5673fc99e73ff4, type: 3}
       propertyPath: m_Name
       value: LevelLoader
