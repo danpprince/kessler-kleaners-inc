@@ -926,8 +926,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5283149634754594843}
-  m_LocalRotation: {x: 0.053170398, y: -0.0000000042987, z: 2.2854517e-10, w: 0.99858546}
-  m_LocalPosition: {x: 0.6819992, y: 1.3900001, z: 0.8639984}
+  m_LocalRotation: {x: 0.05317041, y: -3.7104174e-19, z: 6.96848e-18, w: 0.99858546}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1046,7 +1046,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
