@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 6173827765606901582}
   m_Layer: 0
   m_Name: Katamari
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -213,9 +213,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 0.3
-  rotationSpeed: 3
-  strikeStrength: 100
-  flyStrength: 10
   stuckObjectCountLimit: 200
   isColorCodingColliders: 0
   slowMixer: {fileID: 24100000, guid: 93c9641a48ebebb4ba7b025cfa8fed9a, type: 2}
@@ -242,7 +239,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialFuel: 500
-  timeBetweenHits: 5
   k_move: {fileID: 8453875387259748961}
   EndOfLevel: {fileID: 0}
   strokeCount: 0

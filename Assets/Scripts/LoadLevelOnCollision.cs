@@ -30,6 +30,7 @@ public class LoadLevelOnCollision : MonoBehaviour
         originalPosition = anchoredPosition;
         timeThusFar = 0;
         isAtEndOfLevel = false;
+        Time.timeScale = 1;
     }
 
 
@@ -63,7 +64,7 @@ public class LoadLevelOnCollision : MonoBehaviour
                 Time.fixedDeltaTime = Time.timeScale * 0.02f;
             } else
             {
-                Time.timeScale = 1;
+                //Time.timeScale = 1;
                 Time.fixedDeltaTime = Time.timeScale * 0.02f;
                 scoreBox.enabled = false;
                 cam.GetComponent<PostProcess>().enabled = true;
