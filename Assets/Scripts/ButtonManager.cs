@@ -12,6 +12,7 @@ public class ButtonManager : MonoBehaviour
     public float menuJoystickThreshold = 0.99f;
     private float verticalInput, acceptButton;
     private bool usingMouse = true;
+    public GameObject levelLoader;
    
     
 
@@ -19,6 +20,7 @@ public class ButtonManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {   
+
         start.onClick.AddListener(StartButton);
         settings.onClick.AddListener(SettingsButton);
         quit.onClick.AddListener(QuitButton);
@@ -58,7 +60,7 @@ public class ButtonManager : MonoBehaviour
 
     void StartButton()
     {
-
+        levelLoader.GetComponent<LevelLoader>().LoadNextLevel();
     }
 
     void SettingsButton()
