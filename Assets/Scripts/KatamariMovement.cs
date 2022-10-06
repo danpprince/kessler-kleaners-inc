@@ -350,7 +350,7 @@ public class KatamariMovement : MonoBehaviour
             isPowerBarIncreasing = true;
         }
 
-        powerBar.GetComponent<Image>().fillAmount = powerBarValue;
+        powerBar.GetComponent<RawImage>().material.SetFloat("_Power", powerBarValue);
     }
 
     // Returns True if in golf hit mode
@@ -367,7 +367,6 @@ public class KatamariMovement : MonoBehaviour
 
                 // Set up UI
                 powerBarValue = 0;
-                powerBar.GetComponent<Image>().fillAmount = 0;
                 powerBar.SetActive(true);
                 isPowerBarIncreasing = true;
                 this.GetComponent<LineRenderer>().enabled = true;
