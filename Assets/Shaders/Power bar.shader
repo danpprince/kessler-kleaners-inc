@@ -54,9 +54,6 @@ Shader "Unlit/NewUnlitShader"
                 float4 output;
 
                 float4 color = lerp(_BottomColor, _TopColor, i.uv.y);
-
-                // return i.uv.y < _Power;
-
                 output = color * (i.uv.y < _Power);
                 return output;
             }
