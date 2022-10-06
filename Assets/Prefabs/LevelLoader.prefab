@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7769110160279463545}
   - component: {fileID: 7769110160279463544}
   - component: {fileID: 7769110160279463527}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Crossfade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 7769110160592534348}
   - component: {fileID: 7769110160592534350}
   - component: {fileID: 7769110160592534349}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -271,7 +271,7 @@ GameObject:
   - component: {fileID: 7769110160781070456}
   - component: {fileID: 7769110160781070439}
   - component: {fileID: 7769110160781070438}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -359,7 +359,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7769110161081372824}
   - component: {fileID: 2765241143708172887}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: LevelLoader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
