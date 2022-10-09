@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FollowKatamari : MonoBehaviour
+public class FollowKleaner : MonoBehaviour
 {
-    public GameObject katamari;
+    public GameObject kleaner;
 
     public float followDistance;
     public float cameraHeight;
@@ -12,12 +12,12 @@ public class FollowKatamari : MonoBehaviour
     public Vector3 originalPosition;
     public Quaternion originalRotation;
 
-    private KatamariMovement movement;
+    private KleanerMovement movement;
 
     // Start is called before the first frame update
     void Start()
     {
-        movement = katamari.GetComponent<KatamariMovement>();
+        movement = kleaner.GetComponent<KleanerMovement>();
         originalPosition = transform.position;
         originalRotation = transform.rotation;
     }
@@ -25,16 +25,16 @@ public class FollowKatamari : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Quaternion katamariHeading = movement.heading;
+        Quaternion kleanerHeading = movement.heading;
 
         float verticalInput = Input.GetAxis("Vertical");
         cameraHeight -= verticalInput * Time.deltaTime;
 
         transform.position =
-            katamari.transform.position
-            - katamariHeading * new Vector3(0, 0, followDistance)
+            kleaner.transform.position
+            - kleanerHeading * new Vector3(0, 0, followDistance)
             + new Vector3(0, cameraHeight, 0);
 
-        transform.LookAt(katamari.transform);
+        transform.LookAt(kleaner.transform);
     }
 }

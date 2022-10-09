@@ -7,10 +7,10 @@ public class RestartLevelOnCollision : MonoBehaviour
 {
     [SerializeField]
     string strTag;
-    public GameObject katamari;
+    public GameObject kleaner;
     private bool shouldRestart = false;
     private string capturedTag = "";
-    private KatamariMovement km;
+    private KleanerMovement km;
     private Rigidbody rb;
     
     private void Update()

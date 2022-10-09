@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class VisualizeAngle : MonoBehaviour
 {
-    public KatamariMovement km;
+    public KleanerMovement km;
     public float positionOffset = 1;
     
 
