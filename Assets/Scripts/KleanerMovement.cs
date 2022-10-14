@@ -505,8 +505,11 @@ public class KleanerMovement : MonoBehaviour
 
     private void PointArrowAwayFromKleaner()
     {
-        heading = Quaternion.LookRotation(this.transform.position - _camera.transform.position, Vector3.up);
-        hitXAngle = heading.x;
+        Quaternion awayHeading = Quaternion.LookRotation(this.transform.position - _camera.transform.position, Vector3.up);
+
+        // Store the Euler X rotation component only in hitXAngle and not in heading
+        heading.eulerAngles = new Vector3(0, awayHeading.eulerAngles.y, 0);
+        hitXAngle = -1 * awayHeading.eulerAngles.x;
     }
 
     private void ModifyTimeScale(bool isSpeedingUp)
