@@ -23,8 +23,6 @@ public class ResourceManager : MonoBehaviour
         // Initialize so a hit can be performed at the start
         lastHitTimeSec = Time.time - timeBetweenHits;
         strokeCount = 0;
-
-        
     }
 
     void Update()
@@ -33,7 +31,6 @@ public class ResourceManager : MonoBehaviour
         UpdateUI();
         if (Input.GetKeyDown("r"))
         {
-
             SceneManager.LoadScene(SceneManager.GetActiveScene().name); 
         }
 
@@ -44,7 +41,7 @@ public class ResourceManager : MonoBehaviour
         if (!EndOfLevel.isAtEndOfLevel)
         {
             resourceText.text =
-                  "Fuel remaining: " + fuelRemaining + "\n"
+                  "Fuel remaining: " + fuelRemaining.ToString("0.0") + "\n"
                 + "Mass collected: " + massCollected + "\n"
                 + "Time elapsed: " + timeElapsedSec.ToString("0.0") + "\n"
                 + "Time since last hit: " + GetTimeSinceLastHit().ToString("0.0") + "\n"
@@ -52,7 +49,12 @@ public class ResourceManager : MonoBehaviour
                 + "Strokes: " + strokeCount;
         } else
         {
-            resourceText.text = "TEST SUCCESS";
+            resourceText.alignment = TextAnchor.MiddleCenter;
+            resourceText.text =
+                "Strokes: " + strokeCount + "\n"
+                + "Fuel remaining: " + fuelRemaining + "\n"
+                + "Mass collected: " + massCollected + "\n"
+                + "Time elapsed: " + timeElapsedSec.ToString("0.0");
         }
     }
 
