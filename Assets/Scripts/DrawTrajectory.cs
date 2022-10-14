@@ -14,7 +14,7 @@ public class DrawTrajectory : MonoBehaviour
     public float collisionUpdateRateSeconds = 1.0f;
     public List<GameObject> obstacles;
     public GameObject subject;
-    public KatamariMovement km;
+    public KleanerMovement km;
     public LineRenderer lineRenderer;
 
     private PhysicsScene currentPhysicsScene;
@@ -36,7 +36,7 @@ public class DrawTrajectory : MonoBehaviour
         predictionPhysicsScene = predictionScene.GetPhysicsScene();
 
         CopyAllObstacles();
-        PredictKatamariPath();
+        PredictKleanerPath();
     }
 
     public void CopyAllObstacles()
@@ -55,9 +55,9 @@ public class DrawTrajectory : MonoBehaviour
     {
         timeSinceLastUpdateSeconds += Time.deltaTime;
 
-        if (timeSinceLastUpdateSeconds > collisionUpdateRateSeconds && subject.GetComponent<KatamariMovement>().IsGolfHitMode())
+        if (timeSinceLastUpdateSeconds > collisionUpdateRateSeconds && subject.GetComponent<KleanerMovement>().IsGolfHitMode())
         {
-            PredictKatamariPath();
+            PredictKleanerPath();
             timeSinceLastUpdateSeconds = 0.0f;
         }
     }
@@ -71,7 +71,7 @@ public class DrawTrajectory : MonoBehaviour
         }
     }
 
-    void PredictKatamariPath()
+    void PredictKleanerPath()
     {
         if (!currentPhysicsScene.IsValid() || !predictionPhysicsScene.IsValid())
         {

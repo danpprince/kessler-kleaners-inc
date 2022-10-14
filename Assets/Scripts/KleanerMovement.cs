@@ -14,7 +14,7 @@ public static class FlyingConstants
     public const float StopVelocityMagnitude = 0.5f;
 }
 
-public class KatamariMovement : MonoBehaviour
+public class KleanerMovement : MonoBehaviour
 {
     public float movementSpeed = 1;
     private float horizontalRotationSpeed = 3;
@@ -91,9 +91,9 @@ public class KatamariMovement : MonoBehaviour
 
         movementState = StateMachine.toGolfMode;
 
-        // If the katamari rigidbody falls asleep, it will disable the OnCollisionStay
+        // If the kleaner rigidbody falls asleep, it will disable the OnCollisionStay
         // callback. Setting the sleep threshold to zero makes sure this callback
-        // continues to be called when the katamari is stationary on a collider.
+        // continues to be called when the kleaner is stationary on a collider.
         rb.sleepThreshold = 0;
     }
 
@@ -161,7 +161,7 @@ public class KatamariMovement : MonoBehaviour
 
             ForceMode forceMode = ForceMode.Force;
             rb.AddForce(CalculateHitVector(accelerateFuelUsed), forceMode);
-            // Roll the katamari in the direction it is being hit
+            // Roll the kleaner in the direction it is being hit
             rb.AddTorque(CalculateRollVector(accelerateFuelUsed), forceMode);
 
             // Slow down based on input
@@ -232,7 +232,7 @@ public class KatamariMovement : MonoBehaviour
         GameObject colliderObject = collider.gameObject;
         if (colliderObject.tag == "Stickable")
         {
-            StickToKatamari(colliderObject);
+            StickToKleaner(colliderObject);
 
             AudioSource audioSource = colliderObject.GetComponent<AudioSource>();
             if (!(audioSource is null))
@@ -243,17 +243,17 @@ public class KatamariMovement : MonoBehaviour
         }
     }
 
-    void StickToKatamari(GameObject colliderObject)
+    void StickToKleaner(GameObject colliderObject)
     {
-        float towardsKatamariAmount = 0.1f;
+        float towardsKleanerAmount = 0.1f;
         float jitterAmount = 0.0f;
 
         Vector3 colliderPosition = colliderObject.transform.position;
 
         colliderObject.transform.SetParent(transform, worldPositionStays: true);
 
-        Vector3 towardsKatamari = colliderPosition - transform.position;
-        colliderPosition -= towardsKatamari * towardsKatamariAmount;
+        Vector3 towardsKleaner = colliderPosition - transform.position;
+        colliderPosition -= towardsKleaner * towardsKleanerAmount;
 
         // Too many objects stuck on the same plane creates a flat surface
         // that makes it hard to roll. Add some random jitter to the stuck
@@ -371,7 +371,7 @@ public class KatamariMovement : MonoBehaviour
                 isPowerBarIncreasing = true;
                 this.GetComponent<LineRenderer>().enabled = true;
                 arrow.SetActive(true);
-                PointArrowAwayFromKatamari();
+                PointArrowAwayFromKleaner();
                 hitXAngle = 45;
 
                 // Set up physics
@@ -428,7 +428,7 @@ public class KatamariMovement : MonoBehaviour
                 {
                     movementState = StateMachine.slowMotion;
 
-                    PointArrowAwayFromKatamari();
+                    PointArrowAwayFromKleaner();
                     arrow.SetActive(true);
                 }
 
@@ -503,7 +503,7 @@ public class KatamariMovement : MonoBehaviour
         }
     }
 
-    private void PointArrowAwayFromKatamari()
+    private void PointArrowAwayFromKleaner()
     {
         Quaternion awayHeading = Quaternion.LookRotation(this.transform.position - _camera.transform.position, Vector3.up);
 

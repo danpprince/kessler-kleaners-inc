@@ -39,7 +39,7 @@ public class Starting_Position : MonoBehaviour
         starting_position = meshRenderer.bounds.center + new Vector3 (0f, ((h/2) + (width/2)), 0f);
         player.transform.position = starting_position;
         before_stroke = true;
-        default_movementSpeed = player.GetComponent<KatamariMovement>().movementSpeed;
+        default_movementSpeed = player.GetComponent<KleanerMovement>().movementSpeed;
 
     }
 
@@ -63,13 +63,13 @@ public class Starting_Position : MonoBehaviour
         if (before_stroke)
         {
             player.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition;
-            player.GetComponent<KatamariMovement>().movementSpeed = hit_power;
+            player.GetComponent<KleanerMovement>().movementSpeed = hit_power;
         }
 
         else
         {
             player.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-            player.GetComponent<KatamariMovement>().movementSpeed = default_movementSpeed;
+            player.GetComponent<KleanerMovement>().movementSpeed = default_movementSpeed;
         }
 
        
