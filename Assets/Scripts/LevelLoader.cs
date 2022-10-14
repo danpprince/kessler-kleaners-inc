@@ -80,7 +80,8 @@ public class LevelLoader : MonoBehaviour
         transition.SetTrigger("Start");
 
         //Wait
-        yield return new WaitForSeconds(transitionTime);
+       
+        yield return new WaitForSecondsRealtime(transitionTime);
 
         //Load scene
         SceneManager.LoadScene(levelIndex);

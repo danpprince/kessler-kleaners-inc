@@ -22,11 +22,15 @@ public class LoadLevelOnCollision : MonoBehaviour
     private float timeThusFar;
     public bool isAtEndOfLevel;
 
+    //for loading level
+    public GameObject levelLoader;
     private void Start()
     {
         Vector2 anchoredPosition = scoreBox.rectTransform.anchoredPosition;
         originalPosition = anchoredPosition;
         timeThusFar = 0;
+        isAtEndOfLevel = false;
+        Time.timeScale = 1;
     }
 
 
@@ -60,11 +64,13 @@ public class LoadLevelOnCollision : MonoBehaviour
                 Time.fixedDeltaTime = Time.timeScale * 0.02f;
             } else
             {
-                Time.timeScale = 1;
+                //Time.timeScale = 1;
                 Time.fixedDeltaTime = Time.timeScale * 0.02f;
-                SceneManager.LoadScene(strSceneName);
+                scoreBox.enabled = false;
                 cam.GetComponent<PostProcess>().enabled = true;
-                isAtEndOfLevel = false;
+                levelLoader.GetComponent<LevelLoader>().LoadNextLevel();
+                
+               
             }
         }
     }
