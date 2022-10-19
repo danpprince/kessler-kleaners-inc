@@ -45,7 +45,7 @@ Material:
     m_Floats:
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 9
-    - _Power: 0.82999957
+    - _Power: 0.93999946
     m_Colors:
     - _BottomColor: {r: 0.1509434, g: 0.06194376, b: 0.06194376, a: 1}
     - _TopColor: {r: 1, g: 0, b: 0, a: 0}
