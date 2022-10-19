@@ -12,7 +12,12 @@ public class RestartLevelOnCollision : MonoBehaviour
     {
         if (collider.tag == strTag)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            KleanerMovement km = collider.GetComponent<KleanerMovement>();
+
+            if (km != null)
+            {
+                km.MoveToLastGolfPosition();
+            }
         }
     }
 }
