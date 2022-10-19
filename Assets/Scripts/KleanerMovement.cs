@@ -114,7 +114,6 @@ public class KleanerMovement : MonoBehaviour
         flyParticles = flyParticlesObject.GetComponent<ParticleSystem>();
 
         lastGolfPosition = transform.position;
-        print("lastGolfPosition: " + lastGolfPosition);
     }
 
     // Update is called once per frame
@@ -442,7 +441,6 @@ public class KleanerMovement : MonoBehaviour
                     if (isHitSuccessful)
                     {
                         lastGolfPosition = transform.position;
-                        print("lastGolfPosition: " + lastGolfPosition);
 
                         rb.constraints = RigidbodyConstraints.None;
 
