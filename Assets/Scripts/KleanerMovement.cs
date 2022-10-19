@@ -75,6 +75,13 @@ public class KleanerMovement : MonoBehaviour
 
     private bool isFlyMovementDeadTime = false;
 
+    public GameObject hitParticlesObject;
+    private ParticleSystem hitParticles;
+    public GameObject stopParticlesObject;
+    private ParticleSystem stopParticles;
+    public GameObject flyParticlesObject;
+    private ParticleSystem flyParticles;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -95,6 +102,10 @@ public class KleanerMovement : MonoBehaviour
         // callback. Setting the sleep threshold to zero makes sure this callback
         // continues to be called when the kleaner is stationary on a collider.
         rb.sleepThreshold = 0;
+
+        hitParticles = hitParticlesObject.GetComponent<ParticleSystem>();
+        stopParticles = stopParticlesObject.GetComponent<ParticleSystem>();
+        flyParticles = flyParticlesObject.GetComponent<ParticleSystem>();
     }
 
     // Update is called once per frame
@@ -170,10 +181,13 @@ public class KleanerMovement : MonoBehaviour
                 rb.velocity *= 0.95f;
                 rb.angularVelocity = 0.95f * rb.angularVelocity;
                 rb.useGravity = false;
+
+                stopParticles.Play();
             }
             else
             {
                 rb.useGravity = true;
+                stopParticles.Stop();
             }
         }
 
@@ -402,6 +416,8 @@ public class KleanerMovement : MonoBehaviour
                         powerBar.SetActive(false);
                         arrow.SetActive(false);
                         this.GetComponent<LineRenderer>().enabled = false;
+
+                        hitParticles.Play();
                     }
                 }
                 break;
@@ -436,6 +452,11 @@ public class KleanerMovement : MonoBehaviour
                 {
                     movementState = StateMachine.speedUp;
                     arrow.SetActive(false); //maybe
+                    flyParticles.Stop();
+                }
+                else if (!flyParticles.isPlaying)
+                {
+                    flyParticles.Play();
                 }
 
                 break;
@@ -445,6 +466,11 @@ public class KleanerMovement : MonoBehaviour
                 {
                     movementState = StateMachine.speedUp;
                     arrow.SetActive(false); // maybe
+                    flyParticles.Stop();
+                } 
+                else if (!flyParticles.isPlaying)
+                {
+                    flyParticles.Play();
                 }
 
                 break;
