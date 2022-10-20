@@ -111,87 +111,92 @@ public class KleanerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
-        hitInput = Input.GetAxis("Jump");
-        isHitInputActive = hitInput > 0.5;
-        stopInput = Input.GetAxis("Stop");
-        float forceToGolfModeInput = Input.GetAxis("Fire3");
-
-        if (forceToGolfModeInput > 0.5)
+        if (!PauseMenu.isPaused)
         {
-            movementState = StateMachine.toGolfMode;
-        }
+            horizontalInput = Input.GetAxis("Horizontal");
+            verticalInput = Input.GetAxis("Vertical");
+            hitInput = Input.GetAxis("Jump");
+            isHitInputActive = hitInput > 0.5;
+            stopInput = Input.GetAxis("Stop");
+            float forceToGolfModeInput = Input.GetAxis("Fire3");
 
-        // increment the vertical angle in chunks
-        angle_timer += Time.unscaledDeltaTime;
-        if (movementState == StateMachine.golfMode)
-        {
-            if (verticalInput > 0.5 && angle_timer >= 0.25)
+            if (forceToGolfModeInput > 0.5)
             {
-                hitXAngle += 20;
-                angle_timer = 0;
+                movementState = StateMachine.toGolfMode;
             }
 
-            if (verticalInput < -0.5 && angle_timer >= 0.25)
+            // increment the vertical angle in chunks
+            angle_timer += Time.unscaledDeltaTime;
+            if (movementState == StateMachine.golfMode)
             {
-                hitXAngle -= 20;
-                angle_timer = 0;
+                if (verticalInput > 0.5 && angle_timer >= 0.25)
+                {
+                    hitXAngle += 20;
+                    angle_timer = 0;
+                }
+
+                if (verticalInput < -0.5 && angle_timer >= 0.25)
+                {
+                    hitXAngle -= 20;
+                    angle_timer = 0;
+                }
             }
+            else if (movementState == StateMachine.slowMotion)
+            {
+                hitXAngle += verticalInput * verticalRotationSpeed;
+            }
+            slowMixer.SetFloat("Pitch", Time.timeScale);
         }
-        else if (movementState == StateMachine.slowMotion)
-        {
-            hitXAngle += verticalInput * verticalRotationSpeed;
-        }
-        slowMixer.SetFloat("Pitch", Time.timeScale);
     }
 
         private void FixedUpdate()
     {
-        float yRotation = horizontalInput * horizontalRotationSpeed;
-        Vector3 rotation = new Vector3(0, yRotation, 0);
-        transform.Rotate(rotation, Space.World);
-
-        if (movementState == StateMachine.golfMode || movementState == StateMachine.slowMotion || movementState == StateMachine.slowDown)
+        if (!PauseMenu.isPaused)
         {
-            heading *= Quaternion.Euler(0, yRotation, 0);
-        }
+            float yRotation = horizontalInput * horizontalRotationSpeed;
+            Vector3 rotation = new Vector3(0, yRotation, 0);
+            transform.Rotate(rotation, Space.World);
 
-        if (
-            (
-                movementState == StateMachine.normalSpeed ||
-                movementState == StateMachine.speedUp ||
-                movementState == StateMachine.slowMotion ||
-                movementState == StateMachine.speedUp
-            ) && !isFlyMovementDeadTime
-        )
-        {
-            float accelerateFuelUsed = resourceManager.UseFuel(hitInput);
-            float stopFuelUsed = resourceManager.UseFuel(stopInput);
-
-            ForceMode forceMode = ForceMode.Force;
-            rb.AddForce(CalculateHitVector(accelerateFuelUsed), forceMode);
-            // Roll the kleaner in the direction it is being hit
-            rb.AddTorque(CalculateRollVector(accelerateFuelUsed), forceMode);
-
-            // Slow down based on input
-            if (stopFuelUsed > 0.5)
+            if (movementState == StateMachine.golfMode || movementState == StateMachine.slowMotion || movementState == StateMachine.slowDown)
             {
-                rb.velocity *= 0.95f;
-                rb.angularVelocity = 0.95f * rb.angularVelocity;
-                rb.useGravity = false;
-
-                stopParticles.Play();
+                heading *= Quaternion.Euler(0, yRotation, 0);
             }
-            else
+
+            if (
+                (
+                    movementState == StateMachine.normalSpeed ||
+                    movementState == StateMachine.speedUp ||
+                    movementState == StateMachine.slowMotion ||
+                    movementState == StateMachine.speedUp
+                ) && !isFlyMovementDeadTime
+            )
             {
-                rb.useGravity = true;
-                stopParticles.Stop();
-            }
-        }
+                float accelerateFuelUsed = resourceManager.UseFuel(hitInput);
+                float stopFuelUsed = resourceManager.UseFuel(stopInput);
 
-        UpdateTimeStateMachine();
+                ForceMode forceMode = ForceMode.Force;
+                rb.AddForce(CalculateHitVector(accelerateFuelUsed), forceMode);
+                // Roll the kleaner in the direction it is being hit
+                rb.AddTorque(CalculateRollVector(accelerateFuelUsed), forceMode);
+
+                // Slow down based on input
+                if (stopFuelUsed > 0.5)
+                {
+                    rb.velocity *= 0.95f;
+                    rb.angularVelocity = 0.95f * rb.angularVelocity;
+                    rb.useGravity = false;
+
+                    stopParticles.Play();
+                }
+                else
+                {
+                    rb.useGravity = true;
+                    stopParticles.Stop();
+                }
+            }
+
+            UpdateTimeStateMachine();
+        }
     }
 
     public Vector3 CalculateHitVector(float accelerateFuelUsed)

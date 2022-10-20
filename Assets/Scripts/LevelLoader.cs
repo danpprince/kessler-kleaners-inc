@@ -18,9 +18,7 @@ public class LevelLoader : MonoBehaviour
 
     private void Awake()
     {
-        //list of original buildIndexPair order
-
-        //list of queued buildIndexPair for scene transition utility?
+        
     }
 
     // Update is called once per frame
@@ -40,25 +38,6 @@ public class LevelLoader : MonoBehaviour
         }
 
     }
-    /*
-    private class SceneNameIndexPairs
-    {
-        public List<SceneNameIndexPair> buildIndexList;
-    }
-
-    [System.Serializable]
-    private class SceneNameIndexPair
-    {
-        public string sceneName;
-        public int sceneIndex;
-    }
-
-    private void AddSceneNameIndexPair(string name, int index)
-    {
-        SceneNameIndexPair newPair = new SceneNameIndexPair { sceneName = name, sceneIndex = index };
-
-    }
-    */
 
     public void LoadNextLevel()
     {
