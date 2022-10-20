@@ -31,12 +31,6 @@ public class ResourceManager : MonoBehaviour
     {
         timeElapsedSec += Time.deltaTime;
         UpdateUI();
-        if (Input.GetKeyDown("r"))
-        {
-
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name); 
-        }
-
     }
 
     void UpdateUI()
@@ -52,7 +46,11 @@ public class ResourceManager : MonoBehaviour
                 + "Strokes: " + strokeCount;
         } else
         {
-            resourceText.text = "TEST SUCCESS";
+            resourceText.text = "LEVEL COMPLETE!" +"\n"
+                + "Total Mass Collected: " + Mathf.RoundToInt(massCollected) + "\n"
+                + "Number of Strokes: " + strokeCount + "\n"
+                + "Remaining Fuel Bonus: " + Mathf.RoundToInt(fuelRemaining) + "\n"
+                + "Total Score: " + (Mathf.RoundToInt(massCollected / strokeCount) + Mathf.RoundToInt(fuelRemaining));
         }
     }
 
