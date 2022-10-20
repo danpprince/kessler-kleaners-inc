@@ -125,12 +125,6 @@ public class KleanerMovement : MonoBehaviour
         hitInput = Input.GetAxis("Jump");
         isHitInputActive = hitInput > 0.5;
         stopInput = Input.GetAxis("Stop");
-        float forceToGolfModeInput = Input.GetAxis("Fire3");
-
-        if (forceToGolfModeInput > 0.5)
-        {
-            movementState = StateMachine.toGolfMode;
-        }
 
         // increment the vertical angle in chunks
         angle_timer += Time.unscaledDeltaTime;
