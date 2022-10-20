@@ -119,92 +119,96 @@ public class KleanerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!PauseMenu.isPaused)
+        if (PauseMenu.isPaused)
         {
-            horizontalInput = Input.GetAxis("Horizontal");
-            verticalInput = Input.GetAxis("Vertical");
-            hitInput = Input.GetAxis("Jump");
-            isHitInputActive = hitInput > 0.5;
-            stopInput = Input.GetAxis("Stop");
-            float forceToGolfModeInput = Input.GetAxis("Fire3");
-
-            if (forceToGolfModeInput > 0.5)
-            {
-                movementState = StateMachine.toGolfMode;
-            }
-
-            // increment the vertical angle in chunks
-            angle_timer += Time.unscaledDeltaTime;
-            if (movementState == StateMachine.golfMode)
-            {
-                if (verticalInput > 0.5 && angle_timer >= 0.25)
-                {
-                    hitXAngle += 20;
-                    angle_timer = 0;
-                }
-
-                if (verticalInput < -0.5 && angle_timer >= 0.25)
-                {
-                    hitXAngle -= 20;
-                    angle_timer = 0;
-                }
-            }
-            else if (movementState == StateMachine.slowMotion)
-            {
-                hitXAngle += verticalInput * verticalRotationSpeed;
-            }
-            slowMixer.SetFloat("Pitch", Time.timeScale);
+            return;
         }
+
+        horizontalInput = Input.GetAxis("Horizontal");
+        verticalInput = Input.GetAxis("Vertical");
+        hitInput = Input.GetAxis("Jump");
+        isHitInputActive = hitInput > 0.5;
+        stopInput = Input.GetAxis("Stop");
+        float forceToGolfModeInput = Input.GetAxis("Fire3");
+
+        if (forceToGolfModeInput > 0.5)
+        {
+            movementState = StateMachine.toGolfMode;
+        }
+
+        // increment the vertical angle in chunks
+        angle_timer += Time.unscaledDeltaTime;
+        if (movementState == StateMachine.golfMode)
+        {
+            if (verticalInput > 0.5 && angle_timer >= 0.25)
+            {
+                hitXAngle += 20;
+                angle_timer = 0;
+            }
+
+            if (verticalInput < -0.5 && angle_timer >= 0.25)
+            {
+                hitXAngle -= 20;
+                angle_timer = 0;
+            }
+        }
+        else if (movementState == StateMachine.slowMotion)
+        {
+            hitXAngle += verticalInput * verticalRotationSpeed;
+        }
+        slowMixer.SetFloat("Pitch", Time.timeScale);
     }
 
     private void FixedUpdate()
     {
-        if (!PauseMenu.isPaused)
+        if (PauseMenu.isPaused)
         {
-            float yRotation = horizontalInput * horizontalRotationSpeed;
-            Vector3 rotation = new Vector3(0, yRotation, 0);
-            transform.Rotate(rotation, Space.World);
-
-            if (movementState == StateMachine.golfMode || movementState == StateMachine.slowMotion || movementState == StateMachine.slowDown)
-            {
-                heading *= Quaternion.Euler(0, yRotation, 0);
-            }
-
-            if (
-                (
-                    movementState == StateMachine.normalSpeed ||
-                    movementState == StateMachine.speedUp ||
-                    movementState == StateMachine.slowMotion ||
-                    movementState == StateMachine.speedUp
-                ) && !isFlyMovementDeadTime
-            )
-            {
-                float accelerateFuelUsed = resourceManager.UseFuel(hitInput);
-                float stopFuelUsed = resourceManager.UseFuel(stopInput);
-
-                ForceMode forceMode = ForceMode.Force;
-                rb.AddForce(CalculateHitVector(accelerateFuelUsed), forceMode);
-                // Roll the kleaner in the direction it is being hit
-                rb.AddTorque(CalculateRollVector(accelerateFuelUsed), forceMode);
-
-                // Slow down based on input
-                if (stopFuelUsed > 0.5)
-                {
-                    rb.velocity *= 0.95f;
-                    rb.angularVelocity = 0.95f * rb.angularVelocity;
-                    rb.useGravity = false;
-
-                    stopParticles.Play();
-                }
-                else
-                {
-                    rb.useGravity = true;
-                    stopParticles.Stop();
-                }
-            }
-
-            UpdateTimeStateMachine();
+            return;
         }
+
+        float yRotation = horizontalInput * horizontalRotationSpeed;
+        Vector3 rotation = new Vector3(0, yRotation, 0);
+        transform.Rotate(rotation, Space.World);
+
+        if (movementState == StateMachine.golfMode || movementState == StateMachine.slowMotion || movementState == StateMachine.slowDown)
+        {
+            heading *= Quaternion.Euler(0, yRotation, 0);
+        }
+
+        if (
+            (
+                movementState == StateMachine.normalSpeed ||
+                movementState == StateMachine.speedUp ||
+                movementState == StateMachine.slowMotion ||
+                movementState == StateMachine.speedUp
+            ) && !isFlyMovementDeadTime
+        )
+        {
+            float accelerateFuelUsed = resourceManager.UseFuel(hitInput);
+            float stopFuelUsed = resourceManager.UseFuel(stopInput);
+
+            ForceMode forceMode = ForceMode.Force;
+            rb.AddForce(CalculateHitVector(accelerateFuelUsed), forceMode);
+            // Roll the kleaner in the direction it is being hit
+            rb.AddTorque(CalculateRollVector(accelerateFuelUsed), forceMode);
+
+            // Slow down based on input
+            if (stopFuelUsed > 0.5)
+            {
+                rb.velocity *= 0.95f;
+                rb.angularVelocity = 0.95f * rb.angularVelocity;
+                rb.useGravity = false;
+
+                stopParticles.Play();
+            }
+            else
+            {
+                rb.useGravity = true;
+                stopParticles.Stop();
+            }
+        }
+
+        UpdateTimeStateMachine();
     }
 
     public Vector3 CalculateHitVector(float accelerateFuelUsed)
