@@ -144,14 +144,14 @@ public class KleanerMovement : MonoBehaviour
         }
         else if (movementState == StateMachine.slowMotion)
         {
-            hitXAngle += verticalInput * verticalRotationSpeed;
+            hitXAngle += verticalInput * Time.timeScale;
         }
         slowMixer.SetFloat("Pitch", Time.timeScale);
     }
 
     private void FixedUpdate()
     {
-        float yRotation = horizontalInput * horizontalRotationSpeed;
+        float yRotation = horizontalInput * horizontalRotationSpeed * Time.timeScale;
         Vector3 rotation = new Vector3(0, yRotation, 0);
         transform.Rotate(rotation, Space.World);
 

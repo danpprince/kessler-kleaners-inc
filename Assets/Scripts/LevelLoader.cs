@@ -40,25 +40,6 @@ public class LevelLoader : MonoBehaviour
         }
 
     }
-    /*
-    private class SceneNameIndexPairs
-    {
-        public List<SceneNameIndexPair> buildIndexList;
-    }
-
-    [System.Serializable]
-    private class SceneNameIndexPair
-    {
-        public string sceneName;
-        public int sceneIndex;
-    }
-
-    private void AddSceneNameIndexPair(string name, int index)
-    {
-        SceneNameIndexPair newPair = new SceneNameIndexPair { sceneName = name, sceneIndex = index };
-
-    }
-    */
 
     public void LoadNextLevel()
     {
@@ -68,7 +49,7 @@ public class LevelLoader : MonoBehaviour
         if (nextSceneIndex > SceneManager.sceneCountInBuildSettings - 1)
         {
             // load first scene instead
-            nextSceneIndex = 0;   
+            nextSceneIndex = 2;   
         }
         
         StartCoroutine(LoadLevel(nextSceneIndex));
