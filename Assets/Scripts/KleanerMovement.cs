@@ -54,7 +54,10 @@ public class KleanerMovement : MonoBehaviour
     public float time_modifier;
     private float angle_timer = 0;
 
-    public enum StateMachine { normalSpeed, slowDown, slowMotion, speedUp, golfMode, toGolfMode };
+    public enum StateMachine {
+        normalSpeed, slowDown, slowMotion, speedUp, golfMode, toGolfMode,
+        resetPositionStart, resetPositionWait
+    };
     [System.NonSerialized]
     public StateMachine movementState;
 
@@ -74,6 +77,16 @@ public class KleanerMovement : MonoBehaviour
     public GameObject arrow;
 
     private bool isFlyMovementDeadTime = false;
+
+    public GameObject hitParticlesObject;
+    private ParticleSystem hitParticles;
+    public GameObject stopParticlesObject;
+    private ParticleSystem stopParticles;
+    public GameObject flyParticlesObject;
+    private ParticleSystem flyParticles;
+
+    private Vector3 lastGolfPosition;
+    private float resetPositionStartTime;
 
     void Start()
     {
@@ -95,6 +108,12 @@ public class KleanerMovement : MonoBehaviour
         // callback. Setting the sleep threshold to zero makes sure this callback
         // continues to be called when the kleaner is stationary on a collider.
         rb.sleepThreshold = 0;
+
+        hitParticles = hitParticlesObject.GetComponent<ParticleSystem>();
+        stopParticles = stopParticlesObject.GetComponent<ParticleSystem>();
+        flyParticles = flyParticlesObject.GetComponent<ParticleSystem>();
+
+        lastGolfPosition = transform.position;
     }
 
     // Update is called once per frame
@@ -106,12 +125,6 @@ public class KleanerMovement : MonoBehaviour
         hitInput = Input.GetAxis("Jump");
         isHitInputActive = hitInput > 0.5;
         stopInput = Input.GetAxis("Stop");
-        float forceToGolfModeInput = Input.GetAxis("Fire3");
-
-        if (forceToGolfModeInput > 0.5)
-        {
-            movementState = StateMachine.toGolfMode;
-        }
 
         // increment the vertical angle in chunks
         angle_timer += Time.unscaledDeltaTime;
@@ -136,7 +149,7 @@ public class KleanerMovement : MonoBehaviour
         slowMixer.SetFloat("Pitch", Time.timeScale);
     }
 
-        private void FixedUpdate()
+    private void FixedUpdate()
     {
         float yRotation = horizontalInput * horizontalRotationSpeed * Time.timeScale;
         Vector3 rotation = new Vector3(0, yRotation, 0);
@@ -170,10 +183,13 @@ public class KleanerMovement : MonoBehaviour
                 rb.velocity *= 0.95f;
                 rb.angularVelocity = 0.95f * rb.angularVelocity;
                 rb.useGravity = false;
+
+                stopParticles.Play();
             }
             else
             {
                 rb.useGravity = true;
+                stopParticles.Stop();
             }
         }
 
@@ -362,6 +378,34 @@ public class KleanerMovement : MonoBehaviour
     public void UpdateTimeStateMachine()
     {
         switch (movementState) {
+            case StateMachine.resetPositionStart:
+                resetPositionStartTime = Time.time;
+                movementState = StateMachine.resetPositionWait;
+
+                // Place the kleaner above where it was to prevent it from clipping through the floor
+                float verticalOffset = 5f;
+                rb.position = lastGolfPosition + new Vector3(0f, verticalOffset, 0f);
+                rb.velocity = new Vector3(0f, 0f, 0f);
+                rb.angularVelocity = new Vector3(0f, 0f, 0f);
+
+                break;
+
+            case StateMachine.resetPositionWait:
+                // Allow some time for the camera to move behind the kleaner
+                float waitTimeSec = 2.0f;
+
+                rb.constraints =
+                    RigidbodyConstraints.FreezePositionX
+                    | RigidbodyConstraints.FreezePositionZ
+                    | RigidbodyConstraints.FreezeRotation;
+
+                if (Time.time - resetPositionStartTime >= waitTimeSec)
+                {
+                    movementState = StateMachine.toGolfMode;
+                }
+
+                break;
+
             case StateMachine.toGolfMode:
                 movementState = StateMachine.golfMode;
 
@@ -390,6 +434,8 @@ public class KleanerMovement : MonoBehaviour
                     bool isHitSuccessful = resourceManager.tryToHit();
                     if (isHitSuccessful)
                     {
+                        lastGolfPosition = transform.position;
+
                         rb.constraints = RigidbodyConstraints.None;
 
                         // Make sure force is calculated in golf state
@@ -402,6 +448,8 @@ public class KleanerMovement : MonoBehaviour
                         powerBar.SetActive(false);
                         arrow.SetActive(false);
                         this.GetComponent<LineRenderer>().enabled = false;
+
+                        hitParticles.Play();
                     }
                 }
                 break;
@@ -436,6 +484,11 @@ public class KleanerMovement : MonoBehaviour
                 {
                     movementState = StateMachine.speedUp;
                     arrow.SetActive(false); //maybe
+                    flyParticles.Stop();
+                }
+                else if (!flyParticles.isPlaying)
+                {
+                    flyParticles.Play();
                 }
 
                 break;
@@ -445,6 +498,11 @@ public class KleanerMovement : MonoBehaviour
                 {
                     movementState = StateMachine.speedUp;
                     arrow.SetActive(false); // maybe
+                    flyParticles.Stop();
+                } 
+                else if (!flyParticles.isPlaying)
+                {
+                    flyParticles.Play();
                 }
 
                 break;
@@ -532,5 +590,10 @@ public class KleanerMovement : MonoBehaviour
     public RigidbodyConstraints GetRigidbodyConstraints()
     {
         return rb.constraints;
+    }
+
+    public void MoveToLastGolfPosition()
+    {
+        movementState = StateMachine.resetPositionStart;
     }
 }

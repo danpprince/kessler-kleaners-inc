@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class RestartLevelOnCollision : MonoBehaviour
+public class MoveToLastGolfPositionOnExit : MonoBehaviour
 {
     [SerializeField]
     string strTag;
@@ -12,7 +12,12 @@ public class RestartLevelOnCollision : MonoBehaviour
     {
         if (collider.tag == strTag)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            KleanerMovement km = collider.GetComponent<KleanerMovement>();
+
+            if (km != null)
+            {
+                km.MoveToLastGolfPosition();
+            }
         }
     }
 }
