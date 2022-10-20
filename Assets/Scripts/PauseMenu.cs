@@ -31,7 +31,7 @@ public class PauseMenu : MonoBehaviour
         }
     }
     
-    public void PauseGame()
+    void PauseGame()
     {
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
@@ -42,6 +42,20 @@ public class PauseMenu : MonoBehaviour
     {
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
+        isPaused = false;
+    }
+
+    public void GoToMainMenu()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(0);
+        isPaused = false;
+    }
+
+    public void RestartLevel()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         isPaused = false;
     }
 }
