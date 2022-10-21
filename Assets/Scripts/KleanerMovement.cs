@@ -177,7 +177,7 @@ public class KleanerMovement : MonoBehaviour
         )
         {
             float accelerateFuelUsed = resourceManager.UseFuel(hitInput);
-            float stopFuelUsed = resourceManager.UseFuel(stopInput);
+            float stopFuelUsed = resourceManager.UseFuel(stopInput*0.5f);
 
             ForceMode forceMode = ForceMode.Force;
             rb.AddForce(CalculateHitVector(accelerateFuelUsed), forceMode);
