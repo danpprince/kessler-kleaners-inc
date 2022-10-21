@@ -261,11 +261,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5283149633265286508, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000004290639
+      value: -0.0000000042906407
       objectReference: {fileID: 0}
     - target: {fileID: 5283149633265286508, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -3.068127e-10
+      value: 3.068128e-10
       objectReference: {fileID: 0}
     - target: {fileID: 5283149634530290605, guid: 8e9788d8950d94940b919da56dc38702, type: 3}
       propertyPath: m_LocalRotation.w
@@ -687,6 +687,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b13da6f11d5800840b9d776ee22ca9b7, type: 3}
+--- !u!1 &1051924309 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1913710598331766702, guid: b13da6f11d5800840b9d776ee22ca9b7, type: 3}
+  m_PrefabInstance: {fileID: 1051924308}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1063007446
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -802,7 +807,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
+  m_FirstSelected: {fileID: 1051924309}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &1137139789
