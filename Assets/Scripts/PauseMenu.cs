@@ -8,6 +8,8 @@ public class PauseMenu : MonoBehaviour
     public GameObject pauseMenuUI;
     public static bool isPaused;
 
+    private float resumeGameStartTime;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,12 +44,9 @@ public class PauseMenu : MonoBehaviour
     {
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
-        // Allow some time for the menu to close before allowing player input
-        
-        isPaused = false;
-        
+        isPaused = false;     
     }
-
+    
     public void GoToMainMenu()
     {
         Time.timeScale = 1f;
