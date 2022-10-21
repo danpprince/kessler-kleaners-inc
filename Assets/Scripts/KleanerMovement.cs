@@ -398,6 +398,8 @@ public class KleanerMovement : MonoBehaviour
                 Time.timeScale = 1.0f;
                 Time.fixedDeltaTime = Time.timeScale * 0.02f;
 
+                arrow.SetActive(false);
+
                 flyParticles.Stop();
 
                 break;
