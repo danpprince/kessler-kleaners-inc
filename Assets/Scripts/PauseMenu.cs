@@ -42,7 +42,10 @@ public class PauseMenu : MonoBehaviour
     {
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
+        // Allow some time for the menu to close before allowing player input
+        
         isPaused = false;
+        
     }
 
     public void GoToMainMenu()
