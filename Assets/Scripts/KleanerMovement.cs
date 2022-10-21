@@ -119,7 +119,7 @@ public class KleanerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (PauseMenu.isPaused)
+        if (PauseMenu.isPaused || LoadLevelOnCollision.isAtEndOfLevel)
         {
             return;
         }
@@ -161,7 +161,7 @@ public class KleanerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (PauseMenu.isPaused)
+        if (PauseMenu.isPaused || LoadLevelOnCollision.isAtEndOfLevel)
         {
             return;
         }

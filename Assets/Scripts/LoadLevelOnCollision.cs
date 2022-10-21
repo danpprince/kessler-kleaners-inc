@@ -20,7 +20,7 @@ public class LoadLevelOnCollision : MonoBehaviour
     private Vector2 originalPosition;
     public  float endOfLevelTime;
     private float timeThusFar;
-    public bool isAtEndOfLevel;
+    public static bool isAtEndOfLevel;
 
     //for loading level
     public GameObject levelLoader;
@@ -64,13 +64,16 @@ public class LoadLevelOnCollision : MonoBehaviour
                 Time.fixedDeltaTime = Time.timeScale * 0.02f;
             } else
             {
-                //Time.timeScale = 1;
+                //Time.timeScale = 0f;
                 Time.fixedDeltaTime = Time.timeScale * 0.02f;
                 scoreBox.enabled = false;
                 cam.GetComponent<PostProcess>().enabled = true;
-                levelLoader.GetComponent<LevelLoader>().LoadNextLevel();
-                
-               
+
+                if (Input.GetButtonDown("Jump"))
+                {
+                    levelLoader.GetComponent<LevelLoader>().LoadNextLevel();
+                }
+                              
             }
         }
     }

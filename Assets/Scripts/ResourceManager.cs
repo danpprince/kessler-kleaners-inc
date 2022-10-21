@@ -11,7 +11,7 @@ public class ResourceManager : MonoBehaviour
     private float fuelRemaining, massCollected, timeElapsedSec, lastHitTimeSec;
     private float timeBetweenHits = 5.0f;
     public KleanerMovement k_move;
-    public LoadLevelOnCollision EndOfLevel;
+    //public LoadLevelOnCollision EndOfLevel;
     public int strokeCount;
    
 
@@ -35,7 +35,7 @@ public class ResourceManager : MonoBehaviour
 
     void UpdateUI()
     {
-        if (!EndOfLevel.isAtEndOfLevel)
+        if (!LoadLevelOnCollision.isAtEndOfLevel)
         {
             resourceText.text =
                   "Fuel remaining: " + fuelRemaining + "\n"
@@ -46,11 +46,12 @@ public class ResourceManager : MonoBehaviour
                 + "Strokes: " + strokeCount;
         } else
         {
-            resourceText.text = "LEVEL COMPLETE!" +"\n"
+            resourceText.text = "LEVEL COMPLETE!" + "\n"
                 + "Total Mass Collected: " + Mathf.RoundToInt(massCollected) + "\n"
                 + "Number of Strokes: " + strokeCount + "\n"
                 + "Remaining Fuel Bonus: " + Mathf.RoundToInt(fuelRemaining) + "\n"
-                + "Total Score: " + (Mathf.RoundToInt(massCollected / strokeCount) + Mathf.RoundToInt(fuelRemaining));
+                + "Total Score: " + (Mathf.RoundToInt(massCollected / strokeCount) + Mathf.RoundToInt(fuelRemaining)) + "\n" + "\n"
+                + "Press A to Continue";
         }
     }
 
