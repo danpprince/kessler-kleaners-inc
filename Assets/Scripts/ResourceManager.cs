@@ -104,4 +104,9 @@ public class ResourceManager : MonoBehaviour
     {
         return Time.time - lastHitTimeSec;
     }
+
+    public float GetFuelRemaining()
+    {
+        return fuelRemaining;
+    }
 }

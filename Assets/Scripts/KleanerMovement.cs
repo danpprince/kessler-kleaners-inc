@@ -144,14 +144,21 @@ public class KleanerMovement : MonoBehaviour
         }
         else if (movementState == StateMachine.slowMotion)
         {
-            hitXAngle += verticalInput * Time.timeScale;
+            hitXAngle += verticalInput * 0.33f;
         }
         slowMixer.SetFloat("Pitch", Time.timeScale);
     }
 
     private void FixedUpdate()
     {
-        float yRotation = horizontalInput * horizontalRotationSpeed * Time.timeScale;
+        float yRotation;
+        if (movementState == StateMachine.slowMotion)
+        {
+            yRotation = horizontalInput * horizontalRotationSpeed * 0.33f;
+        } else 
+        {
+             yRotation = horizontalInput * horizontalRotationSpeed * Time.timeScale;
+        }
         Vector3 rotation = new Vector3(0, yRotation, 0);
         transform.Rotate(rotation, Space.World);
 
@@ -170,7 +177,7 @@ public class KleanerMovement : MonoBehaviour
         )
         {
             float accelerateFuelUsed = resourceManager.UseFuel(hitInput);
-            float stopFuelUsed = resourceManager.UseFuel(stopInput);
+            float stopFuelUsed = resourceManager.UseFuel(stopInput*0.5f);
 
             ForceMode forceMode = ForceMode.Force;
             rb.AddForce(CalculateHitVector(accelerateFuelUsed), forceMode);
@@ -388,6 +395,13 @@ public class KleanerMovement : MonoBehaviour
                 rb.velocity = new Vector3(0f, 0f, 0f);
                 rb.angularVelocity = new Vector3(0f, 0f, 0f);
 
+                Time.timeScale = 1.0f;
+                Time.fixedDeltaTime = Time.timeScale * 0.02f;
+
+                arrow.SetActive(false);
+
+                flyParticles.Stop();
+
                 break;
 
             case StateMachine.resetPositionWait:
@@ -457,7 +471,7 @@ public class KleanerMovement : MonoBehaviour
             case StateMachine.normalSpeed:
                 isFlyMovementDeadTime =
                     resourceManager.GetTimeSinceLastHit() <= FlyingConstants.SlowDownDebounceSec;
-                if (!isFlyMovementDeadTime && isHitInputActive)
+                if (!isFlyMovementDeadTime && isHitInputActive && resourceManager.GetFuelRemaining() > 0)
                 {
                     movementState = StateMachine.slowDown;
                 }
@@ -480,7 +494,7 @@ public class KleanerMovement : MonoBehaviour
                     arrow.SetActive(true);
                 }
 
-                if (!isHitInputActive)
+                if (!isHitInputActive || resourceManager.GetFuelRemaining() == 0f)
                 {
                     movementState = StateMachine.speedUp;
                     arrow.SetActive(false); //maybe
@@ -494,7 +508,7 @@ public class KleanerMovement : MonoBehaviour
                 break;
 
             case StateMachine.slowMotion:
-                if (!isHitInputActive)
+                if (!isHitInputActive || resourceManager.GetFuelRemaining() == 0f)
                 {
                     movementState = StateMachine.speedUp;
                     arrow.SetActive(false); // maybe
@@ -513,7 +527,7 @@ public class KleanerMovement : MonoBehaviour
                 // Scale back the velocity from slow motion to prevent unexpected momentum
                 rb.velocity *= .98f;
 
-                if (isHitInputActive)
+                if (isHitInputActive && resourceManager.GetFuelRemaining() > 0f)
                 {
                     movementState = StateMachine.slowDown;
                 }
