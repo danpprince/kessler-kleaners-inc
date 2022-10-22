@@ -40,10 +40,11 @@ public class ResourceManager : MonoBehaviour
             resourceText.text =
                   "Fuel remaining: " + fuelRemaining + "\n"
                 + "Mass collected: " + massCollected + "\n"
+                + "Strokes: " + strokeCount + "\n" + "\n"
                 + "Time elapsed: " + timeElapsedSec.ToString("0.0") + "\n"
                 + "Time since last hit: " + GetTimeSinceLastHit().ToString("0.0") + "\n"
-                + "Current State: " + k_move.movementState + "\n"
-                + "Strokes: " + strokeCount;
+                + "Current State: " + k_move.movementState;
+                
         } else
         {
             resourceText.text = "LEVEL COMPLETE!" + "\n"
