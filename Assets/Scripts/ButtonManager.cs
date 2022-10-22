@@ -70,7 +70,7 @@ public class ButtonManager : MonoBehaviour
     }
 
     void QuitButton() {
-        Debug.Log("The game is quitting");
+        //Debug.Log("The game is quitting");
         Application.Quit();
     }
 

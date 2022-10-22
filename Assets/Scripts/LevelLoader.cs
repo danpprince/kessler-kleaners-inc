@@ -18,9 +18,7 @@ public class LevelLoader : MonoBehaviour
 
     private void Awake()
     {
-        //list of original buildIndexPair order
-
-        //list of queued buildIndexPair for scene transition utility?
+        
     }
 
     // Update is called once per frame
@@ -49,7 +47,7 @@ public class LevelLoader : MonoBehaviour
         if (nextSceneIndex > SceneManager.sceneCountInBuildSettings - 1)
         {
             // load first scene instead
-            nextSceneIndex = 2;   
+            nextSceneIndex = 0;   
         }
         
         StartCoroutine(LoadLevel(nextSceneIndex));

@@ -14682,7 +14682,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialFuel: 75
   k_move: {fileID: 8453875387259748961}
-  EndOfLevel: {fileID: 0}
   strokeCount: 0
   resourceText: {fileID: 0}
 --- !u!120 &8342835830873079450

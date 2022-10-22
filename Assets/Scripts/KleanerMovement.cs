@@ -119,6 +119,10 @@ public class KleanerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (PauseMenu.isPaused || LoadLevelOnCollision.isAtEndOfLevel)
+        {
+            return;
+        }
 
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
@@ -151,6 +155,11 @@ public class KleanerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (PauseMenu.isPaused || LoadLevelOnCollision.isAtEndOfLevel)
+        {
+            return;
+        }
+
         float yRotation;
         if (movementState == StateMachine.slowMotion)
         {
@@ -177,7 +186,7 @@ public class KleanerMovement : MonoBehaviour
         )
         {
             float accelerateFuelUsed = resourceManager.UseFuel(hitInput);
-            float stopFuelUsed = resourceManager.UseFuel(stopInput*0.5f);
+            float stopFuelUsed = resourceManager.UseFuel(stopInput * 0.5f);
 
             ForceMode forceMode = ForceMode.Force;
             rb.AddForce(CalculateHitVector(accelerateFuelUsed), forceMode);
@@ -185,7 +194,7 @@ public class KleanerMovement : MonoBehaviour
             rb.AddTorque(CalculateRollVector(accelerateFuelUsed), forceMode);
 
             // Slow down based on input
-            if (stopFuelUsed > 0.5)
+            if (stopFuelUsed > 0)
             {
                 rb.velocity *= 0.95f;
                 rb.angularVelocity = 0.95f * rb.angularVelocity;
