@@ -17,7 +17,7 @@ public class LoadRandomLevelTerrain : MonoBehaviour
         levels = Resources.LoadAll(LevelPrefabs) as Object[];
         int randomLevel = Random.Range(0, levels.Length);
         GameObject curLevel = (GameObject)GameObject.Instantiate(levels[randomLevel],place.transform);
-        thignsToMute.SetFloat("Volume", -80f);
+        thignsToMute.SetFloat("Volume", -40f);
         cam.GetComponent<LookAtLevel>().level = curLevel;
         
     }
