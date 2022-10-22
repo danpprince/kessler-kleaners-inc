@@ -14654,7 +14654,6 @@ MonoBehaviour:
   movementSpeed: 0.3
   stuckObjectCountLimit: 200
   isColorCodingColliders: 0
-  slowMixer: {fileID: 24100000, guid: 93c9641a48ebebb4ba7b025cfa8fed9a, type: 2}
   resourceManager: {fileID: 8453875387259748974}
   powerBar: {fileID: 0}
   time_modifier: 0
@@ -14813,10 +14812,10 @@ AudioSource:
   m_GameObject: {fileID: 8453875387259748967}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 93c9641a48ebebb4ba7b025cfa8fed9a, type: 2}
   m_audioClip: {fileID: 8300000, guid: 16050ee8c666c2a4b976ae7f7b35f24a, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.774
+  m_Volume: 0.404
   m_Pitch: 1
   Loop: 0
   Mute: 0
