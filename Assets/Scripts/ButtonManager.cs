@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.SceneManagement;
 
 public class ButtonManager : MonoBehaviour
 {
@@ -65,7 +66,7 @@ public class ButtonManager : MonoBehaviour
 
     void SettingsButton()
     {
-
+        SceneManager.LoadScene("HowToPlay");
     }
 
     void QuitButton() {

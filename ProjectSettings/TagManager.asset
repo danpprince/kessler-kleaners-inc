@@ -8,6 +8,8 @@ TagManager:
   - player
   - goal
   - green
+  - boundary
+  - GameMusic
   layers:
   - Default
   - TransparentFX
