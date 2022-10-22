@@ -66,11 +66,11 @@ public class ButtonManager : MonoBehaviour
 
     void SettingsButton()
     {
-        SceneManager.LoadScene("HowToPlay");
+        //SceneManager.LoadScene("HowToPlay");
     }
 
     void QuitButton() {
-        Debug.Log("The game is quitting");
+        //Debug.Log("The game is quitting");
         Application.Quit();
     }
 
