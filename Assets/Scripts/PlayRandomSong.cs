@@ -11,7 +11,7 @@ public class PlayRandomSong : MonoBehaviour
 
     void Start()
     {
-        mixergroup.SetFloat("Volume", -40f);
+        mixergroup.SetFloat("Volume", -20f);
         AudioClip[] clips = Resources.LoadAll<AudioClip>("Music");
 
         print(clips.Length);
