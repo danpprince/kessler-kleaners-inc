@@ -11,12 +11,18 @@ public class PlayRandomSong : MonoBehaviour
 
     void Start()
     {
-        mixergroup.SetFloat("Volume", 4f);
+        mixergroup.SetFloat("Volume", -40f);
         AudioClip[] clips = Resources.LoadAll<AudioClip>("Music");
 
         print(clips.Length);
         source.clip = clips[Random.Range(0, clips.Length)];
         source.Play();
+    }
+
+
+    private void Update()
+    {
+        mixergroup.SetFloat("Pitch", Time.timeScale);
     }
 
 }

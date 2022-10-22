@@ -33,7 +33,6 @@ public class KleanerMovement : MonoBehaviour
     public bool isColorCodingColliders = false;
 
     //For Sound Control\\
-    public AudioMixer slowMixer;
     private AudioSource collisionAudioSource;
 
     public ResourceManager resourceManager;
@@ -150,7 +149,6 @@ public class KleanerMovement : MonoBehaviour
         {
             hitXAngle += verticalInput * 0.33f;
         }
-        slowMixer.SetFloat("Pitch", Time.timeScale);
     }
 
     private void FixedUpdate()
