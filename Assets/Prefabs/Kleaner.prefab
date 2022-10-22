@@ -14680,7 +14680,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ffb4351f929eed47b25df1829a1ad75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialFuel: 100
+  initialFuel: 75
   k_move: {fileID: 8453875387259748961}
   strokeCount: 0
   resourceText: {fileID: 0}
