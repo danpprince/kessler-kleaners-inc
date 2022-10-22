@@ -67,6 +67,7 @@ public class ButtonManager : MonoBehaviour
     void SettingsButton()
     {
         //SceneManager.LoadScene("HowToPlay");
+        
     }
 
     void QuitButton() {
