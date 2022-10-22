@@ -581,6 +581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd115e8e1329a0041b955897b05d7dd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  masterSet: {fileID: 0}
 --- !u!1 &445199830
 GameObject:
   m_ObjectHideFlags: 0
@@ -1324,6 +1325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd115e8e1329a0041b955897b05d7dd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  masterSet: {fileID: 24100000, guid: d44edac7198fd2340ab5777839788b86, type: 2}
 --- !u!1001 &1120444377
 PrefabInstance:
   m_ObjectHideFlags: 0
