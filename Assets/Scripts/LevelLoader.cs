@@ -41,15 +41,17 @@ public class LevelLoader : MonoBehaviour
 
     public void LoadNextLevel()
     {
+        Time.timeScale = 1;
         int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
 
         // if next scene index would exceed last scene in build settings
         if (nextSceneIndex > SceneManager.sceneCountInBuildSettings - 1)
         {
-            // load first scene instead
-            nextSceneIndex = 0;   
+            // Load Main Menu instead
+            SceneManager.LoadScene("Menu Screen");
+            return;
         }
-        
+
         StartCoroutine(LoadLevel(nextSceneIndex));
     }
 
