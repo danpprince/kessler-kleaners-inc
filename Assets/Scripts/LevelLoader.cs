@@ -39,6 +39,11 @@ public class LevelLoader : MonoBehaviour
 
     }
 
+    public void LoadFirstLevel()
+    {
+        StartCoroutine(LoadLevel("Hilly Plane level 1"));
+    }
+
     public void LoadNextLevel()
     {
         Time.timeScale = 1;
@@ -61,10 +66,21 @@ public class LevelLoader : MonoBehaviour
         transition.SetTrigger("Start");
 
         //Wait
-       
         yield return new WaitForSecondsRealtime(transitionTime);
 
         //Load scene
         SceneManager.LoadScene(levelIndex);
+    }
+
+    IEnumerator LoadLevel(string levelName)
+    {
+        //Play animation
+        transition.SetTrigger("Start");
+
+        //Wait
+        yield return new WaitForSecondsRealtime(transitionTime);
+
+        //Load scene
+        SceneManager.LoadScene(levelName);
     }
 }

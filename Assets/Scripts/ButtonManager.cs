@@ -61,7 +61,7 @@ public class ButtonManager : MonoBehaviour
 
     void StartButton()
     {
-        levelLoader.GetComponent<LevelLoader>().LoadNextLevel();
+        levelLoader.GetComponent<LevelLoader>().LoadFirstLevel();
     }
 
     void SettingsButton()
