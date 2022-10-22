@@ -31,6 +31,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -54,6 +55,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -112,7 +114,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 24300002, guid: 93c9641a48ebebb4ba7b025cfa8fed9a, type: 2}
   m_audioClip: {fileID: 8300000, guid: 64a98be2722af474f9f7adfec74c9511, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.503
+  m_Volume: 0.46
   m_Pitch: 1
   Loop: 0
   Mute: 0
