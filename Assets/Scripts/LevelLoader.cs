@@ -47,7 +47,7 @@ public class LevelLoader : MonoBehaviour
         if (nextSceneIndex > SceneManager.sceneCountInBuildSettings - 1)
         {
             // load first scene instead
-            nextSceneIndex = 2;   
+            nextSceneIndex = 0;   
         }
         
         StartCoroutine(LoadLevel(nextSceneIndex));

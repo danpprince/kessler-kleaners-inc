@@ -129,12 +129,6 @@ public class KleanerMovement : MonoBehaviour
         hitInput = Input.GetAxis("Jump");
         isHitInputActive = hitInput > 0.5;
         stopInput = Input.GetAxis("Stop");
-        float forceToGolfModeInput = Input.GetAxis("Fire3");
-
-        if (forceToGolfModeInput > 0.5)
-        {
-            movementState = StateMachine.toGolfMode;
-        }
 
         // increment the vertical angle in chunks
         angle_timer += Time.unscaledDeltaTime;
@@ -154,7 +148,7 @@ public class KleanerMovement : MonoBehaviour
         }
         else if (movementState == StateMachine.slowMotion)
         {
-            hitXAngle += verticalInput * verticalRotationSpeed;
+            hitXAngle += verticalInput * Time.timeScale;
         }
         slowMixer.SetFloat("Pitch", Time.timeScale);
     }
@@ -166,7 +160,7 @@ public class KleanerMovement : MonoBehaviour
             return;
         }
 
-        float yRotation = horizontalInput * horizontalRotationSpeed;
+        float yRotation = horizontalInput * horizontalRotationSpeed * Time.timeScale;
         Vector3 rotation = new Vector3(0, yRotation, 0);
         transform.Rotate(rotation, Space.World);
 
