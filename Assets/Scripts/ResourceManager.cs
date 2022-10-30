@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using TMPro;
 
 public class ResourceManager : MonoBehaviour
 {
     public float initialFuel;
     private float fuelRemaining, massCollected, timeElapsedSec, lastHitTimeSec;
     private float timeBetweenHits = 5.0f;
+    private float totalMass = 0;
     public KleanerMovement k_move;
-    //public LoadLevelOnCollision EndOfLevel;
     public int strokeCount;
-   
-
-    public Text resourceText;
+    public Image fuelBar;
+    public Image massBar;
+    public TextMeshProUGUI fuelText, strokesText, endOfLevelText;
+    public GameObject endOfLevelCanvas;
 
     void Start()
     {
@@ -23,8 +24,7 @@ public class ResourceManager : MonoBehaviour
         // Initialize so a hit can be performed at the start
         lastHitTimeSec = Time.time - timeBetweenHits;
         strokeCount = 0;
-
-        
+        massCollected = 0;
     }
 
     void Update()
@@ -35,25 +35,21 @@ public class ResourceManager : MonoBehaviour
 
     void UpdateUI()
     {
-        if (!LoadLevelOnCollision.isAtEndOfLevel)
+        strokesText.text = "Strokes: " + strokeCount;
+        fuelBar.fillAmount = fuelRemaining / initialFuel;
+
+        if (fuelRemaining > 0)
         {
-            resourceText.text =
-                  "Fuel remaining: " + fuelRemaining + "\n"
-                + "Mass collected: " + massCollected + "\n"
-                + "Strokes: " + strokeCount + "\n" + "\n"
-                + "Time elapsed: " + timeElapsedSec.ToString("0.0") + "\n"
-                + "Time since last hit: " + GetTimeSinceLastHit().ToString("0.0") + "\n"
-                + "Current State: " + k_move.movementState;
-                
-        } else
-        {
-            resourceText.text = "LEVEL COMPLETE!" + "\n"
-                + "Total Mass Collected: " + Mathf.RoundToInt(massCollected) + "\n"
-                + "Number of Strokes: " + strokeCount + "\n"
-                + "Remaining Fuel Bonus: " + Mathf.RoundToInt(fuelRemaining) + "\n"
-                + "Total Score: " + (Mathf.RoundToInt(massCollected / strokeCount) + Mathf.RoundToInt(fuelRemaining)) + "\n" + "\n"
-                + "Press A to Continue";
+            fuelText.text = "Fuel";
+            fuelText.color = Color.white;
         }
+        else
+        {
+            fuelText.text = "No fuel remaining";
+            fuelText.color = Color.red;
+        }
+
+        massBar.fillAmount = massCollected / totalMass;
     }
 
     public float UseFuel(float amountRequested) 
@@ -74,9 +70,22 @@ public class ResourceManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Add to the amount of mass stuck to the kleaner
+    /// </summary>
+    /// <param name="massToAdd"></param>
     public void AddMass(float massToAdd)
     {
         massCollected += massToAdd;
+    }
+    
+    /// <summary>
+    /// Add to the total amount of mass in the level
+    /// </summary>
+    /// <param name="massToAdd"></param>
+    public void AddToTotalMass(float massToAdd)
+    {
+        totalMass += massToAdd;
     }
 
     public bool tryToHit()
@@ -108,5 +117,20 @@ public class ResourceManager : MonoBehaviour
     public float GetFuelRemaining()
     {
         return fuelRemaining;
+    }
+
+    public void ShowEndOfLevelScreen(bool showContinueText)
+    {
+        endOfLevelCanvas.SetActive(true);
+        endOfLevelText.text = "LEVEL COMPLETE!" + "\n"
+            + "Total Mass Collected: " + Mathf.RoundToInt(massCollected) + "\n"
+            + "Number of Strokes: " + strokeCount + "\n"
+            + "Remaining Fuel Bonus: " + Mathf.RoundToInt(fuelRemaining) + "\n"
+            + "Total Score: " + (Mathf.RoundToInt(massCollected / strokeCount) + Mathf.RoundToInt(fuelRemaining));
+
+        if (showContinueText)
+        {
+            endOfLevelText.text += "\n\nPress A to continue";
+        }
     }
 }
