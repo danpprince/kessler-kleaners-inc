@@ -6,6 +6,7 @@ public class GenerateTargetsInsideCube : MonoBehaviour
 {
     public List<GameObject> gameObjectsToInstance;
     public int numObjects;
+    public ResourceManager resourceManager;
 
     void Start()
     {
@@ -22,6 +23,7 @@ public class GenerateTargetsInsideCube : MonoBehaviour
                 Random.Range(0, gameObjectsToInstance.Count)
             ];
             Instantiate(objToInstance, point, rotation);
+            resourceManager.AddToTotalMass(1);
         }
         Destroy(gameObject);
     }
