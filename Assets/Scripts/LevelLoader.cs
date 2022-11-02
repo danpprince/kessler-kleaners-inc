@@ -15,12 +15,6 @@ public class LevelLoader : MonoBehaviour
     [SerializeField]
     KeyCode keyLoadNextScene;
 
-
-    private void Awake()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -37,6 +31,10 @@ public class LevelLoader : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
+        if (ResourceManager.GetIsNextLevelRequested())
+        {
+            LoadNextLevel();
+        }
     }
 
     public void LoadFirstLevel()

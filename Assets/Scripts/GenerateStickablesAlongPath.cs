@@ -9,7 +9,6 @@ public class GenerateStickablesAlongPath : MonoBehaviour
     public int numObjects;
     public PathCreator pathCreator;
     public float radius;
-    public ResourceManager resourceManager;
 
     void Start()
     {
@@ -38,7 +37,7 @@ public class GenerateStickablesAlongPath : MonoBehaviour
                 Random.Range(0, gameObjectsToInstance.Count)
             ];
             Instantiate(objToInstance, stickablePosition, stickableRotation);
-            resourceManager.AddToTotalMass(1);
+            ResourceManager.AddToTotalMass(1);
         }
 
         Destroy(gameObject);

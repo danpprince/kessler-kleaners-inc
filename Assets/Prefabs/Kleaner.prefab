@@ -14577,7 +14577,6 @@ GameObject:
   - component: {fileID: 8453875387259748960}
   - component: {fileID: 8453875387259748964}
   - component: {fileID: 8453875387259748961}
-  - component: {fileID: 8453875387259748974}
   - component: {fileID: 8342835830873079450}
   - component: {fileID: 8183482591349809909}
   - component: {fileID: 6173827765606901582}
@@ -14654,7 +14653,6 @@ MonoBehaviour:
   movementSpeed: 0.3
   stuckObjectCountLimit: 200
   isColorCodingColliders: 0
-  resourceManager: {fileID: 8453875387259748974}
   powerBar: {fileID: 0}
   time_modifier: 0
   slowdownFactor: 0.1
@@ -14667,22 +14665,6 @@ MonoBehaviour:
   hitParticlesObject: {fileID: 4724865893427116028}
   stopParticlesObject: {fileID: 82146454179347681}
   flyParticlesObject: {fileID: 937863443179528206}
---- !u!114 &8453875387259748974
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8453875387259748967}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ffb4351f929eed47b25df1829a1ad75, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  initialFuel: 75
-  k_move: {fileID: 8453875387259748961}
-  strokeCount: 0
-  resourceText: {fileID: 0}
 --- !u!120 &8342835830873079450
 LineRenderer:
   m_ObjectHideFlags: 0
