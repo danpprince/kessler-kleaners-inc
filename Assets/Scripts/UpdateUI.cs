@@ -8,8 +8,7 @@ public class UpdateUI : MonoBehaviour
 {
     public Image fuelBar;
     public Image massBar;
-    public TextMeshProUGUI fuelText, strokesText, endOfLevelText;
-    public GameObject endOfLevelCanvas;
+    public TextMeshProUGUI fuelText, strokesText;
 
     void Update()
     {
