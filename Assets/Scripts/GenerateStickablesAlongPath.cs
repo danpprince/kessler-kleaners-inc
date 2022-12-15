@@ -37,6 +37,7 @@ public class GenerateStickablesAlongPath : MonoBehaviour
                 Random.Range(0, gameObjectsToInstance.Count)
             ];
             Instantiate(objToInstance, stickablePosition, stickableRotation);
+            ResourceManager.AddToTotalMass(1);
         }
 
         Destroy(gameObject);

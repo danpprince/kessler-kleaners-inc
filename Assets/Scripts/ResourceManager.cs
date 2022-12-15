@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using TMPro;
 
 public class ResourceManager : MonoBehaviour
 {
-    public float initialFuel;
-    private float fuelRemaining, massCollected, timeElapsedSec, lastHitTimeSec;
-    private float timeBetweenHits = 5.0f;
-    public KleanerMovement k_move;
-    //public LoadLevelOnCollision EndOfLevel;
-    public int strokeCount;
-   
-
-    public Text resourceText;
+    public static float initialFuel = 75f;
+    private static float fuelRemaining, massCollected, timeElapsedSec, lastHitTimeSec;
+    private static float timeBetweenHits = 5.0f;
+    private static float totalMass = 0;
+    private static int strokeCount;
+    private static bool goalHasBeenReached;
+    private float timeElapsedAfterGoalReached;
+    private float endOfLevelTime = 5;
+    private static bool isNextLevelRequested;
+    private static bool isLoadingNextLevelAvailable;
 
     void Start()
     {
@@ -23,40 +24,65 @@ public class ResourceManager : MonoBehaviour
         // Initialize so a hit can be performed at the start
         lastHitTimeSec = Time.time - timeBetweenHits;
         strokeCount = 0;
+        massCollected = 0;
 
-        
+        isNextLevelRequested = false;
+        isLoadingNextLevelAvailable = false;
+        timeElapsedAfterGoalReached = 0;
+        goalHasBeenReached = false;
     }
 
     void Update()
     {
         timeElapsedSec += Time.deltaTime;
-        UpdateUI();
-    }
 
-    void UpdateUI()
-    {
-        if (!LoadLevelOnCollision.isAtEndOfLevel)
+        if (goalHasBeenReached)
         {
-            resourceText.text =
-                  "Fuel remaining: " + fuelRemaining + "\n"
-                + "Mass collected: " + massCollected + "\n"
-                + "Strokes: " + strokeCount + "\n" + "\n"
-                + "Time elapsed: " + timeElapsedSec.ToString("0.0") + "\n"
-                + "Time since last hit: " + GetTimeSinceLastHit().ToString("0.0") + "\n"
-                + "Current State: " + k_move.movementState;
-                
-        } else
-        {
-            resourceText.text = "LEVEL COMPLETE!" + "\n"
-                + "Total Mass Collected: " + Mathf.RoundToInt(massCollected) + "\n"
-                + "Number of Strokes: " + strokeCount + "\n"
-                + "Remaining Fuel Bonus: " + Mathf.RoundToInt(fuelRemaining) + "\n"
-                + "Total Score: " + (Mathf.RoundToInt(massCollected / strokeCount) + Mathf.RoundToInt(fuelRemaining)) + "\n" + "\n"
-                + "Press A to Continue";
+            timeElapsedAfterGoalReached += Time.unscaledDeltaTime;
+            if (timeElapsedAfterGoalReached <= endOfLevelTime)
+            {
+                Time.timeScale -= 0.3f * Time.unscaledDeltaTime;
+                Time.timeScale = Mathf.Clamp(Time.timeScale, 0.1f, 1f);
+                Time.fixedDeltaTime = Time.timeScale * 0.02f;
+                isLoadingNextLevelAvailable = false;
+            }
+            else
+            {
+                if (Input.GetButtonDown("Jump"))
+                {
+                    isNextLevelRequested = true;
+                }
+                isLoadingNextLevelAvailable = true;
+            }
         }
     }
 
-    public float UseFuel(float amountRequested) 
+    public static int GetStrokeCount()
+    {
+        return strokeCount;
+    }
+
+    public static float GetFuelRemaining()
+    {
+        return fuelRemaining;
+    }
+
+    public static float GetFuelRemainingRatio()
+    {
+        return fuelRemaining / initialFuel;
+    }
+
+    public static float GetMassCollected()
+    {
+        return massCollected;
+    }
+
+    public static float GetMassCollectedRatio()
+    {
+        return massCollected / totalMass;
+    }
+
+    public static float UseFuel(float amountRequested) 
     {
         // Returns the actual amount of fuel that has been used from this call
 
@@ -74,12 +100,25 @@ public class ResourceManager : MonoBehaviour
         }
     }
 
-    public void AddMass(float massToAdd)
+    /// <summary>
+    /// Add to the amount of mass stuck to the kleaner
+    /// </summary>
+    /// <param name="massToAdd"></param>
+    public static void AddMass(float massToAdd)
     {
         massCollected += massToAdd;
     }
+    
+    /// <summary>
+    /// Add to the total amount of mass in the level
+    /// </summary>
+    /// <param name="massToAdd"></param>
+    public static void AddToTotalMass(float massToAdd)
+    {
+        totalMass += massToAdd;
+    }
 
-    public bool tryToHit()
+    public static bool TryToHitKleaner()
     {
         bool isTimeForNextHit = GetTimeSinceLastHit() >= timeBetweenHits;
 
@@ -94,19 +133,43 @@ public class ResourceManager : MonoBehaviour
         return false;
     }
 
-    public bool can_hit()
+    public static bool CatHitKleaner()
     {
         bool isTimeForNextHit = GetTimeSinceLastHit() >= timeBetweenHits;
         return isTimeForNextHit;
     }
 
-    public float GetTimeSinceLastHit()
+    public static float GetTimeSinceLastHit()
     {
         return Time.time - lastHitTimeSec;
     }
 
-    public float GetFuelRemaining()
+    public static void SetGoalHasBeenReached()
     {
-        return fuelRemaining;
+        goalHasBeenReached = true;
+    }
+
+    public static bool GetGoalHasBeenReached()
+    {
+        return goalHasBeenReached;
+    }
+
+    /// <summary>
+    /// Returns true if player has requested that the next level be loaded
+    /// </summary>
+    /// <returns></returns>
+    public static bool GetIsNextLevelRequested()
+    {
+        return isNextLevelRequested;
+    }
+
+    /// <summary>
+    /// Returns true if enough time has elapsed after goal has been reached 
+    /// for the next level loading to be available
+    /// </summary>
+    /// <returns></returns>
+    public static bool GetIsLoadingNextLevelAvailable()
+    {
+        return isLoadingNextLevelAvailable;
     }
 }

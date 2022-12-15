@@ -6,19 +6,17 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     public GameObject pauseMenuUI;
-    public static bool isPaused;
+    private static bool isPaused;
 
-    // Start is called before the first frame update
     void Start()
     {
-        pauseMenuUI = GameObject.Find("PauseMenu");
         pauseMenuUI.SetActive(false);
+        isPaused = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Pause") && !LoadLevelOnCollision.isAtEndOfLevel)
+        if (Input.GetButtonDown("Pause") && !ResourceManager.GetGoalHasBeenReached())
         {
             if (isPaused)
             {
@@ -63,5 +61,10 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         isPaused = false;
+    }
+
+    public static bool GetIsPaused()
+    {
+        return isPaused;
     }
 }

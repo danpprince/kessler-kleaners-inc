@@ -22,6 +22,7 @@ public class GenerateTargetsInsideCube : MonoBehaviour
                 Random.Range(0, gameObjectsToInstance.Count)
             ];
             Instantiate(objToInstance, point, rotation);
+            ResourceManager.AddToTotalMass(1);
         }
         Destroy(gameObject);
     }

@@ -35,8 +35,6 @@ public class KleanerMovement : MonoBehaviour
     //For Sound Control\\
     private AudioSource collisionAudioSource;
 
-    public ResourceManager resourceManager;
-
     private Rigidbody rb;
     private float horizontalInput, verticalInput, hitInput, stopInput;
     private bool isHitInputActive;
@@ -118,7 +116,7 @@ public class KleanerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (PauseMenu.isPaused || LoadLevelOnCollision.isAtEndOfLevel)
+        if (PauseMenu.GetIsPaused() || ResourceManager.GetGoalHasBeenReached())
         {
             return;
         }
@@ -153,7 +151,7 @@ public class KleanerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (PauseMenu.isPaused || LoadLevelOnCollision.isAtEndOfLevel)
+        if (PauseMenu.GetIsPaused() || ResourceManager.GetGoalHasBeenReached())
         {
             return;
         }
@@ -183,8 +181,8 @@ public class KleanerMovement : MonoBehaviour
             ) && !isFlyMovementDeadTime
         )
         {
-            float accelerateFuelUsed = resourceManager.UseFuel(hitInput);
-            float stopFuelUsed = resourceManager.UseFuel(stopInput * 0.5f);
+            float accelerateFuelUsed = ResourceManager.UseFuel(hitInput);
+            float stopFuelUsed = ResourceManager.UseFuel(stopInput * 0.5f);
 
             ForceMode forceMode = ForceMode.Force;
             rb.AddForce(CalculateHitVector(accelerateFuelUsed), forceMode);
@@ -305,7 +303,7 @@ public class KleanerMovement : MonoBehaviour
         }
 
         // TODO: Should objects have other mass?
-        resourceManager.AddMass(1);
+        ResourceManager.AddMass(1);
 
         colliderObject.transform.position = colliderPosition;
 
@@ -452,7 +450,7 @@ public class KleanerMovement : MonoBehaviour
 
                 if (isHitInputActive)
                 {
-                    bool isHitSuccessful = resourceManager.tryToHit();
+                    bool isHitSuccessful = ResourceManager.TryToHitKleaner();
                     if (isHitSuccessful)
                     {
                         lastGolfPosition = transform.position;
@@ -477,8 +475,8 @@ public class KleanerMovement : MonoBehaviour
 
             case StateMachine.normalSpeed:
                 isFlyMovementDeadTime =
-                    resourceManager.GetTimeSinceLastHit() <= FlyingConstants.SlowDownDebounceSec;
-                if (!isFlyMovementDeadTime && isHitInputActive && resourceManager.GetFuelRemaining() > 0)
+                    ResourceManager.GetTimeSinceLastHit() <= FlyingConstants.SlowDownDebounceSec;
+                if (!isFlyMovementDeadTime && isHitInputActive && ResourceManager.GetFuelRemaining() > 0)
                 {
                     movementState = StateMachine.slowDown;
                 }
@@ -501,7 +499,7 @@ public class KleanerMovement : MonoBehaviour
                     arrow.SetActive(true);
                 }
 
-                if (!isHitInputActive || resourceManager.GetFuelRemaining() == 0f)
+                if (!isHitInputActive || ResourceManager.GetFuelRemaining() == 0f)
                 {
                     movementState = StateMachine.speedUp;
                     arrow.SetActive(false); //maybe
@@ -515,7 +513,7 @@ public class KleanerMovement : MonoBehaviour
                 break;
 
             case StateMachine.slowMotion:
-                if (!isHitInputActive || resourceManager.GetFuelRemaining() == 0f)
+                if (!isHitInputActive || ResourceManager.GetFuelRemaining() == 0f)
                 {
                     movementState = StateMachine.speedUp;
                     arrow.SetActive(false); // maybe
@@ -534,7 +532,7 @@ public class KleanerMovement : MonoBehaviour
                 // Scale back the velocity from slow motion to prevent unexpected momentum
                 rb.velocity *= .98f;
 
-                if (isHitInputActive && resourceManager.GetFuelRemaining() > 0f)
+                if (isHitInputActive && ResourceManager.GetFuelRemaining() > 0f)
                 {
                     movementState = StateMachine.slowDown;
                 }
